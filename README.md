@@ -22,6 +22,7 @@
 Our proposed **MotionCtrl** is capable of independently controlling the complex camera motion and object motion of the generated videos, with **only a unified** model. 
 There are some results attained with **MotionCtrl** and more results are showcased in our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/).
 
+<!--
 </br>
 <video poster="" id="steve" autoplay controls muted loop playsinline height="100%" width="100%">
 <source src="https://wzhouxiff.github.io/projects/MotionCtrl/assets/videos/teasers/camera_d971457c81bca597.mp4" type="video/mp4">
@@ -33,8 +34,18 @@ There are some results attained with **MotionCtrl** and more results are showcas
 <source src="https://wzhouxiff.github.io/projects/MotionCtrl/assets/videos/teasers/shake_1.mp4" type="video/mp4">
 </video>
 <video poster="" id="steve" autoplay controls muted loop playsinline height="100%" width="100%">
-<source src="https://wzhouxiff.github.io/projects/MotionCtrl/assets/videos/teasers/s_curve_3.mp4" type="video/mp4">
+<source src="https://wzhouxiff.github.io/projects/MotionCtrl/assets/videos/teasers/s_curve_3_v1.mp4" type="video/mp4">
 </video>
+-->
+
+https://github.com/TencentARC/MotionCtrl/assets/19488619/28a42fe7-e6df-49ec-b3ff-61c197b21819
+
+https://github.com/TencentARC/MotionCtrl/assets/19488619/aa12d150-d49f-4415-aaf1-6e2e2c2fdbe4
+
+https://github.com/TencentARC/MotionCtrl/assets/19488619/89feeac4-c152-4bb8-a8df-cdb2dcd74ccb
+
+https://github.com/TencentARC/MotionCtrl/assets/19488619/e357ee60-8915-4cf0-a9d4-17fe32288d09
+
 
 
 ## Updating
