@@ -82,7 +82,7 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
     conda activate motionctrl
     pip install -r requirements.txt
 
-## :running: Inference
+## 💫 Inference
 
 1. Download the weights of MotionCtrl [motionctrl.pth](https://huggingface.co/TencentARC/MotionCtrl/blob/main/motionctrl.pth) and put it to `./checkpoints`.
 2. Go into `configs/inference/run.sh` and set `condtype` as 'camera_motion', 'object_motion', or 'both'.
