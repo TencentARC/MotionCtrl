@@ -1,0 +1,6 @@
+# main/evaluation
+.vscode/
+
+*.pyc
+gradio_temp
+*.pth

@@ -1,0 +1,104 @@
+model:
+  base_learning_rate: 0.0001
+  scale_lr: false
+  target: motionctrl.motionctrl.MotionCtrl
+  params:
+    # param for object motion control
+    omcm_config:
+      pretrained: ~
+      target: lvdm.modules.encoders.adapter.Adapter
+      params:
+        channels:
+        - 320
+        - 640
+        - 1280
+        - 1280
+        nums_rb: 2
+        cin: 128
+        sk: true
+        use_conv: false
+
+    linear_start: 0.00085
+    linear_end: 0.012
+    num_timesteps_cond: 1
+    log_every_t: 200
+    timesteps: 1000
+    first_stage_key: video
+    cond_stage_key: caption
+    cond_stage_trainable: false
+    conditioning_key: crossattn
+    image_size:
+    - 32
+    - 32
+    channels: 4
+    scale_by_std: false
+    scale_factor: 0.18215
+    use_ema: false
+    uncond_prob: 0.1
+    uncond_type: empty_seq
+    empty_params_only: true
+    scheduler_config:
+      target: utils.lr_scheduler.LambdaLRScheduler
+      interval: step
+      frequency: 100
+      params:
+        start_step: 0
+        final_decay_ratio: 0.01
+        decay_steps: 20000
+    unet_config:
+      target: lvdm.modules.networks.openaimodel3d_next.UNetModel
+      params:
+        in_channels: 4
+        out_channels: 4
+        model_channels: 320
+        attention_resolutions:
+        - 4
+        - 2
+        - 1
+        num_res_blocks: 2
+        channel_mult:
+        - 1
+        - 2
+        - 4
+        - 4
+        num_head_channels: 64
+        transformer_depth: 1
+        context_dim: 1024
+        use_linear: true
+        use_checkpoint: true
+        temporal_conv: true
+        temporal_attention: true
+        temporal_selfatt_only: true
+        use_relative_position: false
+        use_causal_attention: false
+        temporal_length: 16
+        use_image_dataset: false
+        addition_attention: true
+    first_stage_config:
+      target: lvdm.models.autoencoder.AutoencoderKL
+      params:
+        embed_dim: 4
+        monitor: val/rec_loss
+        ddconfig:
+          double_z: true
+          z_channels: 4
+          resolution: 256
+          in_channels: 3
+          out_ch: 3
+          ch: 128
+          ch_mult:
+          - 1
+          - 2
+          - 4
+          - 4
+          num_res_blocks: 2
+          attn_resolutions: []
+          dropout: 0.0
+        lossconfig:
+          target: torch.nn.Identity
+    cond_stage_config:
+      target: lvdm.modules.encoders.condition2.FrozenOpenCLIPEmbedder
+      params:
+        freeze: true
+        layer: penultimate
+   
