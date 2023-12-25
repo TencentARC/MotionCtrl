@@ -43,14 +43,6 @@
 
 
 
-## 📝 Changelog
-
-- [x] 20231225: Release MotionCtrl depolyed on *LVDM/VideoCrafter*
-- [x] 20231225: Gradio Demo Available. [![ Demo](https://img.shields.io/badge/Gradio%20Demo-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl)
-
----
-
 # MotionCtrl: A Unified and Flexible Motion Controller for Video Generation
 
 [![ Paper](https://img.shields.io/badge/Paper-gray
@@ -73,6 +65,16 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
     <img src="assets/62n2a-wuvsw.gif", width="600">
     <img src="assets/ilw96-ak827.gif", width="600">
 </div>
+
+---
+
+## 📝 Changelog
+
+- [x] 20231225: Release MotionCtrl depolyed on ***LVDM/VideoCrafter***.
+- [x] 20231225: Gradio Demo Available. [![ Demo](https://img.shields.io/badge/Gradio%20Demo-orange
+)](https://huggingface.co/spaces/TencentARC/MotionCtrl)
+- [ ] Release MotionCtrl deployed on ***AnimateDiff***.
+- [ ] Release MotionCtrl deployed on ***SVD***.
 
 ---
 
