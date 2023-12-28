@@ -73,6 +73,7 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 - [x] 20231225: Release MotionCtrl deployed on ***LVDM/VideoCrafter***.
 - [x] 20231225: Gradio Demo Available. [![ Demo](https://img.shields.io/badge/Gradio%20Demo-orange
 )](https://huggingface.co/spaces/TencentARC/MotionCtrl)
+- [x] 20231228: Provide local gradio demo for convenience.
 - [ ] Release MotionCtrl deployed on ***AnimateDiff***.
 - [ ] Release MotionCtrl deployed on ***SVD***.
 
@@ -86,15 +87,18 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 
 ## 💫 Inference
 
+- #### Run local inference script
+
 1. Download the weights of MotionCtrl [motionctrl.pth](https://huggingface.co/TencentARC/MotionCtrl/blob/main/motionctrl.pth) and put it to `./checkpoints`.
 2. Go into `configs/inference/run.sh` and set `condtype` as 'camera_motion', 'object_motion', or 'both'.
 - `condtype=camera_motion` means only control the **camera motion** in the generated video.
 - `condtype=object_motion` means only control the **object motion** in the generated video.
 - `condtype=both` means control the camera motion and object motion in the generated video **simultaneously**.
-1. Running scripts:
-
+3. Running scripts:
         sh configs/inference/run.sh
 
+- #### Run local gradio demo
+      python -m app --share
 
 
 
