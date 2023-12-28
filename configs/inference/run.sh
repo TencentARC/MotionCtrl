@@ -18,7 +18,7 @@ save_dir=$res_dir/$condtype'_seed'$seed
 use_ddp=0
 
 if [ $use_ddp == 0 ]; then
-CUDA_VISIBLE_DEVICES=7 python 'main/evaluation/motionctrl_inference.py' \
+python 'main/evaluation/motionctrl_inference.py' \
 --seed 1234 \
 --ckpt_path $ckpt \
 --base $config \
