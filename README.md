@@ -70,7 +70,7 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 
 ## 📝 Changelog
 
-- [x] 20231225: Release MotionCtrl depolyed on ***LVDM/VideoCrafter***.
+- [x] 20231225: Release MotionCtrl deployed on ***LVDM/VideoCrafter***.
 - [x] 20231225: Gradio Demo Available. [![ Demo](https://img.shields.io/badge/Gradio%20Demo-orange
 )](https://huggingface.co/spaces/TencentARC/MotionCtrl)
 - [ ] Release MotionCtrl deployed on ***AnimateDiff***.
