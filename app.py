@@ -79,12 +79,12 @@ button {border-radius: 8px !important;}
 
 
 T_base = [
-            [1.,0.,0.],             ## W2C  x 的正方向： 相机朝左  left
-            [-1.,0.,0.],            ## W2C  x 的负方向： 相机朝右  right
-            [0., 1., 0.],           ## W2C  y 的正方向： 相机朝上  up     
-            [0.,-1.,0.],            ## W2C  y 的负方向： 相机朝下  down
-            [0.,0.,1.],             ## W2C  z 的正方向： 相机往前  zoom out
-            [0.,0.,-1.],            ## W2C  z 的负方向： 相机往前  zoom in
+            [1.,0.,0.],             ## W2C  left
+            [-1.,0.,0.],            ## W2C  right
+            [0., 1., 0.],           ## W2C  up     
+            [0.,-1.,0.],            ## W2C  down
+            [0.,0.,1.],             ## W2C  zoom out
+            [0.,0.,-1.],            ## W2C  zoom in
         ]   
 radius = 1
 n = 16
