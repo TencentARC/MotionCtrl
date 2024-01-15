@@ -26,7 +26,9 @@ MotionCtrl can Independently control **complex camera motion** and **object moti
 
 More results are in [showcase_svd](https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md) and our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/).
 
+
 https://github.com/TencentARC/MotionCtrl/assets/19488619/45d44bf5-d4bf-4e45-8628-2c8926b5954a
+
 
 <!--
 <div align="center">
@@ -56,7 +58,7 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 - [x] 20231225: Gradio demo available. 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BVideoCrafter&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl)
 - [x] 20231228: Provide local gradio demo for convenience.
 - [x] 20240115 More camera poses used for testing are provided in `dataset/camera_poses`
-- [ ] 20240115 Release MotionCtrl deployed on ***SVD***. Codes are in the brach [svd](https://github.com/TencentARC/MotionCtrl/tree/svd) and Gradio Demo is available in 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BSVD&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
+- [x] 20240115 Release MotionCtrl deployed on ***SVD***. Codes are in the brach [svd](https://github.com/TencentARC/MotionCtrl/tree/svd) and Gradio Demo is available in 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BSVD&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
 - [ ] Release MotionCtrl deployed on ***AnimateDiff***.
 
 ---
