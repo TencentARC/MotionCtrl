@@ -1,64 +1,27 @@
-
-<!-- <div align="center"> -->
-<!-- <h1>AnimateZero</h1> -->
-<!-- <h3><b>MotionCtrl</b>: A Unified and Flexible
-                Motion Controller
-                for Video Generation</h3> -->
-
-<!-- [![ Paper](https://img.shields.io/badge/Paper-MotionCtrl-red
-)](https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf) &ensp; [![ arXiv](https://img.shields.io/badge/arXiv-2312.03641-red
-)](https://arxiv.org/pdf/2312.03641.pdf) &ensp; [![Porject Page](https://img.shields.io/badge/Project%20%20Page-MotionCtrl-red)
-](https://wzhouxiff.github.io/projects/MotionCtrl/) &ensp; [![Demo](https://img.shields.io/badge/Demo-MotionCtrl-orange
-)]() -->
-
-<!-- [![ Paper](https://img.shields.io/badge/Paper-gray
-)](https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf) &ensp; [![ arXiv](https://img.shields.io/badge/arXiv-red
-)](https://arxiv.org/pdf/2312.03641.pdf) &ensp; [![Porject Page](https://img.shields.io/badge/Project%20Page-green
-)
-](https://wzhouxiff.github.io/projects/MotionCtrl/) &ensp; [![Demo](https://img.shields.io/badge/Gradio%20Demo-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl)
-
-[Zhouxia Wang](https://vvictoryuki.github.io/website/)<sup>1,2</sup>, [Ziyang Yuan](https://github.com/jiangyzy)<sup>1,4</sup>, [Xintao Wang](https://xinntao.github.io/)<sup>1,3</sup>, [Tianshui Chen](http://tianshuichen.com/)<sup>6</sup>, [Menghan Xia](https://menghanxia.github.io/)<sup>3</sup>, [Ping Luo](http://luoping.me/)<sup>2,5</sup>, [Ying Shan](https://scholar.google.com/citations?hl=zh-CN&user=4oXBp9UAAAAJ)<sup>1,3</sup>
-
-<sup>1</sup> ARC Lab, Tencent PCG, <sup>2</sup> The University of Hong Kong, <sup>3</sup> Tencent AI Lab, <sup>4</sup> Tsinghua University, <sup>5</sup> Shanghai AI Laboratory, <sup>6</sup> Guangdong University of Technology
-
-
-</div> -->
-
-<!-- ## Results of MotionCtrl -->
-
-<!-- </br>
-<video poster="" id="steve" autoplay controls muted loop playsinline height="100%" width="100%">
-<source src="https://wzhouxiff.github.io/projects/MotionCtrl/assets/videos/teasers/camera_d971457c81bca597.mp4" type="video/mp4">
-</video>
-<video poster="" id="steve" autoplay controls muted loop playsinline height="100%" width="100%">
-<source src="https://wzhouxiff.github.io/projects/MotionCtrl/assets/videos/teasers/camera_Round-R_ZoomIn.mp4" type="video/mp4">
-</video>
-<video poster="" id="steve" autoplay controls muted loop playsinline height="100%" width="100%">
-<source src="https://wzhouxiff.github.io/projects/MotionCtrl/assets/videos/teasers/shake_1.mp4" type="video/mp4">
-</video>
-<video poster="" id="steve" autoplay controls muted loop playsinline height="100%" width="100%">
-<source src="https://wzhouxiff.github.io/projects/MotionCtrl/assets/videos/teasers/s_curve_3_v1.mp4" type="video/mp4">
-</video> -->
-
-
-
 # MotionCtrl: A Unified and Flexible Motion Controller for Video Generation
 
 [![ Paper](https://img.shields.io/badge/Paper-gray
 )](https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf) &ensp; [![ arXiv](https://img.shields.io/badge/arXiv-red
 )](https://arxiv.org/pdf/2312.03641.pdf) &ensp; [![Porject Page](https://img.shields.io/badge/Project%20Page-green
 )
-](https://wzhouxiff.github.io/projects/MotionCtrl/) &ensp; [![ Demo](https://img.shields.io/badge/Gradio%20Demo-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl)
+](https://wzhouxiff.github.io/projects/MotionCtrl/) &ensp; [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BVideoCrafter-orange
+)](https://huggingface.co/spaces/TencentARC/MotionCtrl) &ensp; [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
+)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
 
 ---
 
 🔥🔥  This is an official implementation of [MotionCtrl: A Unified and Flexible Motion Controller for Video Generation](https://arxiv.org/pdf/2312.03641.pdf), which is capable of independently controlling the **complex camera motion** and **object motion** of the generated videos, with **only a unified** model. 
 There are some results attained with <b>MotionCtrl</b> and more results are showcased in our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/).
 
+### Results of MotionCtrl+SVD
+<div align="center">
+    <img src="assets/svd/00_ibzz5-dxv2h.gif", width="300">
+    <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">  
+    <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
+    <img src="assets/svd/13_3lyco-4ru8j.gif", width="300">
+</div>
 
-
+### Results of MotionCtrl+VideoCrafter
 <div align="center">
     <img src="assets/hpxvu-3d8ym.gif", width="600">
     <img src="assets/w3nb7-9vz5t.gif", width="600">  
@@ -71,11 +34,14 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 ## 📝 Changelog
 
 - [x] 20231225: Release MotionCtrl deployed on ***LVDM/VideoCrafter***.
-- [x] 20231225: Gradio Demo Available. [![ Demo](https://img.shields.io/badge/Gradio%20Demo-orange
+- [x] 20231225: Gradio Demo Available. [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BVideoCrafter-orange
 )](https://huggingface.co/spaces/TencentARC/MotionCtrl)
 - [x] 20231228: Provide local gradio demo for convenience.
+- [ ] 20240115 Release MotionCtrl deployed on ***SVD***. Code is in brach [MotionCtrl_SVD]() and Gradio Demo is available in [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
+)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
+- [ ] 20240115 More camera poses from Realestate10K are provided in `dataset/camera_poses/realestate` 
 - [ ] Release MotionCtrl deployed on ***AnimateDiff***.
-- [ ] Release MotionCtrl deployed on ***SVD***.
+
 
 ---
 
