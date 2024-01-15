@@ -1,22 +1,36 @@
-# MotionCtrl: A Unified and Flexible Motion Controller for Video Generation
+<p align="center">
+  <img src="assets/logo.jpg" height=80>
+</p>
+
+<div align="center">
+
+## MotionCtrl: A Unified and Flexible Motion Controller for Video Generation
+
+### <div align="center">👉 MotionCtrl for <b><a href="https://github.com/TencentARC/MotionCtrl/tree/MotionCtrl_SVD">[SVD]</a>, for <a href="https://github.com/TencentARC/MotionCtrl/tree/main">[VideoCrafter]</a></b></div>
 
 [![ Paper](https://img.shields.io/badge/Paper-gray
 )](https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf) &ensp; [![ arXiv](https://img.shields.io/badge/arXiv-red
 )](https://arxiv.org/pdf/2312.03641.pdf) &ensp; [![Porject Page](https://img.shields.io/badge/Project%20Page-green
 )
-](https://wzhouxiff.github.io/projects/MotionCtrl/) &ensp; [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BVideoCrafter-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl) &ensp; [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
+](https://wzhouxiff.github.io/projects/MotionCtrl/) &ensp; 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BSVD&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) &ensp; 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BVideoCrafter&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl)
+
+</div>
 
 ---
 
-🔥🔥  This is an official implementation of [MotionCtrl: A Unified and Flexible Motion Controller for Video Generation](https://arxiv.org/pdf/2312.03641.pdf), which is capable of independently controlling the **complex camera motion** and **object motion** of the generated videos, with **only a unified** model. 
-There are some results attained with <b>MotionCtrl</b> and more results are showcased in our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/).
+🔥🔥 We release the codes, [models](https://huggingface.co/TencentARC/MotionCtrl/tree/main) and [demos](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) for MotionCtrl on [Stable Video Diffusion](https://github.com/Stability-AI/generative-models).
 
-### Results of MotionCtrl+SVD
+Official implementation of [MotionCtrl: A Unified and Flexible Motion Controller for Video Generation](https://arxiv.org/abs/2312.03641).
+
+Independently control **complex camera motion** and **object motion** of generated videos, with **only a unified** model.
+
+### MotionCtrl+SVD
+
+More results are in our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/).
+
 <div align="center">
     <img src="assets/svd/00_ibzz5-dxv2h.gif", width="300">
-    <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">  
+    <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">
     <!-- <img src="assets/svd/10_inrmo-e2o0q.gif", width="300">
     <img src="assets/svd/11_2lfsc-m217n.gif", width="300"> -->
     <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
@@ -26,7 +40,7 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 ### Results of MotionCtrl+VideoCrafter
 <div align="center">
     <img src="assets/hpxvu-3d8ym.gif", width="600">
-    <img src="assets/w3nb7-9vz5t.gif", width="600">  
+    <img src="assets/w3nb7-9vz5t.gif", width="600">
     <img src="assets/62n2a-wuvsw.gif", width="600">
     <img src="assets/ilw96-ak827.gif", width="600">
 </div>
@@ -41,7 +55,7 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 - [x] 20231228: Provide local gradio demo for convenience.
 - [x] 20240115 More camera poses used for testing are provided in `dataset/camera_poses`
 - [ ] 20240115 Release MotionCtrl deployed on ***SVD***. Code will be in brach [MotionCtrl_SVD](https://github.com/TencentARC/MotionCtrl/tree/MotionCtrl_SVD) and Gradio Demo will be available in [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD). 
+)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
 - [ ] Release MotionCtrl deployed on ***AnimateDiff***.
 
 
