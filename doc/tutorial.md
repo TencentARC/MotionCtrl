@@ -24,7 +24,7 @@ If the motion control is not obvious, try to increase the `Motion Speed`. 2. If 
 <!-- ![img_0](../assets/tutorial_images/img_0.png) -->
 
 <div >
-<img src="../assets/tutorial_images/img_0.png", height="300">
+<img src="../assets/tutorial_images/img_0.png">
 </div>
 
 ## Step 2. Customize your camera motion
