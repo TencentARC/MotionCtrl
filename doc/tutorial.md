@@ -8,7 +8,7 @@ Here is a tutorial of how to use MotionCtrl_SVD Demo step by step.
 <!-- ![img_0](../assets/tutorial_images/img_0.png) -->
 
 <div >
-<img src="../assets/tutorial_images/img_0.png", height="300">
+<img src="../assets/tutorial_images/img_0.png">
 </div>
 
 ## Step 2. Customize your camera motion
