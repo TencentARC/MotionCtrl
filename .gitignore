@@ -1,6 +1,12 @@
 # main/evaluation
 .vscode/
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+*/**/.DS_Store
 
 *.pyc
 gradio_temp
 *.pth
+
+assets/demo

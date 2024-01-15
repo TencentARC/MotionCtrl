@@ -17,6 +17,8 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 <div align="center">
     <img src="assets/svd/00_ibzz5-dxv2h.gif", width="300">
     <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">  
+    <!-- <img src="assets/svd/10_inrmo-e2o0q.gif", width="300">
+    <img src="assets/svd/11_2lfsc-m217n.gif", width="300"> -->
     <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
     <img src="assets/svd/13_3lyco-4ru8j.gif", width="300">
 </div>
@@ -37,9 +39,9 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 - [x] 20231225: Gradio Demo Available. [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BVideoCrafter-orange
 )](https://huggingface.co/spaces/TencentARC/MotionCtrl)
 - [x] 20231228: Provide local gradio demo for convenience.
-- [ ] 20240115 Release MotionCtrl deployed on ***SVD***. Code is in brach [MotionCtrl_SVD]() and Gradio Demo is available in [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
-- [ ] 20240115 More camera poses from Realestate10K are provided in `dataset/camera_poses/realestate` 
+- [x] 20240115 More camera poses used for testing are provided in `dataset/camera_poses`
+- [ ] 20240116 Going to release MotionCtrl deployed on ***SVD***. Code will be in brach [MotionCtrl_SVD]() and Gradio Demo will be available in [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
+)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD). 
 - [ ] Release MotionCtrl deployed on ***AnimateDiff***.
 
 
