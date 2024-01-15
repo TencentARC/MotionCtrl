@@ -39,7 +39,7 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 - [x] 20231225: Gradio Demo Available. [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BVideoCrafter-orange
 )](https://huggingface.co/spaces/TencentARC/MotionCtrl)
 - [x] 20231228: Provide local gradio demo for convenience.
-- [ ] 20240115 Release MotionCtrl deployed on ***SVD***. Code is in brach [MotionCtrl_SVD]() and Gradio Demo is available in [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
+- [x] 20240115 Release MotionCtrl deployed on ***SVD***. Code is in brach [MotionCtrl_SVD]() and Gradio Demo is available in [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
 )](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
 - [ ] 20240115 More camera poses from Realestate10K are provided in `dataset/camera_poses/realestate` 
 - [ ] Release MotionCtrl deployed on ***AnimateDiff***.
