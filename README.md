@@ -15,7 +15,7 @@
 🔥🔥  This is an extension of [MotionCtrl: A Unified and Flexible Motion Controller for Video Generation](https://arxiv.org/pdf/2312.03641.pdf), deployed on [SVD](https://huggingface.co/stabilityai/stable-video-diffusion-img2vid). Current version is capable of controlling both **basic and complex camera motion** of the generated videos, with **only a unified** model.
 
 🔥🔥 Corresponding gradio demo [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) is available now. [Quick start]() is provided in `doc/quick.md`. There are some results.
+)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) is available now. [Quick start](https://github.com/TencentARC/MotionCtrl/blob/MotionCtrl_SVD/doc/quick.md) is provided in `doc/quick.md`. There are some results.
 
 <div align="center">
     <img src="assets/svd/00_ibzz5-dxv2h.gif", width="300">
