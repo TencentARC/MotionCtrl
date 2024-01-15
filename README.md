@@ -57,12 +57,8 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 
 - #### Run local inference script
 
-1. Download the weights of MotionCtrl [motionctrl.pth](https://huggingface.co/TencentARC/MotionCtrl/blob/main/motionctrl.pth) and put it to `./checkpoints`.
-2. Go into `configs/inference/run.sh` and set `condtype` as 'camera_motion', 'object_motion', or 'both'.
-- `condtype=camera_motion` means only control the **camera motion** in the generated video.
-- `condtype=object_motion` means only control the **object motion** in the generated video.
-- `condtype=both` means control the camera motion and object motion in the generated video **simultaneously**.
-3. Running scripts:
+1. Download the weights of MotionCtrl [motionctrl_svd.pth](https://huggingface.co/TencentARC/MotionCtrl/blob/main/motionctrl_svd.ckpt) and put it to `./checkpoints`.
+2. Running scripts:
         sh configs/inference/run.sh
 
 - #### Run local gradio demo
