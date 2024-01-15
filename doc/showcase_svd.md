@@ -1,8 +1,8 @@
-# Quick Start
+# Showcase of MotionCtrl+SVD
 
-Here is some examples for quick start, which might be helpful for controling the motion on demo.
+Here are some examples for MotionCtrl+SVD.
 
-
+We provide detailed configuration of each example, which might be helpful for reproducing the motion control shown in the example.
 
 ## EX.1
 
@@ -20,7 +20,7 @@ Settings:
 - Image process: Center Crop To 576x1024
 - MotionType: Provided Complex Camera Poses
 - Camera: Pose_5
-- speed : 1 
+- speed : 1
 - FPS: 6
 - n_samples: 2
 - Seed: 123
@@ -330,5 +330,3 @@ Settings:
 - FPS: 6
 - n_samples: 2
 - Seed: 1234
-
-

@@ -1,28 +1,39 @@
-# MotionCtrl: A Unified and Flexible Motion Controller for Video Generation
+<p align="center">
+  <img src="assets/logo.jpg" height=100>
+</p>
+<div align="center">
 
-[![ Paper](https://img.shields.io/badge/Paper-gray
-)](https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf) &ensp; [![ arXiv](https://img.shields.io/badge/arXiv-red
-)](https://arxiv.org/pdf/2312.03641.pdf) &ensp; [![Porject Page](https://img.shields.io/badge/Project%20Page-green
-)
-](https://wzhouxiff.github.io/projects/MotionCtrl/) &ensp; [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BVideoCrafter-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl) &ensp; [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
+## MotionCtrl: A Unified and Flexible Motion Controller for Video Generation
+
+### <div align="center">👉 MotionCtrl for <b><a href="https://github.com/TencentARC/MotionCtrl/tree/svd">[SVD]</a>, for <a href="https://github.com/TencentARC/MotionCtrl/tree/main">[VideoCrafter]</a></b></div>
+
+[![Paper](https://img.shields.io/badge/Paper-gray)](https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf) &ensp; [![arXiv](https://img.shields.io/badge/arXiv-red)](https://arxiv.org/pdf/2312.03641.pdf) &ensp; [![Project Page](https://img.shields.io/badge/Project%20Page-green
+)](https://wzhouxiff.github.io/projects/MotionCtrl/)
+
+🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BSVD&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) &ensp; 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BVideoCrafter&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl)
+
+More examples of MotionCtrl+SVD are in [showcase_svd](https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md)
+
+</div>
 
 ---
 
-## MotionCtrl + SVD 
+🔥🔥 We release the codes, [models](https://huggingface.co/TencentARC/MotionCtrl/tree/main) and [demos](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) for MotionCtrl on [Stable Video Diffusion (SVD)](https://github.com/Stability-AI/generative-models).
 
-🔥🔥  This is an extension of [MotionCtrl: A Unified and Flexible Motion Controller for Video Generation](https://arxiv.org/pdf/2312.03641.pdf), deployed on [SVD](https://huggingface.co/stabilityai/stable-video-diffusion-img2vid). Current version is capable of controlling both **basic and complex camera motion** of the generated videos, with **only a unified** model.
+Official implementation of [MotionCtrl: A Unified and Flexible Motion Controller for Video Generation](https://arxiv.org/abs/2312.03641).
 
-🔥🔥 Corresponding gradio demo [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) is available now. [Quick start](https://github.com/TencentARC/MotionCtrl/blob/MotionCtrl_SVD/doc/quick.md) is provided in `doc/quick.md`. There are some results.
+MotionCtrl can Independently control **complex camera motion** and **object motion** of generated videos, with **only a unified** model.
+
+### Results of MotionCtrl+SVD
+
+More results are in [showcase_svd](https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md) and our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/).
 
 <div align="center">
     <img src="assets/svd/00_ibzz5-dxv2h.gif", width="300">
-    <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">  
-    <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
+    <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">
     <!-- <img src="assets/svd/10_inrmo-e2o0q.gif", width="300">
     <img src="assets/svd/11_2lfsc-m217n.gif", width="300"> -->
+    <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
     <img src="assets/svd/13_3lyco-4ru8j.gif", width="300">
 </div>
 
