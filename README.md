@@ -40,7 +40,7 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 )](https://huggingface.co/spaces/TencentARC/MotionCtrl)
 - [x] 20231228: Provide local gradio demo for convenience.
 - [x] 20240115 More camera poses used for testing are provided in `dataset/camera_poses`
-- [ ] 20240116 Going to release MotionCtrl deployed on ***SVD***. Code will be in brach [MotionCtrl_SVD]() and Gradio Demo will be available in [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
+- [ ] 20240115 Release MotionCtrl deployed on ***SVD***. Code will be in brach [MotionCtrl_SVD](https://github.com/TencentARC/MotionCtrl/tree/MotionCtrl_SVD) and Gradio Demo will be available in [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
 )](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD). 
 - [ ] Release MotionCtrl deployed on ***AnimateDiff***.
 
