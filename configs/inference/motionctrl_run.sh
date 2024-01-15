@@ -16,7 +16,7 @@ if [ ! -d $res_dir ]; then
     mkdir -p $res_dir
 fi
 
-CUDA_VISIBLE_DEVICES=7 python main/inference/motionctrl_cmcm.py \
+python main/inference/motionctrl_cmcm.py \
 --seed 12345 \
 --ckpt $ckpt \
 --config $config \

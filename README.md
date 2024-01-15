@@ -10,43 +10,21 @@
 
 ---
 
-🔥🔥  This is an official implementation of [MotionCtrl: A Unified and Flexible Motion Controller for Video Generation](https://arxiv.org/pdf/2312.03641.pdf), which is capable of independently controlling the **complex camera motion** and **object motion** of the generated videos, with **only a unified** model. 
-There are some results attained with <b>MotionCtrl</b> and more results are showcased in our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/).
+## MotionCtrl + SVD 
 
-### Results of MotionCtrl+SVD
+🔥🔥  This is an extension of [MotionCtrl: A Unified and Flexible Motion Controller for Video Generation](https://arxiv.org/pdf/2312.03641.pdf), deployed on [SVD](https://huggingface.co/stabilityai/stable-video-diffusion-img2vid). Current version is capable of controlling both **basic and complex camera motion** of the generated videos, with **only a unified** model.
+
+🔥🔥 Corresponding gradio demo [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
+)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) is available now. [Quick start]() is provided in `doc/quick.md`. There are some results.
+
 <div align="center">
     <img src="assets/svd/00_ibzz5-dxv2h.gif", width="300">
     <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">  
     <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
-    <img src="assets/svd/10_inrmo-e2o0q.gif", width="300">
-    <img src="assets/svd/11_2lfsc-m217n.gif", width="300">
+    <!-- <img src="assets/svd/10_inrmo-e2o0q.gif", width="300">
+    <img src="assets/svd/11_2lfsc-m217n.gif", width="300"> -->
     <img src="assets/svd/13_3lyco-4ru8j.gif", width="300">
 </div>
-
-### Results of MotionCtrl+VideoCrafter
-<div align="center">
-    <img src="assets/hpxvu-3d8ym.gif", width="600">
-    <img src="assets/w3nb7-9vz5t.gif", width="600">  
-    <img src="assets/62n2a-wuvsw.gif", width="600">
-    <img src="assets/ilw96-ak827.gif", width="600">
-</div>
-
----
-
-## 📝 Changelog
-
-- [x] 20231225: Release MotionCtrl deployed on ***LVDM/VideoCrafter***.
-- [x] 20231225: Gradio Demo Available. [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BVideoCrafter-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl)
-- [x] 20231228: Provide local gradio demo for convenience.
-- [x] 20240115 Release MotionCtrl deployed on ***SVD***. Code is in brach [MotionCtrl_SVD]() and Gradio Demo is available in [![ Demo](https://img.shields.io/badge/Demo%3AMotionCtrl%2BSVD-orange
-)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
-- [ ] 20240115 More camera poses from Realestate10K are provided in `dataset/camera_poses/realestate` 
-- [ ] Release MotionCtrl deployed on ***AnimateDiff***.
-
-
----
-
 
 ## ⚙️ Environment
     conda create -n motionctrl python=3.10.6
@@ -64,6 +42,9 @@ There are some results attained with <b>MotionCtrl</b> and more results are show
 - #### Run local gradio demo
       python -m app --share
 
+❗❗❗ **Noted** ❗❗❗
+1. If the motion control is not obvious, try to increase the `speed` in the run.sh or `Motion Speed` in the gradio demo.
+2. If the generated videos are distored severely, try to descrease the `speed` in the run.sh or `Motion Speed` in the gradio demo. Or increase `FPS`.
 
 
 ## :books: Citation
@@ -78,7 +59,7 @@ If you make use of our work, please cite our paper.
 ```
 
 ## 🤗 Acknowledgment
-The current version of **MotionCtrl** is built on [VideoCrafter](https://github.com/AILab-CVC/VideoCrafter). We appreciate the authors for sharing their awesome codebase.
+The current version of **MotionCtrl** is built on [SVD](https://huggingface.co/stabilityai/stable-video-diffusion-img2vid). We appreciate the authors for sharing their awesome codebase.
 
 ## ❓ Contact
 For any question, feel free to email `wzhoux@connect.hku.hk` or `zhouzi1212@gmail.com`.
