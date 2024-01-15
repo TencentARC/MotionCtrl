@@ -2,6 +2,22 @@
 
 Here is a tutorial of how to use MotionCtrl_SVD Demo step by step.
 
+- [Important Tips](#tips)
+- [Step 1. Pick up your image ](#step-1-pick-up-your-image)
+- [Step 2. Customize your camera motion](#step-2-customize-your-camera-motion)
+- [Step 3. Generate videos](#step-3-generate-videos)
+- [Examples](#demo-examples)
+
+<br>
+
+---
+
+## Tips
+If the motion control is not obvious, try to increase the `Motion Speed`. 2. If the generated videos are distored severely, try to descrease the `Motion Speed` or increase `FPS`
+
+<br>
+
+---
 
 ## Step 1. Pick up your image 
 
