@@ -20,12 +20,24 @@ SPACE_ID = os.environ.get('SPACE_ID', '')
 #### Description ####
 title = r"""<h1 align="center">MotionCtrl: A Unified and Flexible Motion Controller for Video Generation</h1>"""
 subtitle = r"""<h2 align="center">Deployed on SVD Generation</h2>"""
+important_link = r"""
+<div align='center'>
+<a href='https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf'>[Paper]</a>
+&ensp; <a href='https://wzhouxiff.github.io/projects/MotionCtrl/'>[Project Page]</a>
+&ensp; <a href='https://github.com/TencentARC/MotionCtrl'>[Code]</a>
+&ensp; <a href='https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md'>[Showcases]</a>
+&ensp; <a href='https://github.com/TencentARC/MotionCtrl/blob/svd/doc/tutorial.md'>[Tutorial]</a>
+</div>
+"""
 
 description = r"""
 <b>Official Gradio demo</b> for <a href='https://github.com/TencentARC/MotionCtrl' target='_blank'><b>MotionCtrl: A Unified and Flexible Motion Controller for Video Generation</b></a>.<br>
 🔥 MotionCtrl is capable of independently and flexibly controling the camera motion and object motion of a generated video, with only a unified model.<br>
 🤗 Try to control the motion of the generated videos yourself!<br>
 ❗❗❗ Please note **ONLY** Camera Motion Control in the current version of **MotionCtrl** deployed on **SVD** is avaliable.<br>
+❗❗❗ <a href='https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md' target='_blank'>Showcases</a> and 
+<a href='https://github.com/TencentARC/MotionCtrl/blob/svd/doc/tutorial.md' target='_blank'>Tutorial</a> can be found 
+<a href='https://github.com/TencentARC/MotionCtrl/blob/svd/doc/tutorial.md' target='_blank'>here</a><br>.
 """
 # <div>
 # <img src="https://raw.githubusercontent.com/TencentARC/MotionCtrl/main/assets/svd/00_ibzz5-dxv2h.gif", width="300">
@@ -519,6 +531,7 @@ def main(args):
 
         gr.Markdown(title)
         gr.Markdown(subtitle)
+        gr.Markdown(important_link)
         gr.Markdown(description)
 
         with gr.Column():
@@ -809,10 +822,10 @@ def main(args):
 
         gr.Markdown(article)
 
-    # demo.launch(server_name='0.0.0.0', share=False, server_port=args['server_port'])
+    demo.launch(server_name='0.0.0.0', share=False, server_port=args['server_port'])
     # demo.queue(concurrency_count=1, max_size=10)
     # demo.launch()
-    demo.queue(max_size=10).launch(**args)
+    # demo.queue(max_size=10).launch(**args)
 
 
 if __name__=="__main__":
