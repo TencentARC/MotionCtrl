@@ -18,6 +18,10 @@ More examples of MotionCtrl+SVD are in [showcase_svd](https://github.com/Tencent
 
 ---
 
+https://github.com/TencentARC/MotionCtrl/assets/19488619/45d44bf5-d4bf-4e45-8628-2c8926b5954a
+
+---
+
 🔥🔥 We release the codes, [models](https://huggingface.co/TencentARC/MotionCtrl/tree/main) and [demos](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) for MotionCtrl on [Stable Video Diffusion (SVD)](https://github.com/Stability-AI/generative-models).
 
 Official implementation of [MotionCtrl: A Unified and Flexible Motion Controller for Video Generation](https://arxiv.org/abs/2312.03641).
@@ -31,8 +35,6 @@ More results are in [showcase_svd](https://github.com/TencentARC/MotionCtrl/blob
 <div align="center">
     <img src="assets/svd/00_ibzz5-dxv2h.gif", width="300">
     <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">
-    <!-- <img src="assets/svd/10_inrmo-e2o0q.gif", width="300">
-    <img src="assets/svd/11_2lfsc-m217n.gif", width="300"> -->
     <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
     <img src="assets/svd/13_3lyco-4ru8j.gif", width="300">
 </div>
