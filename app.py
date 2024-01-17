@@ -822,10 +822,10 @@ def main(args):
 
         gr.Markdown(article)
 
-    demo.launch(server_name='0.0.0.0', share=False, server_port=args['server_port'])
+    # demo.launch(server_name='0.0.0.0', share=False, server_port=args['server_port'])
     # demo.queue(concurrency_count=1, max_size=10)
     # demo.launch()
-    # demo.queue(max_size=10).launch(**args)
+    demo.queue(max_size=10).launch(**args)
 
 
 if __name__=="__main__":
