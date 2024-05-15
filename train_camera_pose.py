@@ -34,9 +34,9 @@ from torch.utils.data.distributed import DistributedSampler
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer
 
-from animatediff.data.custom_concat_dataset import ConcatDataset
+from motionctrl.data.custom_concat_dataset import ConcatDataset
 from animatediff.data.dataset import WebVid10M
-from animatediff.models.adapted_module import (
+from motionctrl.modified_modules import (
     Adapted_TemporalTransformerBlock_forward, unet3d_forward)
 from animatediff.models.unet import UNet3DConditionModel
 from animatediff.pipelines.pipeline_animation import AnimationPipeline
