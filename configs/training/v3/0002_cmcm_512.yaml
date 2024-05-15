@@ -1,6 +1,6 @@
 image_finetune: false
 
-output_dir: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments"
+output_dir: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments"
 pretrained_model_path: "models/StableDiffusion/stable-diffusion-v1-5"
 
 unet_additional_kwargs:
@@ -36,16 +36,16 @@ train_data:
         info_file: objaverse_success_caption.json
         video_length: 16
         frame_stride: 1
-        resolution: [256,256]
+        resolution: [512,512]
         invert_video: true
     - target: motionctrl.data.realestate10k.RealEstate10K # camera pose only # 62992L
       params:
-        data_dir: /group/30078/public_datasets/3d/RealEstate10K/process/train
-        meta_path: /group/30078/public_datasets/3d/RealEstate10K/caption/train
-        meta_list: /group/30078/public_datasets/3d/RealEstate10K/caption/train.txt
+        data_dir: /group/30098/public_datasets/3d/RealEstate10K/process/train
+        meta_path: /group/30098/public_datasets/3d/RealEstate10K/caption/train
+        meta_list: /group/30098/public_datasets/3d/RealEstate10K/caption/train.txt
         video_length: 16
         frame_stride: [1,16]
-        resolution: [256,256]
+        resolution: [512,512]
         spatial_transform: resize_center_crop
         invert_video: true
         RT_norm: true
@@ -53,12 +53,12 @@ train_data:
       params:
         data_dir: /group/40033/public_datasets/unsplash_resize
         video_length: 16
-        resolution: [256,256]
+        resolution: [512,512]
   dataset_probs:
     - 0.15
     - 0.75
     - 0.1
-  sample_size: 256
+  sample_size: 512
   sample_n_frames: 16
 
 validation_data:
@@ -71,10 +71,10 @@ validation_data:
     # - "Robot dancing in times square."
     # - "Pacific coast, carmel by the sea ocean and waves."
   RT_paths:
-    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-ACW.json
-    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-CW.json
-    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_I_2.0x.json
-    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_O_2.0x.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-ACW.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-CW.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_I_2.0x.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_O_2.0x.json
   num_inference_steps: 25
   guidance_scale: 8.
 
@@ -85,7 +85,7 @@ trainable_modules: ~
 unet_checkpoint_path: "models/Motion_Module/v3_sd15_mm.ckpt"
 
 learning_rate:    1.e-4
-train_batch_size: 2
+train_batch_size: 1
 gradient_accumulation_steps: 4
 
 max_train_epoch:      -1

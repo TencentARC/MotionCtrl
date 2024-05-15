@@ -140,11 +140,12 @@ def main(
     torch.manual_seed(seed)
     
     # Logging folder
-    name = f'{name}_bs{train_batch_size}_lr{learning_rate}_seed{seed}_ccm{gradient_accumulation_steps}'
-    folder_name = "debug" if is_debug else name + datetime.datetime.now().strftime("-%Y-%m-%dT%H-%M-%S")
-    output_dir = os.path.join(output_dir, folder_name)
-    if is_debug and os.path.exists(output_dir):
-        os.system(f"rm -rf {output_dir}")
+    if is_main_process:
+        name = f'{name}_bs{train_batch_size}_lr{learning_rate}_ccm{gradient_accumulation_steps}'
+        folder_name = "debug" if is_debug else name + datetime.datetime.now().strftime("-%Y-%m-%dT%H-%M-%S")
+        output_dir = os.path.join(output_dir, folder_name)
+        if is_debug and os.path.exists(output_dir):
+            os.system(f"rm -rf {output_dir}")
 
     *_, config = inspect.getargvalues(inspect.currentframe())
 
@@ -357,7 +358,7 @@ def main(
                 batch['caption'] = [name if random.random() > cfg_random_null_text_ratio else "" for name in batch['caption']]
                 
             # Data batch sanity check
-            if epoch == first_epoch and step == 0:
+            if epoch == first_epoch and step == 0 and is_main_process:
                 pixel_values, texts = batch['video'].cpu(), batch['caption']
                 if not image_finetune:
                     # pixel_values = rearrange(pixel_values, "b f c h w -> b c f h w") 

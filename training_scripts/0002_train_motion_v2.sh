@@ -1,19 +1,11 @@
-
-gpus='0,1,2,3,4,5,6,7'
-num_gpus=8
-
-# gpus='0'
-# num_gpus=1
-
-CUDA_VISIBLE_DEVICES=$gpus torchrun \
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 torchrun \
 --master_port 1234 \
 --nnodes=1 \
---nproc_per_node=$num_gpus \
+--nproc_per_node=8 \
 train_camera_pose.py \
---config configs/training/v3/0002_cmcm_512.yaml \
-2>&1 | tee -a logs/0002.log
+--config configs/training/v2/0002_training_camera_pose.yaml \
+# 2>&1 | tee -a logs/training_v2.log
 
-# ,1,2,3,4,5,6,7
 
 # CUDA_VISIBLE_DEVICES=0 torchrun \
 # --nnodes=1 \
