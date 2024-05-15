@@ -24,3 +24,5 @@ models/StableDiffusion/*
 !models/DreamBooth_LoRA/*.txt
 !models/MotionLoRA/
 !models/MotionLoRA/*.txt
+
+.vscode/

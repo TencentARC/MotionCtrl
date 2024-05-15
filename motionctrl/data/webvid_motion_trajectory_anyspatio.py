@@ -14,7 +14,7 @@ from torchvision import transforms
 from decord import VideoReader, cpu
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../'))
-from lvdm.data.utils import bivariate_Gaussian
+from motionctrl.data.utils import bivariate_Gaussian
 
 
 def make_spatial_transformations(resolution, type, ori_resolution=None):

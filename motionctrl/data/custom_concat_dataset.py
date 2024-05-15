@@ -8,7 +8,7 @@ from motionctrl.utils.util import instantiate_from_config
 
 
 class ConcatDataset(Dataset):
-    def __init__(self, dataset_configs, dataset_probs,):
+    def __init__(self, dataset_configs, dataset_probs, **kwargs):
         super().__init__()
 
         assert len(dataset_configs) == len(dataset_probs), "dataset configs and prob must have the same length"

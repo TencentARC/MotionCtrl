@@ -12,7 +12,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../'))
-from lvdm.data.utils import create_relative
+from motionctrl.data.utils import create_relative
 
 
 class UnplushDataset(Dataset):

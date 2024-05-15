@@ -35,7 +35,7 @@ def Adapted_TemporalTransformerBlock_forward(self, hidden_states, encoder_hidden
                 video_length=video_length,
             ) + hidden_states
         
-        if 'RT' in kwargs:
+        if 'RT' in kwargs and kwargs['RT'] is not None:
             RT = kwargs['RT']
             # hidden_states.shape = [batch * video_length, height * width, channel]
             # RT.shape = [batch, video_length, 12]
@@ -66,7 +66,7 @@ def unet3d_forward(
         encoder_hidden_states: torch.Tensor,
         class_labels: Optional[torch.Tensor] = None,
         attention_mask: Optional[torch.Tensor] = None,
-        RT: Optional[torch.Tensor] = None,
+        # RT: Optional[torch.Tensor] = None,
         return_dict: bool = True,
         **kwargs,
     ) -> Union[UNet3DConditionOutput, Tuple]:
@@ -139,6 +139,12 @@ def unet3d_forward(
 
             class_emb = self.class_embedding(class_labels).to(dtype=self.dtype)
             emb = emb + class_emb
+
+        # cmcm
+        if 'RT' in kwargs:
+            RT = kwargs['RT']
+        else:
+            RT = None
 
         # pre-process
         sample = self.conv_in(sample)

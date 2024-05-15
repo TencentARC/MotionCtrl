@@ -124,6 +124,9 @@ def main(
 
     global_seed: int = 42,
     is_debug: bool = False,
+
+    # cmcm
+    drop_rate: float = 0.1,
 ):
     check_min_version("0.10.0.dev0")
 
@@ -137,6 +140,7 @@ def main(
     torch.manual_seed(seed)
     
     # Logging folder
+    name = f'{name}_bs{train_batch_size}_lr{learning_rate}_seed{seed}_ccm{gradient_accumulation_steps}'
     folder_name = "debug" if is_debug else name + datetime.datetime.now().strftime("-%Y-%m-%dT%H-%M-%S")
     output_dir = os.path.join(output_dir, folder_name)
     if is_debug and os.path.exists(output_dir):
@@ -212,6 +216,8 @@ def main(
         state_dict = new_state_dict
 
         m, u = unet.load_state_dict(state_dict, strict=False)
+        print('!!!!!!')
+        print(m)
         zero_rank_print(f"missing keys: {len(m)}, unexpected keys: {len(u)}")
         assert len(u) == 0
         
@@ -226,9 +232,8 @@ def main(
             if trainable_module_name in name:
                 param.requires_grad = True
                 break
-    # for trainable_module_name in trainable_modules:
-    #     for param in trainable_module_name.parameters():
-    #         param.requires_grad = True
+
+    print(f"trainable modules: {trainable_modules}")
             
     trainable_params = list(filter(lambda p: p.requires_grad, unet.parameters()))
     optimizer = torch.optim.AdamW(
@@ -369,8 +374,13 @@ def main(
             
             # Convert videos to latent space            
             pixel_values = batch["video"].to(local_rank)
-            RT = batch["T"].to(local_rank)
+            
+            RT = batch["RT"].to(local_rank)
             RT = RT[...]
+            if cfg_random_null_text:
+                for i in range(RT.shape[0]):
+                    RT[i] = RT[i] if random.random() > cfg_random_null_text_ratio else torch.zeros_like(RT[i])
+
             video_length = pixel_values.shape[2]
             with torch.no_grad():
                 if not image_finetune:
@@ -379,8 +389,8 @@ def main(
                     
                     latents = vae.encode(pixel_values).latent_dist
                     latents = latents.sample()
-                    latents = rearrange(latents, "(b f) c h w -> b f c h w", f=video_length)
-                    latents = rearrange(latents, "b f c h w -> b c f h w", f=video_length)
+                    latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
+                    # latents = rearrange(latents, "b f c h w -> b c f h w", f=video_length)
                 else:
                     latents = vae.encode(pixel_values).latent_dist
                     latents = latents.sample()
