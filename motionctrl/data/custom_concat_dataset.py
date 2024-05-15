@@ -4,7 +4,7 @@ import random
 
 from torch.utils.data import Dataset, IterableDataset
 
-from utils.utils import instantiate_from_config
+from motionctrl.utils.util import instantiate_from_config
 
 
 class ConcatDataset(Dataset):

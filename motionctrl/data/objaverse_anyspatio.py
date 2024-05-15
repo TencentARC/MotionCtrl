@@ -13,7 +13,7 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../'))
-from lvdm.data.utils import create_relative
+from motionctrl.data.utils import create_relative
 
 
 class Objaverse360(Dataset):
