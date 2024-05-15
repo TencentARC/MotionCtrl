@@ -1,0 +1,858 @@
+2024-05-15 12:53:23.648619: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-05-15 12:53:23.709973: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-05-15 12:53:24.548583: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+loaded 3D unet's pretrained weights from models/StableDiffusion/stable-diffusion-v1-5/unet ...
+### missing keys: 560; 
+### unexpected keys: 0;
+### Motion Module Parameters: 417.1376 M
+> /group/40034/zhouxiawang/project/motionctrl_animatediff_wzx/scripts/animate.py(60)main()
+-> print(unet)
+(Pdb) UNet3DConditionModel(
+  (conv_in): InflatedConv3d(4, 320, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (time_proj): Timesteps()
+  (time_embedding): TimestepEmbedding(
+    (linear_1): Linear(in_features=320, out_features=1280, bias=True)
+    (act): SiLU()
+    (linear_2): Linear(in_features=1280, out_features=1280, bias=True)
+  )
+  (down_blocks): ModuleList(
+    (0): CrossAttnDownBlock3D(
+      (attentions): ModuleList(
+        (0-1): 2 x Transformer3DModel(
+          (norm): GroupNorm(32, 320, eps=1e-06, affine=True)
+          (proj_in): Conv2d(320, 320, kernel_size=(1, 1), stride=(1, 1))
+          (transformer_blocks): ModuleList(
+            (0): BasicTransformerBlock(
+              (attn1): CrossAttention(
+                (to_q): Linear(in_features=320, out_features=320, bias=False)
+                (to_k): Linear(in_features=320, out_features=320, bias=False)
+                (to_v): Linear(in_features=320, out_features=320, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=320, out_features=320, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm1): LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+              (attn2): CrossAttention(
+                (to_q): Linear(in_features=320, out_features=320, bias=False)
+                (to_k): Linear(in_features=768, out_features=320, bias=False)
+                (to_v): Linear(in_features=768, out_features=320, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=320, out_features=320, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm2): LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+              (ff): FeedForward(
+                (net): ModuleList(
+                  (0): GEGLU(
+                    (proj): Linear(in_features=320, out_features=2560, bias=True)
+                  )
+                  (1): Dropout(p=0.0, inplace=False)
+                  (2): Linear(in_features=1280, out_features=320, bias=True)
+                )
+              )
+              (norm3): LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+          (proj_out): Conv2d(320, 320, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (resnets): ModuleList(
+        (0-1): 2 x ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 320, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(320, 320, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=320, bias=True)
+          (norm2): InflatedGroupNorm(32, 320, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(320, 320, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+        )
+      )
+      (motion_modules): ModuleList(
+        (0-1): 2 x VanillaTemporalModule(
+          (temporal_transformer): TemporalTransformer3DModel(
+            (norm): GroupNorm(32, 320, eps=1e-06, affine=True)
+            (proj_in): Linear(in_features=320, out_features=320, bias=True)
+            (transformer_blocks): ModuleList(
+              (0): TemporalTransformerBlock(
+                (attention_blocks): ModuleList(
+                  (0-1): 2 x VersatileAttention(
+                    (Module Info) Attention_Mode: Temporal, Is_Cross_Attention: False
+                    (to_q): Linear(in_features=320, out_features=320, bias=False)
+                    (to_k): Linear(in_features=320, out_features=320, bias=False)
+                    (to_v): Linear(in_features=320, out_features=320, bias=False)
+                    (to_out): ModuleList(
+                      (0): Linear(in_features=320, out_features=320, bias=True)
+                      (1): Dropout(p=0.0, inplace=False)
+                    )
+                    (pos_encoder): PositionalEncoding(
+                      (dropout): Dropout(p=0.0, inplace=False)
+                    )
+                  )
+                )
+                (norms): ModuleList(
+                  (0-1): 2 x LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+                )
+                (ff): FeedForward(
+                  (net): ModuleList(
+                    (0): GEGLU(
+                      (proj): Linear(in_features=320, out_features=2560, bias=True)
+                    )
+                    (1): Dropout(p=0.0, inplace=False)
+                    (2): Linear(in_features=1280, out_features=320, bias=True)
+                  )
+                )
+                (ff_norm): LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+              )
+            )
+            (proj_out): Linear(in_features=320, out_features=320, bias=True)
+          )
+        )
+      )
+      (downsamplers): ModuleList(
+        (0): Downsample3D(
+          (conv): InflatedConv3d(320, 320, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+        )
+      )
+    )
+    (1): CrossAttnDownBlock3D(
+      (attentions): ModuleList(
+        (0-1): 2 x Transformer3DModel(
+          (norm): GroupNorm(32, 640, eps=1e-06, affine=True)
+          (proj_in): Conv2d(640, 640, kernel_size=(1, 1), stride=(1, 1))
+          (transformer_blocks): ModuleList(
+            (0): BasicTransformerBlock(
+              (attn1): CrossAttention(
+                (to_q): Linear(in_features=640, out_features=640, bias=False)
+                (to_k): Linear(in_features=640, out_features=640, bias=False)
+                (to_v): Linear(in_features=640, out_features=640, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=640, out_features=640, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm1): LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+              (attn2): CrossAttention(
+                (to_q): Linear(in_features=640, out_features=640, bias=False)
+                (to_k): Linear(in_features=768, out_features=640, bias=False)
+                (to_v): Linear(in_features=768, out_features=640, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=640, out_features=640, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm2): LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+              (ff): FeedForward(
+                (net): ModuleList(
+                  (0): GEGLU(
+                    (proj): Linear(in_features=640, out_features=5120, bias=True)
+                  )
+                  (1): Dropout(p=0.0, inplace=False)
+                  (2): Linear(in_features=2560, out_features=640, bias=True)
+                )
+              )
+              (norm3): LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+          (proj_out): Conv2d(640, 640, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (resnets): ModuleList(
+        (0): ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 320, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(320, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=640, bias=True)
+          (norm2): InflatedGroupNorm(32, 640, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(640, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(320, 640, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1): ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 640, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(640, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=640, bias=True)
+          (norm2): InflatedGroupNorm(32, 640, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(640, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+        )
+      )
+      (motion_modules): ModuleList(
+        (0-1): 2 x VanillaTemporalModule(
+          (temporal_transformer): TemporalTransformer3DModel(
+            (norm): GroupNorm(32, 640, eps=1e-06, affine=True)
+            (proj_in): Linear(in_features=640, out_features=640, bias=True)
+            (transformer_blocks): ModuleList(
+              (0): TemporalTransformerBlock(
+                (attention_blocks): ModuleList(
+                  (0-1): 2 x VersatileAttention(
+                    (Module Info) Attention_Mode: Temporal, Is_Cross_Attention: False
+                    (to_q): Linear(in_features=640, out_features=640, bias=False)
+                    (to_k): Linear(in_features=640, out_features=640, bias=False)
+                    (to_v): Linear(in_features=640, out_features=640, bias=False)
+                    (to_out): ModuleList(
+                      (0): Linear(in_features=640, out_features=640, bias=True)
+                      (1): Dropout(p=0.0, inplace=False)
+                    )
+                    (pos_encoder): PositionalEncoding(
+                      (dropout): Dropout(p=0.0, inplace=False)
+                    )
+                  )
+                )
+                (norms): ModuleList(
+                  (0-1): 2 x LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+                )
+                (ff): FeedForward(
+                  (net): ModuleList(
+                    (0): GEGLU(
+                      (proj): Linear(in_features=640, out_features=5120, bias=True)
+                    )
+                    (1): Dropout(p=0.0, inplace=False)
+                    (2): Linear(in_features=2560, out_features=640, bias=True)
+                  )
+                )
+                (ff_norm): LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+              )
+            )
+            (proj_out): Linear(in_features=640, out_features=640, bias=True)
+          )
+        )
+      )
+      (downsamplers): ModuleList(
+        (0): Downsample3D(
+          (conv): InflatedConv3d(640, 640, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+        )
+      )
+    )
+    (2): CrossAttnDownBlock3D(
+      (attentions): ModuleList(
+        (0-1): 2 x Transformer3DModel(
+          (norm): GroupNorm(32, 1280, eps=1e-06, affine=True)
+          (proj_in): Conv2d(1280, 1280, kernel_size=(1, 1), stride=(1, 1))
+          (transformer_blocks): ModuleList(
+            (0): BasicTransformerBlock(
+              (attn1): CrossAttention(
+                (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+                (to_k): Linear(in_features=1280, out_features=1280, bias=False)
+                (to_v): Linear(in_features=1280, out_features=1280, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=1280, out_features=1280, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm1): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              (attn2): CrossAttention(
+                (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+                (to_k): Linear(in_features=768, out_features=1280, bias=False)
+                (to_v): Linear(in_features=768, out_features=1280, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=1280, out_features=1280, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm2): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              (ff): FeedForward(
+                (net): ModuleList(
+                  (0): GEGLU(
+                    (proj): Linear(in_features=1280, out_features=10240, bias=True)
+                  )
+                  (1): Dropout(p=0.0, inplace=False)
+                  (2): Linear(in_features=5120, out_features=1280, bias=True)
+                )
+              )
+              (norm3): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+          (proj_out): Conv2d(1280, 1280, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (resnets): ModuleList(
+        (0): ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 640, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(640, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=1280, bias=True)
+          (norm2): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(640, 1280, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1): ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=1280, bias=True)
+          (norm2): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+        )
+      )
+      (motion_modules): ModuleList(
+        (0-1): 2 x VanillaTemporalModule(
+          (temporal_transformer): TemporalTransformer3DModel(
+            (norm): GroupNorm(32, 1280, eps=1e-06, affine=True)
+            (proj_in): Linear(in_features=1280, out_features=1280, bias=True)
+            (transformer_blocks): ModuleList(
+              (0): TemporalTransformerBlock(
+                (attention_blocks): ModuleList(
+                  (0-1): 2 x VersatileAttention(
+                    (Module Info) Attention_Mode: Temporal, Is_Cross_Attention: False
+                    (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_k): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_v): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_out): ModuleList(
+                      (0): Linear(in_features=1280, out_features=1280, bias=True)
+                      (1): Dropout(p=0.0, inplace=False)
+                    )
+                    (pos_encoder): PositionalEncoding(
+                      (dropout): Dropout(p=0.0, inplace=False)
+                    )
+                  )
+                )
+                (norms): ModuleList(
+                  (0-1): 2 x LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+                )
+                (ff): FeedForward(
+                  (net): ModuleList(
+                    (0): GEGLU(
+                      (proj): Linear(in_features=1280, out_features=10240, bias=True)
+                    )
+                    (1): Dropout(p=0.0, inplace=False)
+                    (2): Linear(in_features=5120, out_features=1280, bias=True)
+                  )
+                )
+                (ff_norm): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              )
+            )
+            (proj_out): Linear(in_features=1280, out_features=1280, bias=True)
+          )
+        )
+      )
+      (downsamplers): ModuleList(
+        (0): Downsample3D(
+          (conv): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+        )
+      )
+    )
+    (3): DownBlock3D(
+      (resnets): ModuleList(
+        (0-1): 2 x ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=1280, bias=True)
+          (norm2): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+        )
+      )
+      (motion_modules): ModuleList(
+        (0-1): 2 x VanillaTemporalModule(
+          (temporal_transformer): TemporalTransformer3DModel(
+            (norm): GroupNorm(32, 1280, eps=1e-06, affine=True)
+            (proj_in): Linear(in_features=1280, out_features=1280, bias=True)
+            (transformer_blocks): ModuleList(
+              (0): TemporalTransformerBlock(
+                (attention_blocks): ModuleList(
+                  (0-1): 2 x VersatileAttention(
+                    (Module Info) Attention_Mode: Temporal, Is_Cross_Attention: False
+                    (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_k): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_v): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_out): ModuleList(
+                      (0): Linear(in_features=1280, out_features=1280, bias=True)
+                      (1): Dropout(p=0.0, inplace=False)
+                    )
+                    (pos_encoder): PositionalEncoding(
+                      (dropout): Dropout(p=0.0, inplace=False)
+                    )
+                  )
+                )
+                (norms): ModuleList(
+                  (0-1): 2 x LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+                )
+                (ff): FeedForward(
+                  (net): ModuleList(
+                    (0): GEGLU(
+                      (proj): Linear(in_features=1280, out_features=10240, bias=True)
+                    )
+                    (1): Dropout(p=0.0, inplace=False)
+                    (2): Linear(in_features=5120, out_features=1280, bias=True)
+                  )
+                )
+                (ff_norm): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              )
+            )
+            (proj_out): Linear(in_features=1280, out_features=1280, bias=True)
+          )
+        )
+      )
+    )
+  )
+  (up_blocks): ModuleList(
+    (0): UpBlock3D(
+      (resnets): ModuleList(
+        (0-2): 3 x ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 2560, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(2560, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=1280, bias=True)
+          (norm2): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(2560, 1280, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (motion_modules): ModuleList(
+        (0-2): 3 x VanillaTemporalModule(
+          (temporal_transformer): TemporalTransformer3DModel(
+            (norm): GroupNorm(32, 1280, eps=1e-06, affine=True)
+            (proj_in): Linear(in_features=1280, out_features=1280, bias=True)
+            (transformer_blocks): ModuleList(
+              (0): TemporalTransformerBlock(
+                (attention_blocks): ModuleList(
+                  (0-1): 2 x VersatileAttention(
+                    (Module Info) Attention_Mode: Temporal, Is_Cross_Attention: False
+                    (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_k): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_v): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_out): ModuleList(
+                      (0): Linear(in_features=1280, out_features=1280, bias=True)
+                      (1): Dropout(p=0.0, inplace=False)
+                    )
+                    (pos_encoder): PositionalEncoding(
+                      (dropout): Dropout(p=0.0, inplace=False)
+                    )
+                  )
+                )
+                (norms): ModuleList(
+                  (0-1): 2 x LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+                )
+                (ff): FeedForward(
+                  (net): ModuleList(
+                    (0): GEGLU(
+                      (proj): Linear(in_features=1280, out_features=10240, bias=True)
+                    )
+                    (1): Dropout(p=0.0, inplace=False)
+                    (2): Linear(in_features=5120, out_features=1280, bias=True)
+                  )
+                )
+                (ff_norm): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              )
+            )
+            (proj_out): Linear(in_features=1280, out_features=1280, bias=True)
+          )
+        )
+      )
+      (upsamplers): ModuleList(
+        (0): Upsample3D(
+          (conv): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+      )
+    )
+    (1): CrossAttnUpBlock3D(
+      (attentions): ModuleList(
+        (0-2): 3 x Transformer3DModel(
+          (norm): GroupNorm(32, 1280, eps=1e-06, affine=True)
+          (proj_in): Conv2d(1280, 1280, kernel_size=(1, 1), stride=(1, 1))
+          (transformer_blocks): ModuleList(
+            (0): BasicTransformerBlock(
+              (attn1): CrossAttention(
+                (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+                (to_k): Linear(in_features=1280, out_features=1280, bias=False)
+                (to_v): Linear(in_features=1280, out_features=1280, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=1280, out_features=1280, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm1): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              (attn2): CrossAttention(
+                (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+                (to_k): Linear(in_features=768, out_features=1280, bias=False)
+                (to_v): Linear(in_features=768, out_features=1280, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=1280, out_features=1280, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm2): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              (ff): FeedForward(
+                (net): ModuleList(
+                  (0): GEGLU(
+                    (proj): Linear(in_features=1280, out_features=10240, bias=True)
+                  )
+                  (1): Dropout(p=0.0, inplace=False)
+                  (2): Linear(in_features=5120, out_features=1280, bias=True)
+                )
+              )
+              (norm3): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+          (proj_out): Conv2d(1280, 1280, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (resnets): ModuleList(
+        (0-1): 2 x ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 2560, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(2560, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=1280, bias=True)
+          (norm2): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(2560, 1280, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (2): ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 1920, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(1920, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=1280, bias=True)
+          (norm2): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(1920, 1280, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (motion_modules): ModuleList(
+        (0-2): 3 x VanillaTemporalModule(
+          (temporal_transformer): TemporalTransformer3DModel(
+            (norm): GroupNorm(32, 1280, eps=1e-06, affine=True)
+            (proj_in): Linear(in_features=1280, out_features=1280, bias=True)
+            (transformer_blocks): ModuleList(
+              (0): TemporalTransformerBlock(
+                (attention_blocks): ModuleList(
+                  (0-1): 2 x VersatileAttention(
+                    (Module Info) Attention_Mode: Temporal, Is_Cross_Attention: False
+                    (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_k): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_v): Linear(in_features=1280, out_features=1280, bias=False)
+                    (to_out): ModuleList(
+                      (0): Linear(in_features=1280, out_features=1280, bias=True)
+                      (1): Dropout(p=0.0, inplace=False)
+                    )
+                    (pos_encoder): PositionalEncoding(
+                      (dropout): Dropout(p=0.0, inplace=False)
+                    )
+                  )
+                )
+                (norms): ModuleList(
+                  (0-1): 2 x LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+                )
+                (ff): FeedForward(
+                  (net): ModuleList(
+                    (0): GEGLU(
+                      (proj): Linear(in_features=1280, out_features=10240, bias=True)
+                    )
+                    (1): Dropout(p=0.0, inplace=False)
+                    (2): Linear(in_features=5120, out_features=1280, bias=True)
+                  )
+                )
+                (ff_norm): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              )
+            )
+            (proj_out): Linear(in_features=1280, out_features=1280, bias=True)
+          )
+        )
+      )
+      (upsamplers): ModuleList(
+        (0): Upsample3D(
+          (conv): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+      )
+    )
+    (2): CrossAttnUpBlock3D(
+      (attentions): ModuleList(
+        (0-2): 3 x Transformer3DModel(
+          (norm): GroupNorm(32, 640, eps=1e-06, affine=True)
+          (proj_in): Conv2d(640, 640, kernel_size=(1, 1), stride=(1, 1))
+          (transformer_blocks): ModuleList(
+            (0): BasicTransformerBlock(
+              (attn1): CrossAttention(
+                (to_q): Linear(in_features=640, out_features=640, bias=False)
+                (to_k): Linear(in_features=640, out_features=640, bias=False)
+                (to_v): Linear(in_features=640, out_features=640, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=640, out_features=640, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm1): LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+              (attn2): CrossAttention(
+                (to_q): Linear(in_features=640, out_features=640, bias=False)
+                (to_k): Linear(in_features=768, out_features=640, bias=False)
+                (to_v): Linear(in_features=768, out_features=640, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=640, out_features=640, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm2): LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+              (ff): FeedForward(
+                (net): ModuleList(
+                  (0): GEGLU(
+                    (proj): Linear(in_features=640, out_features=5120, bias=True)
+                  )
+                  (1): Dropout(p=0.0, inplace=False)
+                  (2): Linear(in_features=2560, out_features=640, bias=True)
+                )
+              )
+              (norm3): LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+          (proj_out): Conv2d(640, 640, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (resnets): ModuleList(
+        (0): ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 1920, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(1920, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=640, bias=True)
+          (norm2): InflatedGroupNorm(32, 640, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(640, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(1920, 640, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1): ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(1280, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=640, bias=True)
+          (norm2): InflatedGroupNorm(32, 640, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(640, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(1280, 640, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (2): ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 960, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(960, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=640, bias=True)
+          (norm2): InflatedGroupNorm(32, 640, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(640, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(960, 640, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (motion_modules): ModuleList(
+        (0-2): 3 x VanillaTemporalModule(
+          (temporal_transformer): TemporalTransformer3DModel(
+            (norm): GroupNorm(32, 640, eps=1e-06, affine=True)
+            (proj_in): Linear(in_features=640, out_features=640, bias=True)
+            (transformer_blocks): ModuleList(
+              (0): TemporalTransformerBlock(
+                (attention_blocks): ModuleList(
+                  (0-1): 2 x VersatileAttention(
+                    (Module Info) Attention_Mode: Temporal, Is_Cross_Attention: False
+                    (to_q): Linear(in_features=640, out_features=640, bias=False)
+                    (to_k): Linear(in_features=640, out_features=640, bias=False)
+                    (to_v): Linear(in_features=640, out_features=640, bias=False)
+                    (to_out): ModuleList(
+                      (0): Linear(in_features=640, out_features=640, bias=True)
+                      (1): Dropout(p=0.0, inplace=False)
+                    )
+                    (pos_encoder): PositionalEncoding(
+                      (dropout): Dropout(p=0.0, inplace=False)
+                    )
+                  )
+                )
+                (norms): ModuleList(
+                  (0-1): 2 x LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+                )
+                (ff): FeedForward(
+                  (net): ModuleList(
+                    (0): GEGLU(
+                      (proj): Linear(in_features=640, out_features=5120, bias=True)
+                    )
+                    (1): Dropout(p=0.0, inplace=False)
+                    (2): Linear(in_features=2560, out_features=640, bias=True)
+                  )
+                )
+                (ff_norm): LayerNorm((640,), eps=1e-05, elementwise_affine=True)
+              )
+            )
+            (proj_out): Linear(in_features=640, out_features=640, bias=True)
+          )
+        )
+      )
+      (upsamplers): ModuleList(
+        (0): Upsample3D(
+          (conv): InflatedConv3d(640, 640, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+      )
+    )
+    (3): CrossAttnUpBlock3D(
+      (attentions): ModuleList(
+        (0-2): 3 x Transformer3DModel(
+          (norm): GroupNorm(32, 320, eps=1e-06, affine=True)
+          (proj_in): Conv2d(320, 320, kernel_size=(1, 1), stride=(1, 1))
+          (transformer_blocks): ModuleList(
+            (0): BasicTransformerBlock(
+              (attn1): CrossAttention(
+                (to_q): Linear(in_features=320, out_features=320, bias=False)
+                (to_k): Linear(in_features=320, out_features=320, bias=False)
+                (to_v): Linear(in_features=320, out_features=320, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=320, out_features=320, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm1): LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+              (attn2): CrossAttention(
+                (to_q): Linear(in_features=320, out_features=320, bias=False)
+                (to_k): Linear(in_features=768, out_features=320, bias=False)
+                (to_v): Linear(in_features=768, out_features=320, bias=False)
+                (to_out): ModuleList(
+                  (0): Linear(in_features=320, out_features=320, bias=True)
+                  (1): Dropout(p=0.0, inplace=False)
+                )
+              )
+              (norm2): LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+              (ff): FeedForward(
+                (net): ModuleList(
+                  (0): GEGLU(
+                    (proj): Linear(in_features=320, out_features=2560, bias=True)
+                  )
+                  (1): Dropout(p=0.0, inplace=False)
+                  (2): Linear(in_features=1280, out_features=320, bias=True)
+                )
+              )
+              (norm3): LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+          (proj_out): Conv2d(320, 320, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (resnets): ModuleList(
+        (0): ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 960, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(960, 320, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=320, bias=True)
+          (norm2): InflatedGroupNorm(32, 320, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(320, 320, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(960, 320, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1-2): 2 x ResnetBlock3D(
+          (norm1): InflatedGroupNorm(32, 640, eps=1e-05, affine=True)
+          (conv1): InflatedConv3d(640, 320, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (time_emb_proj): Linear(in_features=1280, out_features=320, bias=True)
+          (norm2): InflatedGroupNorm(32, 320, eps=1e-05, affine=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (conv2): InflatedConv3d(320, 320, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (nonlinearity): SiLU()
+          (conv_shortcut): InflatedConv3d(640, 320, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (motion_modules): ModuleList(
+        (0-2): 3 x VanillaTemporalModule(
+          (temporal_transformer): TemporalTransformer3DModel(
+            (norm): GroupNorm(32, 320, eps=1e-06, affine=True)
+            (proj_in): Linear(in_features=320, out_features=320, bias=True)
+            (transformer_blocks): ModuleList(
+              (0): TemporalTransformerBlock(
+                (attention_blocks): ModuleList(
+                  (0-1): 2 x VersatileAttention(
+                    (Module Info) Attention_Mode: Temporal, Is_Cross_Attention: False
+                    (to_q): Linear(in_features=320, out_features=320, bias=False)
+                    (to_k): Linear(in_features=320, out_features=320, bias=False)
+                    (to_v): Linear(in_features=320, out_features=320, bias=False)
+                    (to_out): ModuleList(
+                      (0): Linear(in_features=320, out_features=320, bias=True)
+                      (1): Dropout(p=0.0, inplace=False)
+                    )
+                    (pos_encoder): PositionalEncoding(
+                      (dropout): Dropout(p=0.0, inplace=False)
+                    )
+                  )
+                )
+                (norms): ModuleList(
+                  (0-1): 2 x LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+                )
+                (ff): FeedForward(
+                  (net): ModuleList(
+                    (0): GEGLU(
+                      (proj): Linear(in_features=320, out_features=2560, bias=True)
+                    )
+                    (1): Dropout(p=0.0, inplace=False)
+                    (2): Linear(in_features=1280, out_features=320, bias=True)
+                  )
+                )
+                (ff_norm): LayerNorm((320,), eps=1e-05, elementwise_affine=True)
+              )
+            )
+            (proj_out): Linear(in_features=320, out_features=320, bias=True)
+          )
+        )
+      )
+    )
+  )
+  (mid_block): UNetMidBlock3DCrossAttn(
+    (attentions): ModuleList(
+      (0): Transformer3DModel(
+        (norm): GroupNorm(32, 1280, eps=1e-06, affine=True)
+        (proj_in): Conv2d(1280, 1280, kernel_size=(1, 1), stride=(1, 1))
+        (transformer_blocks): ModuleList(
+          (0): BasicTransformerBlock(
+            (attn1): CrossAttention(
+              (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+              (to_k): Linear(in_features=1280, out_features=1280, bias=False)
+              (to_v): Linear(in_features=1280, out_features=1280, bias=False)
+              (to_out): ModuleList(
+                (0): Linear(in_features=1280, out_features=1280, bias=True)
+                (1): Dropout(p=0.0, inplace=False)
+              )
+            )
+            (norm1): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+            (attn2): CrossAttention(
+              (to_q): Linear(in_features=1280, out_features=1280, bias=False)
+              (to_k): Linear(in_features=768, out_features=1280, bias=False)
+              (to_v): Linear(in_features=768, out_features=1280, bias=False)
+              (to_out): ModuleList(
+                (0): Linear(in_features=1280, out_features=1280, bias=True)
+                (1): Dropout(p=0.0, inplace=False)
+              )
+            )
+            (norm2): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+            (ff): FeedForward(
+              (net): ModuleList(
+                (0): GEGLU(
+                  (proj): Linear(in_features=1280, out_features=10240, bias=True)
+                )
+                (1): Dropout(p=0.0, inplace=False)
+                (2): Linear(in_features=5120, out_features=1280, bias=True)
+              )
+            )
+            (norm3): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+          )
+        )
+        (proj_out): Conv2d(1280, 1280, kernel_size=(1, 1), stride=(1, 1))
+      )
+    )
+    (resnets): ModuleList(
+      (0-1): 2 x ResnetBlock3D(
+        (norm1): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+        (conv1): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (time_emb_proj): Linear(in_features=1280, out_features=1280, bias=True)
+        (norm2): InflatedGroupNorm(32, 1280, eps=1e-05, affine=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+        (conv2): InflatedConv3d(1280, 1280, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (nonlinearity): SiLU()
+      )
+    )
+    (motion_modules): ModuleList(
+      (0): None
+    )
+  )
+  (conv_norm_out): InflatedGroupNorm(32, 320, eps=1e-05, affine=True)
+  (conv_act): SiLU()
+  (conv_out): InflatedConv3d(320, 4, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+)
+> /group/40034/zhouxiawang/project/motionctrl_animatediff_wzx/scripts/animate.py(63)main()
+-> controlnet = controlnet_images = None
+(Pdb) 

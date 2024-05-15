@@ -1,0 +1,26 @@
+{
+    "name": "wzhoux",
+    "host": "9.134.229.18",
+    "protocol": "sftp",
+    "port": 36000,
+    "username": "root",
+    "remotePath": "/group/30042/zhouxiawang/project/release_animatediff",
+    "uploadOnSave": true,
+    "password": "Beagirl12#",
+    "ignore": [
+        ".vscode",
+        ".git",
+        ".DS_Store",
+        ".conda",
+        "./models",
+        "./logs",
+        "outputs",
+        "eggs",
+        ".eggs",
+        "logs",
+        "experiments",
+        "val_laion",
+        "*.pyc",
+        "tmp"
+    ]
+}
