@@ -1,7 +1,7 @@
 import argparse
 import datetime
 import inspect
-import os, sys
+import os
 from omegaconf import OmegaConf
 
 import torch
@@ -13,8 +13,11 @@ from diffusers import AutoencoderKL, DDIMScheduler
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer
 
+<<<<<<< HEAD
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+=======
+>>>>>>> cf80ddeb47b69cf0b16f225800de081d486d7f21
 from animatediff.models.unet import UNet3DConditionModel
 from animatediff.models.sparse_controlnet import SparseControlNetModel
 from animatediff.pipelines.pipeline_animation import AnimationPipeline
