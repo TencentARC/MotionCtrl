@@ -436,6 +436,7 @@ class AnimationPipeline(DiffusionPipeline):
                     encoder_hidden_states=text_embeddings,
                     down_block_additional_residuals = down_block_additional_residuals,
                     mid_block_additional_residual   = mid_block_additional_residual,
+                    **kwargs
                 ).sample.to(dtype=latents_dtype)
 
                 # perform guidance
