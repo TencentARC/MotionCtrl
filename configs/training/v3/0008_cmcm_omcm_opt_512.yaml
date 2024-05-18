@@ -65,7 +65,7 @@ unet_checkpoint_path: "models/Motion_Module/v3_sd15_mm.ckpt"
 # unet_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0001_cmcm_bs2_lr0.0001_ccm4-2024-05-15T18-54-39/checkpoints/checkpoint-epoch-23.ckpt"
 
 
-learning_rate:    1.e-4
+learning_rate:    1.e-5
 train_batch_size: 1
 gradient_accumulation_steps: 4
 
@@ -94,7 +94,7 @@ omcm_min_step: 0
 min_step_prob: 0.0
 
 omcm_config: 
-  pretrained: ~
+  pretrained: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0008_cmcm_omcm_opt_512_bs1_lr1e-05_ccm4-2024-05-18T17-02-17/checkpoints/omcm-checkpoint.ckpt
   params:
     channels:
       - 320

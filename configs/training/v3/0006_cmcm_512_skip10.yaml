@@ -107,6 +107,7 @@ is_debug: false
 
 
 # cmcm
-cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T14-23-00/checkpoints/cmcm-checkpoint.ckpt"
+# cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T14-23-00/checkpoints/cmcm-checkpoint.ckpt"
+cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T15-31-12/checkpoints/cmcm-checkpoint.ckpt"
 enable_cmcm: true
 enable_omcm: false

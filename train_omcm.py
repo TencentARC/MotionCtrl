@@ -131,7 +131,7 @@ def main(
     # cmcm
     enable_cmcm: bool = False,
     cmcm_checkpoint_path: str = "",
-    
+
     # omcm
     enable_omcm: bool = False,
     omcm_config: Optional[Dict] = None,
@@ -278,10 +278,10 @@ def main(
         state_dict = new_state_dict
 
         m, u = unet.load_state_dict(state_dict, strict=False)
-        if is_main_process:
-            print('!!!!!!')
-            print(m)
-            print(u)
+        # if is_main_process:
+        #     print('!!!!!!')
+        #     print(m)
+        #     print(u)
         zero_rank_print(f"missing keys: {len(m)}, unexpected keys: {len(u)}")
         # assert len(u) == 0 # do not load cmcm for memory efficiency
 
@@ -298,10 +298,10 @@ def main(
         state_dict = new_state_dict
 
         m, u = unet.load_state_dict(state_dict, strict=False)
-        if is_main_process:
-            print('!!!!!!')
-            print(m)
-            print(u)
+        # if is_main_process:
+        #     print('******')
+        #     print(m)
+        #     print(u)
         zero_rank_print(f"cmcm missing keys: {len(m)}, cmcm unexpected keys: {len(u)}")
         # assert len(u) == 0 # do not load cmcm for memory efficiency
         
@@ -414,7 +414,8 @@ def main(
 
         RT_paths = validation_data.get("RT_paths", [])
         if len(RT_paths) == 0:
-            val_RTs = [None] * val_len
+            val_RTs = [torch.zeros((2, train_data.sample_n_frames, 12))] * val_len
+            val_RTs = [RT.to(validation_pipeline.device) for RT in val_RTs]
         else:
             assert len(RT_paths) == val_len, f'RT_paths: {len(RT_paths)} != val_len: {val_len}'
             val_RTs = []
