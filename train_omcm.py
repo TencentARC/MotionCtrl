@@ -130,6 +130,8 @@ def main(
 
     # cmcm
     enable_cmcm: bool = False,
+    cmcm_checkpoint_path: str = "",
+    
     # omcm
     enable_omcm: bool = False,
     omcm_config: Optional[Dict] = None,
@@ -218,7 +220,7 @@ def main(
                 trainable_modules.append(f'{_name}.norms.1')
 
     # omcm
-    if enable_omcm is not None:
+    if enable_omcm:
         assert omcm_config is not None
         omcm = Adapter(**omcm_config.params)
         if omcm_config.pretrained is not None:
@@ -281,6 +283,26 @@ def main(
             print(m)
             print(u)
         zero_rank_print(f"missing keys: {len(m)}, unexpected keys: {len(u)}")
+        # assert len(u) == 0 # do not load cmcm for memory efficiency
+
+    if cmcm_checkpoint_path != "":
+        zero_rank_print(f"from checkpoint: {cmcm_checkpoint_path}")
+        cmcm_checkpoint_path = torch.load(cmcm_checkpoint_path, map_location="cpu")
+        if "global_step" in cmcm_checkpoint_path: zero_rank_print(f"global_step: {cmcm_checkpoint_path['global_step']}")
+        state_dict = cmcm_checkpoint_path["state_dict"] if "state_dict" in cmcm_checkpoint_path else cmcm_checkpoint_path
+        new_state_dict = {}
+        for k, v in state_dict.items():
+            if 'module.' in k:
+                k = k.replace('module.', '')
+            new_state_dict[k] = v
+        state_dict = new_state_dict
+
+        m, u = unet.load_state_dict(state_dict, strict=False)
+        if is_main_process:
+            print('!!!!!!')
+            print(m)
+            print(u)
+        zero_rank_print(f"cmcm missing keys: {len(m)}, cmcm unexpected keys: {len(u)}")
         # assert len(u) == 0 # do not load cmcm for memory efficiency
         
     # Freeze vae and text_encoder
@@ -628,18 +650,24 @@ def main(
                         torch.save(omcm_state_dict, os.path.join(save_path, f"omcm-checkpoint-{global_step}.ckpt"))
                 
                 if enable_cmcm:
+                    cmcm_state_dict = {}
+                    for k, v in unet.state_dict().items():
+                        for trainable_module_name in trainable_modules:
+                            if trainable_module_name in k:
+                                cmcm_state_dict[k] = v
+                                break
                     state_dict = {
                         "epoch": epoch,
                         "global_step": global_step,
-                        "state_dict": unet.state_dict(),
+                        "state_dict":cmcm_state_dict,
                     }
                     if step == len(train_dataloader) - 1:
-                        torch.save(state_dict, os.path.join(save_path, f"checkpoint-epoch-{epoch+1}.ckpt"))
+                        torch.save(state_dict, os.path.join(save_path, f"cmcm-epoch-{epoch+1}.ckpt"))
                     else:
-                        torch.save(state_dict, os.path.join(save_path, f"checkpoint.ckpt"))
+                        torch.save(state_dict, os.path.join(save_path, f"cmcm-checkpoint.ckpt"))
 
                     if global_step % save_checkpoint_steps == 0:
-                        torch.save(state_dict, os.path.join(save_path, f"checkpoint-{global_step}.ckpt"))
+                        torch.save(state_dict, os.path.join(save_path, f"cmcm-checkpoint-{global_step}.ckpt"))
                 logging.info(f"Saved state to {save_path} (global_step: {global_step})")
                 
             # Periodically validation
@@ -656,7 +684,10 @@ def main(
                 prompts = validation_data.prompts
 
                 for idx, prompt in enumerate(prompts):
-                    traj_features = get_traj_features(val_trajs[idx], omcm)
+                    if enable_omcm:
+                        traj_features = get_traj_features(val_trajs[idx], omcm)
+                    else:
+                        traj_features = None
                     if not image_finetune:
                         sample = validation_pipeline(
                             prompt,

@@ -29,32 +29,31 @@ noise_scheduler_kwargs:
   clip_sample:         false
 
 train_data:
-  target: motionctrl.data.webvid_motion_trajectory_anyspatio.WebVid
+  target: motionctrl.data.webvid.WebVid
   params:
-        data_dir: /group/40033/public_datasets/WebVid
-        meta_path: /group/40033/public_datasets/WebVid/meta_data/results_2M_train.csv
-        motion_seg_list: /group/40033/public_datasets/WebVid/motion_seg_list_v2.txt
-        video_length: 16
-        frame_stride:
-        - 1
-        - 2
-        trajectory_type: dense
-        spatial_transform: align2_256
-        resolution: [512,512]
-        load_raw_resolution: True
-  sample_size: 512
-
+    data_dir: /group/40033/public_datasets/WebVid
+    meta_path: /group/40033/public_datasets/WebVid/meta_data/results_2M_train.csv
+    video_length: 16
+    frame_stride: 8
+    load_raw_resolution: True
+    resolution: [256,256]
+    spatial_transform: resize_center_crop
+  sample_size: 256
   sample_n_frames: 16
 
 validation_data:
   prompts:
-    - "a sunflower swaying in the wind."
-    - "a man surfing."
+    - "a car runing on the road."
+    - "a car runing on the road."
 
-  traj_paths:
-    - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/shaking_10.npy
-    - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/curve_2.npy
+  # traj_paths:
+  #   - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/shaking_10.npy
+  #   - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/curve_2.npy
   
+  opt_paths:
+    - /group/30098/zhouxiawang/project/SVD_Codebase/examples/videos/car-turn-24.mp4
+    - /group/30098/zhouxiawang/project/SVD_Codebase/examples/videos/car-turn.mp4
+
   num_inference_steps: 25
   guidance_scale: 8.
 
@@ -62,18 +61,19 @@ trainable_modules: ~
   # - "motion_modules."
 
 # unet_checkpoint_path: "models/Motion_Module/mm_sd_v15_v2.ckpt"
-# unet_checkpoint_path: "models/Motion_Module/v3_sd15_mm.ckpt"
+unet_checkpoint_path: "models/Motion_Module/v3_sd15_mm.ckpt"
 # unet_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0001_cmcm_bs2_lr0.0001_ccm4-2024-05-15T18-54-39/checkpoints/checkpoint-epoch-23.ckpt"
-unet_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T14-23-00/checkpoints/cmcm-checkpoint.ckpt"
+
 
 learning_rate:    1.e-4
-train_batch_size: 1
+train_batch_size: 3
 gradient_accumulation_steps: 4
 
 max_train_epoch:      -1
 max_train_steps:      1000000
 checkpointing_epochs: -1
 checkpointing_steps:  1000
+save_checkpoint_steps: 5000
 
 validation_steps:       1000
 validation_steps_tuple: [2, 50, 500]
@@ -82,15 +82,16 @@ global_seed: 42
 mixed_precision_training: true
 enable_xformers_memory_efficient_attention: True
 
-is_debug: true
+is_debug: false
 
 # cmcm
+cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T14-23-00/checkpoints/cmcm-checkpoint.ckpt"
 enable_cmcm: False
 
 # omcm
 enable_omcm: true
-omcm_min_step: 700
-min_step_prob: 0.8
+omcm_min_step: 0
+min_step_prob: 0.0
 
 omcm_config: 
   pretrained: ~
@@ -104,3 +105,18 @@ omcm_config:
     cin: 128 # 2 * 8 * 8
     sk: True
     use_conv: False
+
+use_optical_flow: true
+optical_flow_config:
+  pretrained_model: /group/40034/zhouxiawang/env/share/weights/unimatch_pretrained_models/gmflow-scale2-regrefine6-mixdata-train320x576-4e7b215d.pth
+  num_reg_refine: 6
+  target: motionctrl.unimatch.unimatch.UniMatch
+  params:
+    num_scales: 2
+    feature_channels: 128
+    upsample_factor: 4
+    num_head: 1
+    ffn_dim_expansion: 4
+    num_transformer_layers: 6
+    reg_refine: true
+    task: 'flow'

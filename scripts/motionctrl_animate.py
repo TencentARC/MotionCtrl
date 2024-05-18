@@ -39,10 +39,15 @@ def main(args):
     func_args = dict(func_args)
     
     time_str = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
-    savedir = f"samples/{Path(args.config).stem}-{time_str}"
-    os.makedirs(savedir)
+    # savedir = f"samples/{Path(args.config).stem}-{time_str}"
 
     config  = OmegaConf.load(args.config)
+
+    # import pdb; pdb.set_trace()
+    name_part = config[0].motion_module.split('/')
+    savedir = f"samples/{name_part[-3].split('_')[0]}_epoch{name_part[-1][:-5].split('-')[-1]}"
+    os.makedirs(savedir, exist_ok=True)
+
     samples = []
 
     # create validation pipeline
