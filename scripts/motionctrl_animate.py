@@ -179,38 +179,41 @@ def main(args):
             RT_names.append(RT_name)
 
         config[model_idx].random_seed = []
-        for prompt_idx, (prompt, n_prompt, random_seed, RT) in enumerate(zip(prompts, n_prompts, random_seeds, RTs)):
-            
-            # manually set random seed for reproduction
-            if random_seed != -1: torch.manual_seed(random_seed)
-            else: torch.seed()
-            config[model_idx].random_seed.append(torch.initial_seed())
-            
-            print(f"current seed: {torch.initial_seed()}")
-            print(f"sampling {prompt} ...")
-            sample = pipeline(
-                prompt,
-                negative_prompt     = n_prompt,
-                num_inference_steps = model_config.steps,
-                guidance_scale      = model_config.guidance_scale,
-                width               = model_config.W,
-                height              = model_config.H,
-                video_length        = model_config.L,
 
-                controlnet_images = controlnet_images,
-                controlnet_image_index = model_config.get("controlnet_image_indexs", [0]),
-                RT = RT,
-            ).videos
-            samples.append(sample)
+        for RT_idx, RT in enumerate(RTs):
+            samples = []
+            for prompt_idx, (prompt, n_prompt, random_seed) in enumerate(zip(prompts, n_prompts, random_seeds)):
+                
+                # manually set random seed for reproduction
+                if random_seed != -1: torch.manual_seed(random_seed)
+                else: torch.seed()
+                config[model_idx].random_seed.append(torch.initial_seed())
+                
+                print(f"current seed: {torch.initial_seed()}")
+                print(f"sampling {prompt} ...")
+                sample = pipeline(
+                    prompt,
+                    negative_prompt     = n_prompt,
+                    num_inference_steps = model_config.steps,
+                    guidance_scale      = model_config.guidance_scale,
+                    width               = model_config.W,
+                    height              = model_config.H,
+                    video_length        = model_config.L,
 
-            prompt = "-".join((prompt.replace("/", "").split(" ")[:10]))
-            save_videos_grid(sample, f"{savedir}/sample/{sample_idx}-{prompt}-{RT_names[prompt_idx]}.gif")
-            print(f"save to {savedir}/sample/{prompt}.gif")
-            
-            sample_idx += 1
+                    controlnet_images = controlnet_images,
+                    controlnet_image_index = model_config.get("controlnet_image_indexs", [0]),
+                    RT = RT,
+                ).videos
+                samples.append(sample)
 
-    samples = torch.concat(samples)
-    save_videos_grid(samples, f"{savedir}/sample.gif", n_rows=4)
+                prompt = "-".join((prompt.replace("/", "").split(" ")[:10]))
+                save_videos_grid(sample, f"{savedir}/sample/{sample_idx}-{prompt}.gif")
+                print(f"save to {savedir}/sample/{prompt}.gif")
+                
+                sample_idx += 1
+
+            samples = torch.concat(samples)
+            save_videos_grid(samples, f"{savedir}/sample-{RT_names[RT_idx]}.gif", n_rows=4)
 
     OmegaConf.save(config, f"{savedir}/config.yaml")
 
@@ -218,7 +221,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--pretrained-model-path", type=str, default="models/StableDiffusion/stable-diffusion-v1-5",)
-    parser.add_argument("--inference-config",      type=str, default="configs/inference/inference-v1.yaml")    
+    parser.add_argument("--inference-config",      type=str, default="configs/inference/inference-v3.yaml")    
     parser.add_argument("--config",                type=str, required=True)
     
     parser.add_argument("--L", type=int, default=16 )

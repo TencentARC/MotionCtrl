@@ -2,13 +2,15 @@
   # motion_module:    "models/Motion_Module/v3_sd15_mm.ckpt"
   # motion_module:    "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0001_cmcm_bs2_lr0.0001_ccm4-2024-05-15T18-54-39/checkpoints/checkpoint-epoch-9.ckpt"
   # motion_module:    "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0001_cmcm_bs2_lr0.0001_ccm4-2024-05-15T18-54-39/checkpoints/checkpoint-epoch-23.ckpt"
-  motion_module: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0002_cmcm_512_bs1_lr0.0001_ccm4-2024-05-15T20-12-58/checkpoints/checkpoint-epoch-6.ckpt"
+  motion_module:    "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0001_cmcm_bs2_lr0.0001_ccm4-2024-05-15T18-54-39/checkpoints/checkpoint-epoch-28.ckpt"
+  # motion_module: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0002_cmcm_512_bs1_lr0.0001_ccm4-2024-05-15T20-12-58/checkpoints/checkpoint-epoch-6.ckpt"
   # motion_module: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0002_cmcm_512_bs1_lr0.0001_ccm4-2024-05-15T20-12-58/checkpoints/checkpoint-epoch-11.ckpt"
 
-  dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"
+  # dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"
+  dreambooth_model_path: "/group/40034/yaoweili/code/trajectory/animatediff/models/DreamBooth_LoRA/helloobjects_V12c.safetensors"
   lora_model_path: ""
 
-  seed:           [13100322578370451493, 14752961627088720670, 9329399085567825781, 16987697414827649302]
+  seed:           [13100322578370451493, 14752961627088720670, 9329399085567825781, 16987697414827649302, 13100322578370451493, 14752961627088720670, 9329399085567825781, 16987697414827649302]
   steps:          25
   guidance_scale: 7.5
 

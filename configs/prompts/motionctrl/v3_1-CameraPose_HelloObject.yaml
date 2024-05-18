@@ -1,0 +1,41 @@
+- inference_config: "configs/inference/inference-v3.yaml"
+  motion_module: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0001_cmcm_bs2_lr0.0001_ccm4-2024-05-15T18-54-39/checkpoints/checkpoint-epoch-28.ckpt"
+  
+  dreambooth_path: "models/DreamBooth_LoRA/helloobjects_V12c.safetensors"
+  lora_model_path: ""
+  
+  seed:           [3638500841, 16046708080676731040, 16403310442494881856, 12859041357761502239, 13897214542379912903]
+  steps:          25
+  guidance_scale: 7.5
+
+  prompt:
+    - "intricate detailing,photorealism,hyperrealistic, glowing jellyfish mushroom, flying, starry sky, bokeh, golden ratio composition,"
+    - "Detailed craftsmanship, photorealism, hyperrealistic, roaring waterfall, misty spray, lush greenery, vibrant rainbow, golden ratio composition."
+    - "Exquisite detail depiction, photo-realistic sensation, surrealism, ancient castles, towering towers, sprawling ivy, traces of history, golden ratio composition."
+    - "Intricate detailing, photorealism, hyperrealistic, blooming cherry blossom, fluttering petals, soft sunlight, serene park, golden ratio composition."
+    - "Intricate detailing, photorealism, hyperrealistic, majestic mountain range, snow-capped peaks, glowing sunset, panoramic view, golden ratio composition."    
+  
+  n_prompt:
+    - "FastNegativeV2,(bad-artist:1),(worst quality, low quality:1.4),(bad_prompt_version2:0.8),bad-hands-5,lowres,bad anatomy,bad hands,((text)),(watermark),error,missing fingers,extra digit,fewer digits,cropped,worst quality,low quality,normal quality,((username)),blurry,(extra limbs),bad-artist-anime,badhandv4,EasyNegative,ng_deepnegative_v1_75t,verybadimagenegative_v1.3,BadDream,(three hands:1.6),(three legs:1.2),(more than two hands:1.4),(more than two legs,:1.2),"
+    
+  post_prompt: ''
+
+  RT_paths:
+    - "cus_camera_motion/test_camera_I_3.0x.json"
+    - "cus_camera_motion/test_camera_U_3.0x.json"
+    - "cus_camera_motion/test_camera_D_3.0x.json"
+    - "cus_camera_motion/test_camera_O_3.0x.json"
+    - "cus_camera_motion/test_camera_L_3.0x.json"
+    - "cus_camera_motion/test_camera_R_3.0x.json"
+    - "cus_camera_motion/test_camera_Round-RI.json"
+    - "cus_camera_motion/test_camera_Round-ZoomIn.json"
+    - "cus_camera_motion/test_camera_SPIN-CW.json"
+    - "cus_camera_motion/test_camera_SPIN-ACW.json"
+    - "cus_camera_motion/test_camera_SPIN-DU.json"
+    - "cus_camera_motion/test_camera_SPIN-LR.json"
+    - "cus_camera_motion/test_camera_SPIN-ACW_120.json"
+    - "cus_camera_motion/test_camera_SPIN-ACW_150.json"
+    - "cus_camera_motion/test_camera_SPIN-CW_120.json"
+    - "cus_camera_motion/test_camera_SPIN-CW_150.json"
+
+    

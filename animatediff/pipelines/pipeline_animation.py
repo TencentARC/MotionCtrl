@@ -392,10 +392,18 @@ class AnimationPipeline(DiffusionPipeline):
         # Prepare extra step kwargs.
         extra_step_kwargs = self.prepare_extra_step_kwargs(generator, eta)
 
+        if 'omcm_min_step' in kwargs:
+            omcm_min_step = kwargs['omcm_min_step']
+            kwargs.pop('omcm_min_step')
+
         # Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
+                # import pdb; pdb.set_trace()
+                if 'traj_features' in kwargs and t < omcm_min_step:
+                    kwargs.pop('traj_features')
+                    
                 # expand the latents if we are doing classifier free guidance
                 latent_model_input = torch.cat([latents] * 2) if do_classifier_free_guidance else latents
                 latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)

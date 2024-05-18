@@ -25,6 +25,7 @@ class UNet3DConditionOutput(BaseOutput):
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 
+# cmcm
 def Adapted_TemporalTransformerBlock_forward(self, hidden_states, encoder_hidden_states=None, attention_mask=None, video_length=None, **kwargs):
         # import pdb; pdb.set_trace()
         for attention_block, norm in zip(self.attention_blocks[:-1], self.norms[:-1]):
@@ -59,6 +60,102 @@ def Adapted_TemporalTransformerBlock_forward(self, hidden_states, encoder_hidden
         output = hidden_states  
         return output
 
+# omcm
+def Adapted_CrossAttnDownBlock3D_forward(self, hidden_states, temb=None, encoder_hidden_states=None, attention_mask=None, **kwargs):
+        output_states = ()
+
+        if 'traj_features' in kwargs:
+            traj_features = kwargs['traj_features']
+            kwargs.pop('traj_features')
+        else:
+            traj_features = None
+
+        for resnet, attn, motion_module in zip(self.resnets, self.attentions, self.motion_modules):
+            if self.training and self.gradient_checkpointing:
+
+                def create_custom_forward(module, return_dict=None):
+                    def custom_forward(*inputs):
+                        if return_dict is not None:
+                            return module(*inputs, return_dict=return_dict)
+                        else:
+                            return module(*inputs)
+
+                    return custom_forward
+
+                hidden_states = torch.utils.checkpoint.checkpoint(create_custom_forward(resnet), hidden_states, temb)
+                hidden_states = torch.utils.checkpoint.checkpoint(
+                    create_custom_forward(attn, return_dict=False),
+                    hidden_states,
+                    encoder_hidden_states,
+                )[0]
+                if motion_module is not None:
+                    hidden_states = torch.utils.checkpoint.checkpoint(create_custom_forward(motion_module), hidden_states.requires_grad_(), temb, encoder_hidden_states)
+                
+            else:
+                hidden_states = resnet(hidden_states, temb)
+                hidden_states = attn(hidden_states, encoder_hidden_states=encoder_hidden_states).sample
+                
+                # add motion module
+                hidden_states = motion_module(hidden_states, temb, encoder_hidden_states=encoder_hidden_states, **kwargs) if motion_module is not None else hidden_states
+
+            output_states += (hidden_states,)
+
+        # omcm
+        if traj_features is not None:
+            hidden_states = hidden_states + traj_features[self.traj_fea_idx]
+            output_states = output_states[:-1] + (hidden_states,)
+
+        if self.downsamplers is not None:
+            for downsampler in self.downsamplers:
+                hidden_states = downsampler(hidden_states)
+
+            output_states += (hidden_states,)
+
+        return hidden_states, output_states
+
+def Adapted_DownBlock3D_forward(self, hidden_states, temb=None, encoder_hidden_states=None, **kwargs):
+        output_states = ()
+
+        if 'traj_features' in kwargs:
+            traj_features = kwargs['traj_features']
+            kwargs.pop('traj_features')
+        else:
+            traj_features = None
+
+        for resnet, motion_module in zip(self.resnets, self.motion_modules):
+            if self.training and self.gradient_checkpointing:
+                def create_custom_forward(module):
+                    def custom_forward(*inputs):
+                        return module(*inputs)
+
+                    return custom_forward
+
+                hidden_states = torch.utils.checkpoint.checkpoint(create_custom_forward(resnet), hidden_states, temb)
+                if motion_module is not None:
+                    hidden_states = torch.utils.checkpoint.checkpoint(create_custom_forward(motion_module, **kwargs), hidden_states.requires_grad_(), temb, encoder_hidden_states)
+            else:
+                hidden_states = resnet(hidden_states, temb)
+
+                # add motion module
+                hidden_states = motion_module(hidden_states, temb, encoder_hidden_states=encoder_hidden_states, **kwargs) if motion_module is not None else hidden_states
+
+            output_states += (hidden_states,)
+
+        # omcm
+        if traj_features is not None:
+            hidden_states = hidden_states + traj_features[self.traj_fea_idx]
+            output_states = output_states[:-1] + (hidden_states,)
+
+        if self.downsamplers is not None:
+            for downsampler in self.downsamplers:
+                hidden_states = downsampler(hidden_states)
+
+            output_states += (hidden_states,)
+
+        return hidden_states, output_states
+
+
+# unet forward
 def unet3d_forward(
         self,
         sample: torch.FloatTensor,
@@ -143,8 +240,15 @@ def unet3d_forward(
         # cmcm
         if 'RT' in kwargs:
             RT = kwargs['RT']
+            kwargs.pop('RT')
         else:
             RT = None
+
+        if 'traj_features' in kwargs:
+            traj_features = kwargs['traj_features']
+            kwargs.pop('traj_features')
+        else:
+            traj_features = None
 
         # pre-process
         sample = self.conv_in(sample)
@@ -158,7 +262,8 @@ def unet3d_forward(
                     temb=emb,
                     encoder_hidden_states=encoder_hidden_states,
                     attention_mask=attention_mask,
-                    RT=RT
+                    RT=RT,
+                    traj_features=traj_features,
                 )
             else:
                 sample, res_samples = downsample_block(hidden_states=sample, temb=emb, encoder_hidden_states=encoder_hidden_states, RT=RT)

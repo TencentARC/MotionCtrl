@@ -1,0 +1,109 @@
+image_finetune: false
+
+output_dir: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments"
+pretrained_model_path: "models/StableDiffusion/stable-diffusion-v1-5"
+
+unet_additional_kwargs:
+  use_inflated_groupnorm:     true # v2: without this line
+  use_motion_module:          true
+  motion_module_resolutions:  [1,2,4,8]
+  motion_module_mid_block:    false # v2: true
+  motion_module_type:         Vanilla
+
+  motion_module_kwargs:
+    num_attention_heads:                 8
+    num_transformer_block:               1
+    attention_block_types:               [ "Temporal_Self", "Temporal_Self" ]
+    temporal_position_encoding:          true
+    temporal_position_encoding_max_len:  32
+    temporal_attention_dim_div:          1
+    zero_initialize:                     true
+
+
+noise_scheduler_kwargs:
+  num_train_timesteps: 1000
+  beta_start:          0.00085
+  beta_end:            0.012
+  beta_schedule:       "linear"
+  steps_offset:        1
+  clip_sample:         false
+
+train_data:
+  target: motionctrl.data.custom_concat_dataset.ConcatDataset
+  params:
+    dataset_configs:
+      - target: motionctrl.data.objaverse_anyspatio.Objaverse360 # camera pose only # 399008
+        params:
+          data_dir: /group/40046/public_datasets/3d_datasets/objaverse/views_release
+          info_file: objaverse_success_caption.json
+          video_length: 16
+          frame_stride: 1
+          resolution: [512,512]
+          invert_video: true
+      - target: motionctrl.data.realestate10k.RealEstate10K # camera pose only # 62992L
+        params:
+          data_dir: /group/30098/public_datasets/3d/RealEstate10K/process/train
+          meta_path: /group/30098/public_datasets/3d/RealEstate10K/caption/train
+          meta_list: /group/30098/public_datasets/3d/RealEstate10K/caption/train.txt
+          video_length: 16
+          frame_stride: [1,16]
+          resolution: [512,512]
+          spatial_transform: resize_center_crop
+          invert_video: true
+          RT_norm: true
+      - target: motionctrl.data.unplush_anticlockwise_clockwise_anyspatio.UnplushDataset  # camera pose only # 5w
+        params:
+          data_dir: /group/40033/public_datasets/unsplash_resize
+          video_length: 16
+          resolution: [512,512]
+    dataset_probs:
+      - 0.15
+      - 0.75
+      - 0.1
+  sample_size: 512
+  sample_n_frames: 16
+
+validation_data:
+  prompts:
+    - "Snow rocky mountains peaks canyon. Snow blanketed rocky mountains surround and shadow deep canyons."
+    - "Snow rocky mountains peaks canyon. Snow blanketed rocky mountains surround and shadow deep canyons."
+    - "Snow rocky mountains peaks canyon. Snow blanketed rocky mountains surround and shadow deep canyons."
+    - "Snow rocky mountains peaks canyon. Snow blanketed rocky mountains surround and shadow deep canyons."
+    # - "A drone view of celebration with Christma tree and fireworks, starry sky - background."
+    # - "Robot dancing in times square."
+    # - "Pacific coast, carmel by the sea ocean and waves."
+  RT_paths:
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-ACW.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-CW.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_I_2.0x.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_O_2.0x.json
+  num_inference_steps: 25
+  guidance_scale: 8.
+
+trainable_modules: ~
+  # - "motion_modules."
+
+# unet_checkpoint_path: "models/Motion_Module/mm_sd_v15_v2.ckpt"
+unet_checkpoint_path: "models/Motion_Module/v3_sd15_mm.ckpt"
+
+learning_rate:    1.e-4
+train_batch_size: 1
+gradient_accumulation_steps: 4
+
+max_train_epoch:      -1
+max_train_steps:      1000000
+checkpointing_epochs: -1
+checkpointing_steps:  1000
+
+validation_steps:       1000
+validation_steps_tuple: [2, 50, 500]
+
+global_seed: 42
+mixed_precision_training: true
+enable_xformers_memory_efficient_attention: True
+
+is_debug: false
+
+
+# cmcm
+# drop_rate: 0.1
