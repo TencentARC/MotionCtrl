@@ -7,7 +7,7 @@
   # motion_module: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0002_cmcm_512_bs1_lr0.0001_ccm4-2024-05-15T20-12-58/checkpoints/checkpoint-epoch-11.ckpt"
   # motion_module: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0002_cmcm_512_bs1_lr0.0001_ccm4-2024-05-15T20-12-58/checkpoints/checkpoint-epoch-19.ckpt"
   # cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T17-02-12/checkpoints/cmcm-checkpoint.ckpt"
-  cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T17-02-12/checkpoints/cmcm-epoch-3.ckpt"
+  cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T17-02-12/checkpoints/cmcm-epoch-2.ckpt"
   
 
   dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"

@@ -131,6 +131,7 @@ def main(
     # cmcm
     enable_cmcm: bool = False,
     cmcm_checkpoint_path: str = "",
+    appearance_debias: float = 0.0,
 
     # omcm
     enable_omcm: bool = False,
@@ -154,7 +155,7 @@ def main(
     
     # Logging folder
     if is_main_process:
-        name = f'{name}_lr{learning_rate}_bs{train_batch_size}_gpus{num_processes}_ccm{gradient_accumulation_steps}'
+        name = f'{name}_lr{learning_rate}_bs{train_batch_size}_gpus{num_processes}_ccm{gradient_accumulation_steps}_debias{appearance_debias}'
         folder_name = "debug" if is_debug else name + datetime.datetime.now().strftime("-%Y-%m-%dT%H-%M-%S")
         output_dir = os.path.join(output_dir, folder_name)
         if is_debug and os.path.exists(output_dir):
@@ -606,7 +607,20 @@ def main(
             with torch.cuda.amp.autocast(enabled=mixed_precision_training):
                 model_pred = unet(noisy_latents, timesteps, encoder_hidden_states, 
                                   RT=RT, traj_features=traj_features).sample
+                
                 loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
+                if appearance_debias > 0: # appearance debias loss from MotionDirector (https://arxiv.org/abs/2310.08465)
+                    anchor = []
+                    for i in range(target.shape[0]):
+                        randidx = random.randint(0, target.shape[2]-1)
+                        anchor.append(target[i:i+1, :, randidx:randidx+1, :, :])
+                    anchor = torch.cat(anchor, dim=0)
+                    # repeate anchor to match target
+                    anchor = anchor.repeat_interleave(target.shape[2], dim=2)
+                    loss_app_debias = F.mse_loss(math.sqrt(2) * model_pred - anchor,
+                                                math.sqrt(2) * target - anchor, 
+                                                reduction="mean")
+                    loss = loss + appearance_debias * loss_app_debias
 
             optimizer.zero_grad()
 
