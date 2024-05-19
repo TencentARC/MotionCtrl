@@ -414,8 +414,11 @@ def main(
 
         RT_paths = validation_data.get("RT_paths", [])
         if len(RT_paths) == 0:
-            val_RTs = [torch.zeros((2, train_data.sample_n_frames, 12))] * val_len
-            val_RTs = [RT.to(validation_pipeline.device) for RT in val_RTs]
+            if cmcm_checkpoint_path != "":
+                val_RTs = [torch.zeros((2, train_data.sample_n_frames, 12))] * val_len
+                val_RTs = [RT.to(validation_pipeline.device) for RT in val_RTs]
+            else:
+                val_RTs = [None] * val_len
         else:
             assert len(RT_paths) == val_len, f'RT_paths: {len(RT_paths)} != val_len: {val_len}'
             val_RTs = []
