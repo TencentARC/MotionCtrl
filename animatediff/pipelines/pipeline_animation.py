@@ -401,7 +401,7 @@ class AnimationPipeline(DiffusionPipeline):
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
                 # import pdb; pdb.set_trace()
-                if 'traj_features' in kwargs and t < omcm_min_step:
+                if 'traj_features' in kwargs and kwargs['traj_features'] is not None and t < omcm_min_step:
                     kwargs.pop('traj_features')
                     
                 # expand the latents if we are doing classifier free guidance

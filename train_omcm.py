@@ -154,7 +154,7 @@ def main(
     
     # Logging folder
     if is_main_process:
-        name = f'{name}_bs{train_batch_size}_lr{learning_rate}_ccm{gradient_accumulation_steps}'
+        name = f'{name}_lr{learning_rate}_bs{train_batch_size}_gpus{num_processes}_ccm{gradient_accumulation_steps}'
         folder_name = "debug" if is_debug else name + datetime.datetime.now().strftime("-%Y-%m-%dT%H-%M-%S")
         output_dir = os.path.join(output_dir, folder_name)
         if is_debug and os.path.exists(output_dir):

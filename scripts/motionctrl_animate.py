@@ -31,7 +31,13 @@ from pathlib import Path
 from PIL import Image
 import numpy as np
 from motionctrl.modified_modules import (
-    Adapted_TemporalTransformerBlock_forward, unet3d_forward)
+    Adapted_TemporalTransformerBlock_forward, unet3d_forward,
+    Adapted_CrossAttnDownBlock3D_forward, Adapted_DownBlock3D_forward)
+
+from motionctrl.adapter import Adapter
+from motionctrl.utils.util import instantiate_from_config
+from motionctrl.util import get_traj_features, get_batch_motion, get_opt_from_video, vis_opt_flow
+
 
 @torch.no_grad()
 def main(args):
@@ -39,14 +45,14 @@ def main(args):
     func_args = dict(func_args)
     
     time_str = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
-    # savedir = f"samples/{Path(args.config).stem}-{time_str}"
+    savedir = f"samples/{Path(args.config).stem}_" #-{time_str}"
 
     config  = OmegaConf.load(args.config)
 
     # import pdb; pdb.set_trace()
-    name_part = config[0].motion_module.split('/')
-    savedir = f"samples/{name_part[-3].split('_')[0]}_epoch{name_part[-1][:-5].split('-')[-1]}"
-    os.makedirs(savedir, exist_ok=True)
+    # name_part = config[0].motion_module.split('/')
+    # savedir = f"samples/{name_part[-3].split('_')[0]}_epoch{name_part[-1][:-5].split('-')[-1]}"
+    # os.makedirs(savedir, exist_ok=True)
 
     samples = []
 
@@ -63,21 +69,6 @@ def main(args):
 
         inference_config = OmegaConf.load(model_config.get("inference_config", args.inference_config))
         unet = UNet3DConditionModel.from_pretrained_2d(args.pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(inference_config.unet_additional_kwargs)).cuda()
-
-        bound_moudule = unet3d_forward.__get__(unet, unet.__class__)
-        setattr(unet, "forward", bound_moudule)
-
-        for _name, _module in unet.named_modules():
-            if _module.__class__.__name__ == "TemporalTransformerBlock":
-                bound_moudule = Adapted_TemporalTransformerBlock_forward.__get__(_module, _module.__class__)
-                setattr(_module, "forward", bound_moudule)
-
-                cc_projection = nn.Linear(_module.attention_blocks[-1].to_k.in_features + 12, _module.attention_blocks[-1].to_k.in_features)
-                nn.init.eye_(list(cc_projection.parameters())[0][:_module.attention_blocks[-1].to_k.in_features, :_module.attention_blocks[-1].to_k.in_features])
-                nn.init.zeros_(list(cc_projection.parameters())[1])
-                cc_projection.requires_grad_(True)
-
-                _module.add_module('cc_projection', cc_projection)
 
         # load controlnet model
         controlnet = controlnet_images = None
@@ -160,7 +151,106 @@ def main(args):
             dreambooth_model_path      = model_config.get("dreambooth_path", ""),
             lora_model_path            = model_config.get("lora_model_path", ""),
             lora_alpha                 = model_config.get("lora_alpha", 0.8),
-        ).to("cuda")
+        ) #.to("cuda")
+
+        bound_moudule = unet3d_forward.__get__(unet, unet.__class__)
+        setattr(unet, "forward", bound_moudule)
+
+        # motionctrl
+        cmcm_checkpoint_path       = model_config.get("cmcm_checkpoint_path", "")
+        omcm_checkpoint_path       = model_config.get("omcm_checkpoint_path", "")
+        optical_flow_config        = model_config.get("optical_flow_config", None)
+        if optical_flow_config is not None:
+            use_optical_flow = True
+        else:
+            use_optical_flow = False
+        # import pdb; pdb.set_trace()
+
+        if cmcm_checkpoint_path != "" and os.path.exists(cmcm_checkpoint_path):
+            name_part = cmcm_checkpoint_path.split('/')
+            savedir = savedir + f"cmcm_{name_part[-3].split('_')[0]}"
+
+            for _name, _module in unet.named_modules():
+                if _module.__class__.__name__ == "TemporalTransformerBlock":
+                    bound_moudule = Adapted_TemporalTransformerBlock_forward.__get__(_module, _module.__class__)
+                    setattr(_module, "forward", bound_moudule)
+
+                    cc_projection = nn.Linear(_module.attention_blocks[-1].to_k.in_features + 12, _module.attention_blocks[-1].to_k.in_features)
+                    nn.init.eye_(list(cc_projection.parameters())[0][:_module.attention_blocks[-1].to_k.in_features, :_module.attention_blocks[-1].to_k.in_features])
+                    nn.init.zeros_(list(cc_projection.parameters())[1])
+                    cc_projection.requires_grad_(True)
+
+                    _module.add_module('cc_projection', cc_projection)
+
+            # load cmcm checkpoint
+            print(f"load cmcm from {cmcm_checkpoint_path}")
+            load_model = torch.load(cmcm_checkpoint_path, map_location="cpu")
+            savedir = savedir + f"_global_step{load_model['global_step']}"
+
+            cmcm_state_dict = load_model["state_dict"] if "state_dict" in load_model else load_model
+            new_state_dict = {}
+            for k, v in cmcm_state_dict.items():
+                if 'module.' in k:
+                    k = k.replace('module.', '')
+                new_state_dict[k] = v
+            cmcm_state_dict = new_state_dict
+            
+            cmcm_state_dict.pop("animatediff_config", "")
+            missing, unexpected = pipeline.unet.load_state_dict(cmcm_state_dict, strict=False)
+            assert len(unexpected) == 0
+        
+        pipeline = pipeline.to("cuda")
+
+        if omcm_checkpoint_path != "" and os.path.exists(omcm_checkpoint_path):
+
+            name_part = omcm_checkpoint_path.split('/')
+            savedir = savedir + f"_omcm_{name_part[-3].split('_')[0]}_"
+
+            omcm = Adapter(model_config.omcm_config.params)
+
+            load_model = torch.load(omcm_checkpoint_path, map_location="cpu")
+            savedir = savedir + f"global_step{load_model['global_step']}"
+
+            omcm_state_dict = load_model['omcm_state_dict']
+            new_state_dict = {}
+            for k, v in omcm_state_dict.items():
+                if 'module.' in k:
+                    k = k.replace('module.', '')
+                new_state_dict[k] = v
+            omcm_state_dict = new_state_dict
+
+            m, u = omcm.load_state_dict(omcm_state_dict, strict=True)
+            assert len(u) == 0
+
+            idx = 0
+            for _name, _module in unet.down_blocks.named_modules():
+                if _module.__class__.__name__ == "CrossAttnDownBlock3D":
+                    bound_moudule = Adapted_CrossAttnDownBlock3D_forward.__get__(_module, _module.__class__)
+                    setattr(_module, "forward", bound_moudule)
+                    setattr(_module, "traj_fea_idx", idx)
+                    idx += 1
+
+                elif _module.__class__.__name__ == "DownBlock3D":
+                    bound_moudule = Adapted_DownBlock3D_forward.__get__(_module, _module.__class__)
+                    setattr(_module, "forward", bound_moudule)
+                    setattr(_module, "traj_fea_idx", idx)
+                    idx += 1
+
+            omcm = omcm.to(pipeline.device)
+
+            if use_optical_flow:
+                print(f'!!!!! dense optical flow !!!!!')
+                opt_model = instantiate_from_config(optical_flow_config)
+                assert os.path.exists(optical_flow_config.pretrained_model)
+                print(f"Loading pretrained motion stage model from {optical_flow_config.pretrained_model}")
+                opt_model.load_state_dict(torch.load(optical_flow_config.pretrained_model)['model'])
+                opt_model.eval()
+                for param in opt_model.parameters():
+                    param.requires_grad = False
+                num_reg_refine = optical_flow_config.num_reg_refine
+                opt_model = opt_model.to(pipeline.device)
+
+        os.makedirs(savedir, exist_ok=True)
 
         prompts      = model_config.prompt
         n_prompts    = list(model_config.n_prompt) * len(prompts) if len(model_config.n_prompt) == 1 else model_config.n_prompt
@@ -183,42 +273,80 @@ def main(args):
             RT_name = RT_path.split("/")[-1].split(".")[0].replace("test_camera_", "")
             RT_names.append(RT_name)
 
+        if RTs == []:
+            if cmcm_checkpoint_path != "":
+                RTs = [torch.zeros((2, model_config.L, 12)).to(pipeline.device)]
+                RT_names.append("zero_motion")
+            else:
+                RTs = [None]
+                RT_names.append("none_motion")
+
+        vis_flows = []
+        val_trajs = []
+        val_trajs_name = []
+
+        if use_optical_flow:
+            width = height = model_config.W, model_config.H
+            sample_n_frames = model_config.L
+            traj_cnt = 0
+            for vid_path in model_config.opt_paths:
+                assert os.path.exists(vid_path), f"video path: {vid_path} does not exist"
+                trajectoy = get_opt_from_video(opt_model, num_reg_refine, vid_path, width, height, sample_n_frames, device=local_rank)
+                # cfg
+                trajectoy = torch.cat([torch.zeros_like(trajectoy), trajectoy], dim=0)
+                val_trajs.append(trajectoy)
+                vis_flows.append(vis_opt_flow(trajectoy[1:]))
+                val_trajs_name.append(f'img{traj_cnt}')
+                traj_cnt += 1
+
+        if val_trajs == []:
+            val_trajs = [None]
+            vis_flows = []
+            val_trajs_name = ["no_traj"]
+
         config[model_idx].random_seed = []
 
-        for RT_idx, RT in enumerate(RTs):
-            samples = []
-            for prompt_idx, (prompt, n_prompt, random_seed) in enumerate(zip(prompts, n_prompts, random_seeds)):
-                
-                # manually set random seed for reproduction
-                if random_seed != -1: torch.manual_seed(random_seed)
-                else: torch.seed()
-                config[model_idx].random_seed.append(torch.initial_seed())
-                
-                print(f"current seed: {torch.initial_seed()}")
-                print(f"sampling {prompt} ...")
-                sample = pipeline(
-                    prompt,
-                    negative_prompt     = n_prompt,
-                    num_inference_steps = model_config.steps,
-                    guidance_scale      = model_config.guidance_scale,
-                    width               = model_config.W,
-                    height              = model_config.H,
-                    video_length        = model_config.L,
+        for traj_idx, traj in enumerate(val_trajs):
+            if traj is not None:
+                traj_features = get_traj_features(val_trajs[idx], omcm)
+            else:
+                traj_features = None
+            for RT_idx, RT in enumerate(RTs):
+                samples = []
+                for prompt_idx, (prompt, n_prompt, random_seed) in enumerate(zip(prompts, n_prompts, random_seeds)):
+                    
+                    # manually set random seed for reproduction
+                    if random_seed != -1: torch.manual_seed(random_seed)
+                    else: torch.seed()
+                    config[model_idx].random_seed.append(torch.initial_seed())
+                    
+                    print(f"current seed: {torch.initial_seed()}")
+                    print(f"sampling {prompt} ...")
+                    sample = pipeline(
+                        prompt,
+                        negative_prompt     = n_prompt,
+                        num_inference_steps = model_config.steps,
+                        guidance_scale      = model_config.guidance_scale,
+                        width               = model_config.W,
+                        height              = model_config.H,
+                        video_length        = model_config.L,
 
-                    controlnet_images = controlnet_images,
-                    controlnet_image_index = model_config.get("controlnet_image_indexs", [0]),
-                    RT = RT,
-                ).videos
-                samples.append(sample)
+                        controlnet_images = controlnet_images,
+                        controlnet_image_index = model_config.get("controlnet_image_indexs", [0]),
+                        RT = RT,
+                        traj_features = traj_features,
+                        omcm_min_step = model_config.get("omcm_min_step", 700),
+                    ).videos
+                    samples.append(sample)
 
-                prompt = "-".join((prompt.replace("/", "").split(" ")[:10]))
-                save_videos_grid(sample, f"{savedir}/sample/{sample_idx}-{prompt}.gif")
-                print(f"save to {savedir}/sample/{prompt}.gif")
-                
-                sample_idx += 1
+                    prompt = "-".join((prompt.replace("/", "").split(" ")[:10]))
+                    save_videos_grid(sample, f"{savedir}/sample/{sample_idx}-{prompt}.gif")
+                    print(f"save to {savedir}/sample/{prompt}.gif")
+                    
+                    sample_idx += 1
 
-            samples = torch.concat(samples)
-            save_videos_grid(samples, f"{savedir}/sample-{RT_names[RT_idx]}.gif", n_rows=4)
+                samples = torch.concat(samples)
+                save_videos_grid(samples, f"{savedir}/sample-{RT_names[RT_idx]}-{val_trajs_name[traj_idx]}.gif", n_rows=4)
 
     OmegaConf.save(config, f"{savedir}/config.yaml")
 

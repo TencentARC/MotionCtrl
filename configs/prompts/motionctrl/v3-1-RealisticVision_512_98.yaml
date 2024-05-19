@@ -7,8 +7,8 @@
   # motion_module: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0002_cmcm_512_bs1_lr0.0001_ccm4-2024-05-15T20-12-58/checkpoints/checkpoint-epoch-11.ckpt"
   # motion_module: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0002_cmcm_512_bs1_lr0.0001_ccm4-2024-05-15T20-12-58/checkpoints/checkpoint-epoch-19.ckpt"
   # cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T17-02-12/checkpoints/cmcm-checkpoint.ckpt"
-  # cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T17-02-12/checkpoints/cmcm-epoch-4.ckpt"
-  cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0007_cmcm_256_skip10_bs2_lr0.0001_ccm4-2024-05-18T14-51-52/checkpoints/cmcm-checkpoint.ckpt"
+  cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T17-02-12/checkpoints/cmcm-epoch-3.ckpt"
+  
 
   dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"
   # dreambooth_model_path: "/group/40034/yaoweili/code/trajectory/animatediff/models/DreamBooth_LoRA/helloobjects_V12c.safetensors"
@@ -47,13 +47,13 @@
     # - "semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck"
 
   RT_paths:
-    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-ACW.json
-    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-CW.json
-    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_I_2.0x.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-ACW.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-CW.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_I_2.0x.json
     # - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_O_2.0x.json
-    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-RI-120.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-RI-120.json
     # - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-RI-120.json
-    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-ZoomIn.json
+    - /group/30098/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-ZoomIn.json
     # - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-ZoomIn.json
 
     # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_1424acd0007d40b5.json'
