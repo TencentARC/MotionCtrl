@@ -206,10 +206,10 @@ def main(args):
             name_part = omcm_checkpoint_path.split('/')
             savedir = savedir + f"_omcm_{name_part[-3].split('_')[0]}_"
 
-            omcm = Adapter(model_config.omcm_config.params)
+            omcm = Adapter(**model_config.omcm_config.params)
 
             load_model = torch.load(omcm_checkpoint_path, map_location="cpu")
-            savedir = savedir + f"global_step{load_model['global_step']}"
+            savedir = savedir + f"global_step{load_model['global_step']}_T{model_config.get('omcm_min_step', 700)}"
 
             omcm_state_dict = load_model['omcm_state_dict']
             new_state_dict = {}
@@ -286,12 +286,12 @@ def main(args):
         val_trajs_name = []
 
         if use_optical_flow:
-            width = height = model_config.W, model_config.H
+            width, height = model_config.W, model_config.H
             sample_n_frames = model_config.L
             traj_cnt = 0
             for vid_path in model_config.opt_paths:
                 assert os.path.exists(vid_path), f"video path: {vid_path} does not exist"
-                trajectoy = get_opt_from_video(opt_model, num_reg_refine, vid_path, width, height, sample_n_frames, device=local_rank)
+                trajectoy = get_opt_from_video(opt_model, num_reg_refine, vid_path, width, height, sample_n_frames, device=pipeline.device)
                 # cfg
                 trajectoy = torch.cat([torch.zeros_like(trajectoy), trajectoy], dim=0)
                 val_trajs.append(trajectoy)
@@ -308,11 +308,14 @@ def main(args):
 
         for traj_idx, traj in enumerate(val_trajs):
             if traj is not None:
-                traj_features = get_traj_features(val_trajs[idx], omcm)
+                traj_features = get_traj_features(traj, omcm)
             else:
                 traj_features = None
             for RT_idx, RT in enumerate(RTs):
+                
                 samples = []
+                if vis_flows != []:
+                    samples += [vis_flows[traj_idx]]
                 for prompt_idx, (prompt, n_prompt, random_seed) in enumerate(zip(prompts, n_prompts, random_seeds)):
                     
                     # manually set random seed for reproduction
