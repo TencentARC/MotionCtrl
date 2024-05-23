@@ -29,30 +29,34 @@ noise_scheduler_kwargs:
   clip_sample:         false
 
 train_data:
-  target: motionctrl.data.webvid.WebVid
+  target: motionctrl.data.webvid_motion_trajectory_anyspatio.WebVid
   params:
     data_dir: /group/40033/public_datasets/WebVid
     meta_path: /group/40033/public_datasets/WebVid/meta_data/results_2M_train.csv
+    motion_seg_list: /group/40033/public_datasets/WebVid/motion_seg_list_v2.txt
     video_length: 16
-    frame_stride: 8
-    load_raw_resolution: True
+    frame_stride:
+    - 1
+    - 2
+    trajectory_type: sparse
+    spatial_transform: align2_256
     resolution: [256,256]
-    spatial_transform: resize_center_crop
+    load_raw_resolution: True
   sample_size: 256
   sample_n_frames: 16
 
 validation_data:
   prompts:
-    - "a car runing on the road."
-    - "a car runing on the road."
+    - "a sunflower swaying in the wind."
+    - "a man surfing."
 
-  # traj_paths:
-  #   - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/shaking_10.npy
-  #   - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/curve_2.npy
+  traj_paths:
+    - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/shaking_10.npy
+    - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/curve_2.npy
   
-  opt_paths:
-    - /group/30098/zhouxiawang/project/SVD_Codebase/examples/videos/car-turn-24.mp4
-    - /group/30098/zhouxiawang/project/SVD_Codebase/examples/videos/car-turn.mp4
+  # opt_paths:
+  #   - /group/30098/zhouxiawang/project/SVD_Codebase/examples/videos/car-turn-24.mp4
+  #   - /group/30098/zhouxiawang/project/SVD_Codebase/examples/videos/car-turn.mp4
 
   num_inference_steps: 25
   guidance_scale: 8.
@@ -65,7 +69,7 @@ unet_checkpoint_path: "models/Motion_Module/v3_sd15_mm.ckpt"
 # unet_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0001_cmcm_bs2_lr0.0001_ccm4-2024-05-15T18-54-39/checkpoints/checkpoint-epoch-23.ckpt"
 
 
-learning_rate:    1.e-5
+learning_rate:    1.e-4
 train_batch_size: 3
 gradient_accumulation_steps: 4
 
@@ -107,17 +111,17 @@ omcm_config:
     sk: True
     use_conv: False
 
-use_optical_flow: true
-optical_flow_config:
-  pretrained_model: /group/40034/zhouxiawang/env/share/weights/unimatch_pretrained_models/gmflow-scale2-regrefine6-mixdata-train320x576-4e7b215d.pth
-  num_reg_refine: 6
-  target: motionctrl.unimatch.unimatch.UniMatch
-  params:
-    num_scales: 2
-    feature_channels: 128
-    upsample_factor: 4
-    num_head: 1
-    ffn_dim_expansion: 4
-    num_transformer_layers: 6
-    reg_refine: true
-    task: 'flow'
+use_optical_flow: false
+# optical_flow_config:
+#   pretrained_model: /group/40034/zhouxiawang/env/share/weights/unimatch_pretrained_models/gmflow-scale2-regrefine6-mixdata-train320x576-4e7b215d.pth
+#   num_reg_refine: 6
+#   target: motionctrl.unimatch.unimatch.UniMatch
+#   params:
+#     num_scales: 2
+#     feature_channels: 128
+#     upsample_factor: 4
+#     num_head: 1
+#     ffn_dim_expansion: 4
+#     num_transformer_layers: 6
+#     reg_refine: true
+#     task: 'flow'

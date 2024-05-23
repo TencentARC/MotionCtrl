@@ -444,6 +444,8 @@ def main(
             val_trajs = []
             for traj_path in validation_data.traj_paths:
                 trajectoy = torch.tensor(np.load(traj_path)).permute(3, 0, 1, 2).float() # [t,h,w,c]->[c,t,h,w]
+                if train_data.get("sample_size", 256) != 256:
+                    trajectoy = F.interpolate(trajectoy, size=train_data.get("sample_size", 256), mode='bilinear', align_corners=False)
                 trajectoy = trajectoy[None, ...]
                 if eable_guidance:
                     trajectoy = torch.cat([torch.zeros_like(trajectoy), trajectoy], dim=0)

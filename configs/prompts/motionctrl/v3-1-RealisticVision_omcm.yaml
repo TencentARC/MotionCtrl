@@ -13,8 +13,11 @@
   # cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T14-23-00/checkpoints/cmcm-checkpoint.ckpt"
   # omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0009_cmcm_omcm_opt_256_bs3_lr1e-05_ccm4-2024-05-18T19-56-04/checkpoints/omcm-checkpoint-25000.ckpt"
   
+  cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0012_cmcm_512_skip10_debias_obja02_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-20T19-34-55/checkpoints/cmcm-checkpoint-40000.ckpt"
+  # cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0012_cmcm_512_skip10_debias_obja02_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-22T11-04-18/checkpoints/cmcm-checkpoint-40000.ckpt"
   # training from animatediff v3
-  omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0010_cmcm_omcm_opt_organimate_256_bs3_lr1e-05_ccm4-2024-05-19T00-31-43/checkpoints/omcm-checkpoint-20000.ckpt"
+  # omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0010_cmcm_omcm_opt_organimate_256_bs3_lr1e-05_ccm4-2024-05-19T00-31-43/checkpoints/omcm-checkpoint-20000.ckpt"
+  omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0010_cmcm_omcm_opt_organimate_256_lr1e-05_bs3_gpus8_ccm4-2024-05-19T20-20-51/checkpoints/omcm-checkpoint-35000.ckpt"
   omcm_min_step: 800
 
   dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"

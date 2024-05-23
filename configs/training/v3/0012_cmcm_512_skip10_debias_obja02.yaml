@@ -110,7 +110,8 @@ is_debug: false
 # cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T14-23-00/checkpoints/cmcm-checkpoint.ckpt"
 # cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T15-31-12/checkpoints/cmcm-checkpoint.ckpt"
 # cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0006_cmcm_512_skip10_bs1_lr0.0001_ccm4-2024-05-18T17-02-12/checkpoints/cmcm-epoch-2.ckpt"
-cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0011_cmcm_512_skip10_debias_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-19T20-49-27/checkpoints/cmcm-checkpoint-60000.ckpt"
+# cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0011_cmcm_512_skip10_debias_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-19T20-49-27/checkpoints/cmcm-checkpoint-60000.ckpt"
+cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0012_cmcm_512_skip10_debias_obja02_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-20T19-34-55/checkpoints/cmcm-checkpoint-40000.ckpt"
 enable_cmcm: true
 enable_omcm: false
 appearance_debias: 5
