@@ -299,6 +299,16 @@ def main(args):
                 val_trajs_name.append(f'img{traj_cnt}')
                 traj_cnt += 1
 
+        if len(model_config.get("traj_paths", [])) > 0:
+            for traj_path in model_config.traj_paths:
+                trajectoy = torch.tensor(np.load(traj_path)).permute(3, 0, 1, 2).float() # [t,h,w,c]->[c,t,h,w]
+                trajectoy = trajectoy[None, ...]
+                trajectoy = torch.cat([torch.zeros_like(trajectoy), trajectoy], dim=0)
+                trajectoy = trajectoy.to(pipeline.device)
+                val_trajs.append(trajectoy)
+                vis_flows.append(vis_opt_flow(trajectoy[1:]))
+                val_trajs_name.append(traj_path.split("/")[-1].split(".")[0])
+
         if val_trajs == []:
             val_trajs = [None]
             vis_flows = []
