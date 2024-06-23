@@ -51,8 +51,10 @@ validation_data:
     - "a man surfing."
 
   traj_paths:
-    - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/shaking_10.npy
-    - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/curve_2.npy
+    # - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/shaking_10.npy
+    # - /group/30098/zhouxiawang/project/MotionCtrlV2/examples/trajectories/curve_2.npy
+    - ./examples/motionctrl_animatediff_512/swaying_0/swaying_0.npy
+    - ./examples/motionctrl_animatediff_512/curve_0/curve_0.npy
   
   # opt_paths:
   #   - /group/30098/zhouxiawang/project/SVD_Codebase/examples/videos/car-turn-24.mp4
@@ -69,9 +71,9 @@ unet_checkpoint_path: "models/Motion_Module/v3_sd15_mm.ckpt"
 # unet_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0001_cmcm_bs2_lr0.0001_ccm4-2024-05-15T18-54-39/checkpoints/checkpoint-epoch-23.ckpt"
 
 
-learning_rate:    1.e-4
+learning_rate:    5.e-5
 train_batch_size: 1
-gradient_accumulation_steps: 4
+gradient_accumulation_steps: 8
 
 max_train_epoch:      -1
 max_train_steps:      1000000
@@ -94,13 +96,15 @@ enable_cmcm: False
 
 # omcm
 enable_omcm: true
-omcm_min_step: 0
-min_step_prob: 0.0
+omcm_min_step: 700
+min_step_prob: 0.8
 
 omcm_config: 
   # pretrained: /group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0009_cmcm_omcm_opt_256_bs3_lr0.0001_ccm4-2024-05-18T15-44-31/checkpoints/omcm-checkpoint.ckpt
   # pretrained: /group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0010_cmcm_omcm_opt_organimate_256_lr1e-05_bs3_gpus8_ccm4-2024-05-19T20-20-51/checkpoints/omcm-checkpoint-35000.ckpt
-  pretrained: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0014_cmcm_omcm_sparse_256_lr0.0001_bs3_gpus8_ccm4_debias0.0-2024-05-23T12-51-52/checkpoints/omcm-checkpoint-25000.ckpt
+  pretrained: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0010_cmcm_omcm_opt_organimate_256_lr1e-05_bs3_gpus8_ccm4-2024-05-19T20-20-51/checkpoints/omcm-checkpoint-35000.ckpt
+  # pretrained: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0014_cmcm_omcm_sparse_256_lr0.0001_bs3_gpus8_ccm4_debias0.0-2024-05-23T12-51-52/checkpoints/omcm-checkpoint-25000.ckpt
+  # pretrained: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0016_cmcm_omcm_opt_organimate_512_lr1e-05_bs1_gpus8_ccm4_debias0.0-2024-05-24T15-44-41/checkpoints/omcm-checkpoint-200000.ckpt
   params:
     channels:
       - 320

@@ -1,20 +1,23 @@
 
-gpus='0,1,2,3,4,5,6,7'
-num_gpus=8
-
 gpus='0,1,2,3'
 num_gpus=4
 
-# gpus='0'
+gpus='0,1,2,3,4,5,6,7'
+num_gpus=8
+
+gpus='4,5,6,7'
+num_gpus=4
+
+# gpus='1'
 # num_gpus=1
 
 CUDA_VISIBLE_DEVICES=$gpus torchrun \
---master_port 1239 \
+--master_port 1238 \
 --nnodes=1 \
 --nproc_per_node=$num_gpus \
 train_omcm_v1.py \
---config configs/training/v3/0016_cmcm_omcm_opt_organimate_512.yaml \
-2>&1 | tee -a 'logs/0016_'$gpus'gpus.log'
+--config configs/training/v3/0019_cmcm_omcm_dense_512.yaml \
+2>&1 | tee -a 'logs/0019_'$gpus'gpus.log'
 
 # ,1,2,3,4,5,6,7
 

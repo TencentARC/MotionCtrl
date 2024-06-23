@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 def avg_pool_nd(dims, *args, **kwargs):
     """
@@ -96,8 +97,11 @@ class ResnetBlock(nn.Module):
 
 
 class Adapter(nn.Module):
-    def __init__(self, channels=[320, 640, 1280, 1280], nums_rb=3, cin=64, ksize=3, sk=False, use_conv=True):
+    def __init__(self, channels=[320, 640, 1280, 1280], 
+                 nums_rb=3, cin=64, ksize=3, sk=False, 
+                 use_conv=True, align_training_size = 0):
         super(Adapter, self).__init__()
+        self.align_training_size = align_training_size
         self.unshuffle = nn.PixelUnshuffle(8)
         self.channels = channels
         self.nums_rb = nums_rb
@@ -114,6 +118,13 @@ class Adapter(nn.Module):
         self.conv_in = nn.Conv2d(cin, channels[0], 3, 1, 1)
 
     def forward(self, x):
+        # import pdb; pdb.set_trace()
+        if self.align_training_size > 0:
+            org_b, org_c, org_h, org_w = x.shape
+            x = F.pixel_unshuffle(x, self.align_training_size) # [B, C**, H, W] -> [B, C, h, w]
+            x = x.reshape(org_b, org_c, -1, org_h//self.align_training_size, org_w//self.align_training_size)
+            x = x.permute(0, 2, 1, 3, 4).reshape(-1, org_c, org_h//self.align_training_size, org_w//self.align_training_size)
+
         # unshuffle
         x = self.unshuffle(x)
         # extract features
@@ -124,6 +135,15 @@ class Adapter(nn.Module):
                 idx = i * self.nums_rb + j
                 x = self.body[idx](x)
             features.append(x)
+
+        if self.align_training_size > 0:
+            for i in range(len(features)):
+                feat = features[i]
+                cur_b, cur_c, cur_h, cur_w = feat.shape
+                feat = feat.reshape(org_b, -1, cur_c, cur_h, cur_w)
+                feat = feat.permute(0, 2, 1, 3, 4).reshape(org_b, -1, cur_h, cur_w)
+                feat = F.pixel_shuffle(feat, self.align_training_size)
+                features[i] = feat
 
         return features
 

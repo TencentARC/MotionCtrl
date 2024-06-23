@@ -14,15 +14,16 @@
   # omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0009_cmcm_omcm_opt_256_bs3_lr1e-05_ccm4-2024-05-18T19-56-04/checkpoints/omcm-checkpoint-25000.ckpt"
   
   # cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0012_cmcm_512_skip10_debias_obja02_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-20T19-34-55/checkpoints/cmcm-checkpoint-40000.ckpt"
-  # cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0012_cmcm_512_skip10_debias_obja02_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-22T11-04-18/checkpoints/cmcm-checkpoint-40000.ckpt"
+  ## cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0012_cmcm_512_skip10_debias_obja02_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-22T11-04-18/checkpoints/cmcm-checkpoint-40000.ckpt"
   # training from animatediff v3
   # omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0010_cmcm_omcm_opt_organimate_256_bs3_lr1e-05_ccm4-2024-05-19T00-31-43/checkpoints/omcm-checkpoint-20000.ckpt"
   
   # omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0010_cmcm_omcm_opt_organimate_256_lr1e-05_bs3_gpus8_ccm4-2024-05-19T20-20-51/checkpoints/omcm-checkpoint-35000.ckpt"
-  omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0014_cmcm_omcm_sparse_256_lr0.0001_bs3_gpus8_ccm4_debias0.0-2024-05-23T12-51-52/checkpoints/omcm-checkpoint-365000.ckpt"
-  omcm_min_step: 0
+  # omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0014_cmcm_omcm_sparse_256_lr0.0001_bs3_gpus8_ccm4_debias0.0-2024-05-23T12-51-52/checkpoints/omcm-checkpoint-365000.ckpt"
+  omcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0019_cmcm_omcm_dense_512_lr5e-05_bs1_gpus4_ccm8_debias5-2024-06-21T21-41-11/checkpoints/omcm-checkpoint-135000.ckpt"
+  omcm_min_step: 700
 
-  dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"
+  # dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"
   # dreambooth_model_path: "/group/40034/yaoweili/code/trajectory/animatediff/models/DreamBooth_LoRA/helloobjects_V12c.safetensors"
   lora_model_path: ""
 
@@ -112,6 +113,7 @@
       cin: 128 # 2 * 8 * 8
       sk: True
       use_conv: False
+      align_training_size: 2
   
   # optical_flow_config:
   #   pretrained_model: /group/40034/zhouxiawang/env/share/weights/unimatch_pretrained_models/gmflow-scale2-regrefine6-mixdata-train320x576-4e7b215d.pth

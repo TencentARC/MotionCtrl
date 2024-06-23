@@ -4,7 +4,7 @@
     "protocol": "sftp",
     "port": 36000,
     "username": "root",
-    "remotePath": "/group/30042/zhouxiawang/project/release_animatediff",
+    "remotePath": "/group/30098/zhouxiawang/project/motionctrl_animatediff_wzx",
     "uploadOnSave": true,
     "password": "Beagirl12#",
     "ignore": [

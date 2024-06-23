@@ -8,6 +8,7 @@ import json
 import torch
 import torch.nn as nn
 import torchvision.transforms as transforms
+import torch.nn.functional as F
 
 import diffusers
 from diffusers import AutoencoderKL, DDIMScheduler
@@ -66,6 +67,7 @@ def main(args):
         model_config.W = model_config.get("W", args.W)
         model_config.H = model_config.get("H", args.H)
         model_config.L = model_config.get("L", args.L)
+        savedir = f"{savedir}_H{model_config.H}_W{model_config.W}"
 
         inference_config = OmegaConf.load(model_config.get("inference_config", args.inference_config))
         unet = UNet3DConditionModel.from_pretrained_2d(args.pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(inference_config.unet_additional_kwargs)).cuda()
@@ -206,6 +208,9 @@ def main(args):
             name_part = omcm_checkpoint_path.split('/')
             savedir = savedir + f"_omcm_{name_part[-3].split('_')[0]}_"
 
+            if model_config.omcm_config.params.get("align_training_size", 0) > 0:
+                savedir = f'{savedir}_align{model_config.omcm_config.params["align_training_size"]}'
+
             omcm = Adapter(**model_config.omcm_config.params)
 
             load_model = torch.load(omcm_checkpoint_path, map_location="cpu")
@@ -319,6 +324,14 @@ def main(args):
         for traj_idx, traj in enumerate(val_trajs):
             if traj is not None:
                 traj_features = get_traj_features(traj, omcm)
+                # for fea_idx in range(len(traj_features)):
+                #     fea = traj_features[fea_idx]
+                #     # upsampling X2
+                #     # import pdb; pdb.set_trace()
+                #     upfea = []
+                #     for fra in range(fea.shape[2]):
+                #         upfea.append(F.interpolate(fea[:,:,fra], scale_factor=2, mode='bilinear', align_corners=False))
+                #     traj_features[fea_idx] = torch.stack(upfea, dim=2)
             else:
                 traj_features = None
             for RT_idx, RT in enumerate(RTs):

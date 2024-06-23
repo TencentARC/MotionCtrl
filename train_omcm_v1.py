@@ -509,7 +509,10 @@ def main(
         
         for step, batch in enumerate(train_dataloader):
             if cfg_random_null_text:
-                batch['caption'] = [name if random.random() > cfg_random_null_text_ratio else "" for name in batch['caption']]
+                cfg_rand = torch.rand(batch['video'].shape[0])
+                cfg_mask = cfg_rand < cfg_random_null_text_ratio
+                batch['caption'] = [name if not mask else "" for name, mask in zip(batch['caption'], cfg_mask)]
+                # batch['caption'] = [name if random.random() > cfg_random_null_text_ratio else "" for name in batch['caption']]
                 
             # Data batch sanity check
             if epoch == first_epoch and step == 0 and is_main_process:
@@ -534,8 +537,10 @@ def main(
                 RT = batch["RT"].to(local_rank)
                 RT = RT[...] # [b, t, 12]
                 if cfg_random_null_text:
-                    for i in range(RT.shape[0]):
-                        RT[i] = RT[i] if random.random() > cfg_random_null_text_ratio else torch.zeros_like(RT[i])
+                    # for i in range(RT.shape[0]):
+                    #     RT[i] = RT[i] if random.random() > cfg_random_null_text_ratio else torch.zeros_like(RT[i])
+                    RT = [RT[i] if not mask else torch.zeros_like(RT[i]) for i, mask in enumerate(cfg_mask)]
+                    RT = torch.stack(RT, dim=0)
             else:
                 RT = torch.zeros((pixel_values.shape[0], pixel_values.shape[2], 12), device=local_rank)
             
@@ -545,8 +550,10 @@ def main(
                 else:
                     trajs = batch['trajs'].to(local_rank) # [b, 2, f, h, w]
                 if cfg_random_null_text:
-                    for i in range(trajs.shape[0]):
-                        trajs[i] = trajs[i] if random.random() > cfg_random_null_text_ratio else torch.zeros_like(trajs[i])
+                    # for i in range(trajs.shape[0]):
+                    #     trajs[i] = trajs[i] if random.random() > cfg_random_null_text_ratio else torch.zeros_like(trajs[i])
+                    trajs = [trajs[i] if not mask else torch.zeros_like(trajs[i]) for i, mask in enumerate(cfg_mask)]
+                    trajs = torch.stack(trajs, dim=0)
                 
                 traj_features = get_traj_features(trajs, omcm)
 
@@ -692,7 +699,8 @@ def main(
                 
             # Periodically validation
             if is_main_process and (global_step % validation_steps == 0 or global_step in validation_steps_tuple):
-                samples = vis_flows + []
+                # samples = vis_flows + []
+                samples = []
                 
                 generator = torch.Generator(device=latents.device)
                 generator.manual_seed(global_seed)
@@ -701,11 +709,19 @@ def main(
                 width  = train_data.sample_size[1] if not isinstance(train_data.sample_size, int) else train_data.sample_size
 
                 # prompts = validation_data.prompts[:2] if global_step < 1000 and (not image_finetune) else validation_data.prompts
-                prompts = validation_data.prompts
+                # prompts = validation_data.prompts
+                prompts = batch['caption']
 
                 for idx, prompt in enumerate(prompts):
+                    # import pdb; pdb.set_trace()
                     if enable_omcm:
-                        traj_features = get_traj_features(val_trajs[idx], omcm)
+                        samples.append((batch['video'][idx:idx+1] + 1.0) / 2.0)
+                        samples.append(vis_opt_flow(trajs[idx:idx+1]))
+                        cur_trajs = trajs[idx:idx+1]
+                        if enable_guidance:
+                            cur_trajs = torch.cat([torch.zeros_like(cur_trajs), cur_trajs], dim=0)
+                        traj_features = get_traj_features(cur_trajs, omcm)
+                        
                     else:
                         traj_features = None
                     if not image_finetune:
