@@ -155,6 +155,9 @@ def main(args):
             lora_alpha                 = model_config.get("lora_alpha", 0.8),
         ) #.to("cuda")
 
+        if model_config.get("dreambooth_path", "") != "":
+            savedir += "dreambooth_"
+
         bound_moudule = unet3d_forward.__get__(unet, unet.__class__)
         setattr(unet, "forward", bound_moudule)
 
@@ -279,7 +282,8 @@ def main(args):
             RT_names.append(RT_name)
 
         if RTs == []:
-            if cmcm_checkpoint_path != "":
+            # if cmcm_checkpoint_path != "":
+            if cmcm_checkpoint_path is not None and os.path.exists(cmcm_checkpoint_path):
                 RTs = [torch.zeros((2, model_config.L, 12)).to(pipeline.device)]
                 RT_names.append("zero_motion")
             else:

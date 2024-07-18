@@ -15,7 +15,7 @@
   
   # cmcm_checkpoint_path: "/group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0012_cmcm_512_skip10_debias_obja02_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-20T19-34-55/checkpoints/cmcm-checkpoint-40000.ckpt"
   ### Selected cmcm
-  # cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0012_cmcm_512_skip10_debias_obja02_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-22T11-04-18/checkpoints/cmcm-checkpoint-40000.ckpt"
+  cmcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0012_cmcm_512_skip10_debias_obja02_lr1e-05_bs1_gpus8_ccm4_debias5-2024-05-22T11-04-18/checkpoints/cmcm-checkpoint-40000.ckpt"
   # training from animatediff v3
   # omcm_checkpoint_path: "/group/40034/zhouxiawang/outputs/motionctrl_animatediff/experiments/0010_cmcm_omcm_opt_organimate_256_bs3_lr1e-05_ccm4-2024-05-19T00-31-43/checkpoints/omcm-checkpoint-20000.ckpt"
   
@@ -27,11 +27,11 @@
   # omcm_checkpoint_path: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0020_cmcm_omcm_dense_512_lr5e-05_bs1_gpus4_ccm8_debias5-2024-06-23T16-50-58/checkpoints/omcm-checkpoint-85000.ckpt
   # omcm_checkpoint_path: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0022_cmcm_omcm_sparse_512_lr5e-05_bs1_gpus4_ccm8_debias5-2024-06-24T20-32-30/checkpoints/omcm-checkpoint-25000.ckpt
   # omcm_checkpoint_path: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0021_cmcm_omcm_sparse_512_lr5e-05_bs1_gpus4_ccm8_debias5-2024-06-24T20-18-32/checkpoints/omcm-checkpoint-25000.ckpt
-  omcm_checkpoint_path: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0021_cmcm_omcm_sparse_512_lr5e-05_bs1_gpus4_ccm8_debias5-2024-06-24T20-18-32/checkpoints/omcm-checkpoint-95000.ckpt
-  # omcm_checkpoint_path: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0022_cmcm_omcm_sparse_512_lr5e-05_bs1_gpus4_ccm8_debias5-2024-06-25T12-29-06/checkpoints/omcm-checkpoint-65000.ckpt
+  # omcm_checkpoint_path: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0021_cmcm_omcm_sparse_512_lr5e-05_bs1_gpus4_ccm8_debias5-2024-06-24T20-18-32/checkpoints/omcm-checkpoint-95000.ckpt
+  omcm_checkpoint_path: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0022_cmcm_omcm_sparse_512_lr5e-05_bs1_gpus4_ccm8_debias5-2024-06-25T12-29-06/checkpoints/omcm-checkpoint-65000.ckpt
   omcm_min_step: 700
 
-  dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"
+  # dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"
   # dreambooth_model_path: "/group/40034/yaoweili/code/trajectory/animatediff/models/DreamBooth_LoRA/helloobjects_V12c.safetensors"
   lora_model_path: ""
 
@@ -91,24 +91,24 @@
     # - "semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck"
     # - "semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck"
 
-  # RT_paths:
-  #   - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-ACW.json
-  #   - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-CW.json
-  #   - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_I_2.0x.json
-  #   # - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_O_2.0x.json
-  #   - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-RI-120.json
-  #   # - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-RI-120.json
-  #   - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-ZoomIn.json
-  #   # - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-ZoomIn.json
+  RT_paths:
+    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-ACW.json
+    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_SPIN-CW.json
+    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_I_2.0x.json
+    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_O_2.0x.json
+    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-RI-120.json
+    # - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-RI-120.json
+    - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-ZoomIn.json
+    # - /group/40034/zhouxiawang/outputs/LDVMPose/examples/cus_camera_motion/test_camera_Round-ZoomIn.json
 
-  #   # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_1424acd0007d40b5.json'
-  #   # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_d971457c81bca597.json'
-  #   # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_I_0.2x.json'
-  #   # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_I_0.4x.json'
-  #   # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_I_1.0x.json'
-  #   # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_I_2.0x.json'
-  #   # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_Round-ZoomIn.json'
-  #   # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_U.json'
+    # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_1424acd0007d40b5.json'
+    # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_d971457c81bca597.json'
+    # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_I_0.2x.json'
+    # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_I_0.4x.json'
+    # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_I_1.0x.json'
+    # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_I_2.0x.json'
+    # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_Round-ZoomIn.json'
+    # - '/group/30098/zhouxiawang/project/MotionCtrlV2/examples/camera_poses/test_camera_U.json'
 
   omcm_config: 
     params:
