@@ -14,8 +14,7 @@ from PIL import Image
 from pytorch_lightning import seed_everything
 
 from gradio_utils.camera_utils import CAMERA_MOTION_MODE, process_camera
-from gradio_utils.traj_utils import (OBJECT_MOTION_MODE, get_provided_traj,
-                                     process_points, process_traj)
+from gradio_utils.traj_utils import (OBJECT_MOTION_MODE, process_traj)
 from gradio_utils.utils import vis_camera
 from lvdm.models.samplers.ddim import DDIMSampler
 from main.evaluation.motionctrl_inference import (DEFAULT_NEGATIVE_PROMPT,
@@ -23,18 +22,48 @@ from main.evaluation.motionctrl_inference import (DEFAULT_NEGATIVE_PROMPT,
                                                   post_prompt)
 from utils.utils import instantiate_from_config
 
+from gradio_utils.page_control import (MODE, BASE_MODEL, 
+                                       get_camera_dict, get_traj_list,
+                                       reset_camera, 
+                                       visualized_step1, visualized_step2,
+                                       visualized_camera_poses, visualized_traj_poses,
+                                       add_camera_motion, add_complex_camera_motion, 
+                                       input_raw_camera_pose,
+                                       change_camera_mode, change_camera_speed,
+                                       add_traj_point, add_provided_traj, 
+                                       fn_traj_droplast, fn_traj_reset,
+                                       fn_vis_camera, fn_vis_traj,)
+
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 SPACE_ID = os.environ.get('SPACE_ID', '')
+
+DIY_MODE = ['Customized Mode 1: First A then B', 
+            'Customized Mode 2: Both A and B', 
+            'Customized Mode 3: RAW Camera Poses']
 
 
 #### Description ####
 title = r"""<h1 align="center">MotionCtrl: A Unified and Flexible Motion Controller for Video Generation</h1>"""
+# subtitle = r"""<h2 align="center">Deployed on SVD Generation</h2>"""
+important_link = r"""
+<div align='center'>
+<a href='https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD'>[Demo MotionCtrl + SVD]</a>
+&ensp; <a href='https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf'>[Paper]</a>
+&ensp; <a href='https://wzhouxiff.github.io/projects/MotionCtrl/'>[Project Page]</a>
+&ensp; <a href='https://github.com/TencentARC/MotionCtrl'>[Code]</a>
+&ensp; <a href='https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md'>[Showcases]</a>
+&ensp; <a href='https://github.com/TencentARC/MotionCtrl/blob/svd/doc/tutorial.md'>[Tutorial]</a>
+</div>
+"""
 
 description = r"""
 <b>Official Gradio demo</b> for <a href='https://github.com/TencentARC/MotionCtrl' target='_blank'><b>MotionCtrl: A Unified and Flexible Motion Controller for Video Generation</b></a>.<br>
 🔥 MotionCtrl is capable of independently and flexibly controling the camera motion and object motion of a generated video, with only a unified model.<br>
 🤗 Try to control the motion of the generated videos yourself!<br>
-❗❗❗ Please note that current version of **MotionCtrl** is deployed on **LVDM/VideoCrafter**. The versions that depolyed on **AnimateDiff** and **SVD** will be released soon.<br>
+❗❗❗ This demo provides model of **MotionCtrl** deployed on **LVDM/VideoCrafter** and **VideoCrafte2**. 
+Deployments in **LVDM/VideoCrafter** include both Camera and Object Motion Control, 
+while deployments in **VideoCrafte2** only include Camera Motion Control.
+<br>
 """
 article = r"""
 If MotionCtrl is helpful, please help to ⭐ the <a href='https://github.com/TencentARC/MotionCtrl' target='_blank'>Github Repo</a>. Thanks! 
@@ -47,11 +76,12 @@ If MotionCtrl is helpful, please help to ⭐ the <a href='https://github.com/Ten
 <br>
 If our work is useful for your research, please consider citing:
 ```bibtex
-@inproceedings{wang2023motionctrl,
-  title={MotionCtrl: A Unified and Flexible Motion Controller for Video Generation},
-  author={Wang, Zhouxia and Yuan, Ziyang and Wang, Xintao and Chen, Tianshui and Xia, Menghan and Luo, Ping and Shan, Yin},
-  booktitle={arXiv preprint arXiv:2312.03641},
-  year={2023}
+@inproceedings{wang2024motionctrl,
+  title={Motionctrl: A unified and flexible motion controller for video generation},
+  author={Wang, Zhouxia and Yuan, Ziyang and Wang, Xintao and Li, Yaowei and Chen, Tianshui and Xia, Menghan and Luo, Ping and Shan, Ying},
+  booktitle={ACM SIGGRAPH 2024 Conference Papers},
+  pages={1--11},
+  year={2024}
 }
 ```
 
@@ -100,6 +130,7 @@ res = []
 res_forsave = []
 T_range = 1.8
 
+exp_no = 0
 
 
 for i in range(0, 16):
@@ -111,217 +142,55 @@ for i in range(0, 16):
     res.append(RT)
     
 fig = vis_camera(res)
-    
-# MODE = ["camera motion control", "object motion control", "camera + object motion control"]
-MODE = ["control camera poses", "control object trajectory", "control both camera and object motion"]
-BASE_MODEL = ['LVDM/VideoCrafter', 'AnimateDiff', 'SVD']
 
-
-traj_list = [] 
-camera_dict = {
-                "motion":[],
-                "mode": "Customized Mode 1: First A then B",  # "First A then B", "Both A and B", "Custom"
-                "speed": 1.0,
-                "complex": None
-                }   
-
-def fn_vis_camera(info_mode):
-    global camera_dict
-    RT = process_camera(camera_dict) # [t, 3, 4]
-    if camera_dict['complex'] is not None:
-        # rescale T to [-2,2]
-        for i in range(3):
-            min_T = np.min(RT[:,i,-1])
-            max_T = np.max(RT[:,i,-1])
-            if min_T < -2 or max_T > 2:
-                RT[:,i,-1] = RT[:,i,-1] - min_T
-                RT[:,i,-1] = RT[:,i,-1] / (np.max(RT[:,:,-1]) + 1e-6)
-                RT[:,i,-1] = RT[:,i,-1] * 4
-                RT[:,i,-1] = RT[:,i,-1] - 2
-
-    fig = vis_camera(RT)
-
-    if info_mode == MODE[0]:
-        vis_step3_prompt_generate = True
-        vis_prompt = True
-        vis_num_samples = True
-        vis_seed = True
-        vis_start = True
-        vis_gen_video = True
-
-        vis_object_mode = False
-        vis_object_info = False
-
-    else:
-        vis_step3_prompt_generate = False
-        vis_prompt = False
-        vis_num_samples = False
-        vis_seed = False
-        vis_start = False
-        vis_gen_video = False
-
-        vis_object_mode = True
-        vis_object_info = True
-
-    return fig, \
-            gr.update(visible=vis_object_mode), \
-            gr.update(visible=vis_object_info), \
-            gr.update(visible=vis_step3_prompt_generate), \
-            gr.update(visible=vis_prompt), \
-            gr.update(visible=vis_num_samples), \
-            gr.update(visible=vis_seed), \
-            gr.update(visible=vis_start), \
-            gr.update(visible=vis_gen_video, value=None)
-
-def fn_vis_traj():
-    global traj_list
-    xy_range = 1024
-    points = process_points(traj_list)
-    imgs = []
-    for idx in range(16):
-        bg_img = np.ones((1024, 1024, 3), dtype=np.uint8) * 255
-        for i in range(15):
-            p = points[i]
-            p1 = points[i+1]
-            cv2.line(bg_img, p, p1, (255, 0, 0), 2)
-
-            if i == idx:
-                cv2.circle(bg_img, p, 2, (0, 255, 0), 20)
-
-        if idx==(15):
-            cv2.circle(bg_img, points[-1], 2, (0, 255, 0), 20)
-        
-        imgs.append(bg_img.astype(np.uint8))
-
-    # size = (512, 512)
-    fps = 10
-    path = tempfile.NamedTemporaryFile(suffix='.mp4', delete=False).name
-    writer = imageio.get_writer(path, format='mp4', mode='I', fps=fps)
-    for img in imgs:
-        writer.append_data(img)
-
-    writer.close()
-
-    vis_step3_prompt_generate = True
-    vis_prompt = True
-    vis_num_samples = True
-    vis_seed = True
-    vis_start = True
-    vis_gen_video = True
-    return path, gr.update(visible=vis_step3_prompt_generate), \
-                gr.update(visible=vis_prompt), \
-                gr.update(visible=vis_num_samples), \
-                gr.update(visible=vis_seed), \
-                gr.update(visible=vis_start), \
-                gr.update(visible=vis_gen_video, value=None)
-
-def display_camera_info(camera_dict, camera_mode=None):
-    if camera_dict['complex'] is not None:
-        res = f"complex : {camera_dict['complex']}. "
-    else:
-        res = ""
-        res += f"motion : {[_ for _ in camera_dict['motion']]}. "
-        res += f"speed : {camera_dict['speed']}. "
-        if camera_mode == CAMERA_MOTION_MODE[2]:
-            res += f"mode : {camera_dict['mode']}. "
-    return res
-
-def add_traj_point(evt: gr.SelectData, ):
-    global traj_list
-    traj_list.append(evt.index)
-    traj_str = [f"{traj}" for traj in traj_list]
-    return ", ".join(traj_str)
-
-def add_provided_traj(traj_name):
-    global traj_list
-    traj_list = get_provided_traj(traj_name)
-    traj_str = [f"{traj}" for traj in traj_list]
-    return ", ".join(traj_str)
-
-def add_camera_motion(camera_motion, camera_mode):  
-    global camera_dict
-    if camera_dict['complex'] is not None:
-        camera_dict['complex'] = None
-    if camera_mode == CAMERA_MOTION_MODE[2] and len(camera_dict['motion']) <2:
-        camera_dict['motion'].append(camera_motion)
-    else:
-        camera_dict['motion']=[camera_motion]
-    
-    return display_camera_info(camera_dict, camera_mode)
-
-def add_complex_camera_motion(camera_motion):
-    global camera_dict
-    camera_dict['complex']=camera_motion
-    return display_camera_info(camera_dict)
-
-def change_camera_mode(combine_type, camera_mode):
-    global camera_dict
-    camera_dict['mode'] = combine_type
-
-    return display_camera_info(camera_dict, camera_mode)
-
-def change_camera_speed(camera_speed):
-    global camera_dict
-    camera_dict['speed'] = camera_speed
-    return display_camera_info(camera_dict)
-
-def reset_camera():
-    global camera_dict
-    camera_dict = {
-                    "motion":[],
-                    "mode": "Customized Mode 1: First A then B",
-                    "speed": 1.0,
-                    "complex": None
-                    }   
-    return display_camera_info(camera_dict)
-
-
-def fn_traj_droplast():
-    global traj_list
-
-    if traj_list:
-        traj_list.pop()
-
-    if traj_list:
-        traj_str = [f"{traj}" for traj in traj_list]
-        return ", ".join(traj_str)
-    else:   
-        return "Click to specify trajectory"
-
-def fn_traj_reset():
-    global traj_list
-    traj_list = []
-    return "Click to specify trajectory"
 
 ###########################################
 
 model_path='./checkpoints/motionctrl.pth'
 config_path='./configs/inference/config_both.yaml'
+if not os.path.exists(model_path):
+    os.system(f'wget https://huggingface.co/TencentARC/MotionCtrl/resolve/main/motionctrl.pth?download=true -P ./checkpoints/')
+    os.system(f'mv ./checkpoints/motionctrl.pth?download=true ./checkpoints/motionctrl.pth')
 
 config = OmegaConf.load(config_path)
 model_config = config.pop("model", OmegaConf.create())
-model = instantiate_from_config(model_config)
+model_v1 = instantiate_from_config(model_config)
 if torch.cuda.is_available():
-    model = model.cuda()
+    model_v1 = model_v1.cuda()
 
-model = load_model_checkpoint(model, model_path)
-model.eval()
+model_v1 = load_model_checkpoint(model_v1, model_path)
+model_v1.eval()
+
+v2_model_path = './checkpoints/motionctrl_videocrafter2_cmcm.ckpt'
+if not os.path.exists(v2_model_path):
+    os.system(f'wget https://huggingface.co/TencentARC/MotionCtrl/resolve/main/motionctrl_videocrafter2_cmcm.ckpt?download=true -P ./checkpoints/')
+    os.system(f'mv ./checkpoints/motionctrl_videocrafter2_cmcm.ckpt?download=true ./checkpoints/motionctrl_videocrafter2_cmcm.ckpt')
+
+model_v2 = instantiate_from_config(model_config)
+model_v2 = load_model_checkpoint(model_v2, v2_model_path)
+
+if torch.cuda.is_available():
+    model_v2 = model_v2.cuda()
+
+model_v2.eval()
 
 
-def model_run(prompts, infer_mode, seed, n_samples):
-    global traj_list
-    global camera_dict
+def model_run(prompts, choose_model, infer_mode, seed, n_samples, camera_args=None):
+    traj_list = get_traj_list()
+    camera_dict = get_camera_dict()
 
-    RT = process_camera(camera_dict).reshape(-1,12)
+    RT = process_camera(camera_dict, camera_args).reshape(-1,12)
     traj_flow = process_traj(traj_list).transpose(3,0,1,2)
-    print(prompts)
-    print(RT.shape)
-    print(traj_flow.shape)
 
-    noise_shape = [1, 4, 16, 32, 32]
+    if choose_model == BASE_MODEL[0]:
+        model = model_v1
+        noise_shape = [1, 4, 16, 32, 32]
+    else:
+        model = model_v2
+        noise_shape = [1, 4, 16, 40, 64]
     unconditional_guidance_scale = 7.5
     unconditional_guidance_scale_temporal = None
-    # n_samples = 1
+
     ddim_steps= 50
     ddim_eta=1.0
     cond_T=800
@@ -415,15 +284,13 @@ def model_run(prompts, infer_mode, seed, n_samples):
     batch_variants = torch.stack(batch_variants, dim=1)
     batch_variants = batch_variants[0]
     
-    # file_path = save_results(batch_variants, "MotionCtrl", "gradio_temp", fps=10)
     file_path = save_results(batch_variants, fps=10)
-    print(file_path)
 
     return gr.update(value=file_path, width=256*n_samples, height=256)
 
-    # return file_path
+    # return 
 
-def save_results(video, fps=10):
+def save_results(video, fps=10, out_dir=None):
     
     # b,c,t,h,w
     video = video.detach().cpu()
@@ -435,7 +302,10 @@ def save_results(video, fps=10):
     grid = (grid + 1.0) / 2.0
     grid = (grid * 255).to(torch.uint8).permute(0, 2, 3, 1) # [t, h, w*n, 3]
     
-    path = tempfile.NamedTemporaryFile(suffix='.mp4', delete=False).name
+    if out_dir is None:
+        path = tempfile.NamedTemporaryFile(suffix='.mp4', delete=False).name
+    else:
+        path = os.path.join(out_dir, 'motionctrl.mp4')
 
     writer = imageio.get_writer(path, format='mp4', mode='I', fps=fps)
     for i in range(grid.shape[0]):
@@ -446,357 +316,35 @@ def save_results(video, fps=10):
 
     return path
 
-def visualized_step2(infer_mode):
-
-    # reset
-    reset_camera()
-    fn_traj_reset()
-
-    # camera motion control
-    vis_basic_camera_motion = False
-    vis_basic_camera_motion_des = False
-    vis_custom_camera_motion = False
-    vis_custom_run_status = False
-    vis_complex_camera_motion = False
-    vis_complex_camera_motion_des = False
-    vis_U = False
-    vis_D = False
-    vis_L = False
-    vis_R = False
-    vis_I = False
-    vis_O = False
-    vis_ACW = False
-    vis_CW = False
-    vis_combine1 = False
-    vis_combine2 = False
-    vis_speed = False
-
-    vis_Pose_1, vis_Pose_2, vis_Pose_3, vis_Pose_4 = False, False, False, False
-    vis_Pose_5, vis_Pose_6, vis_Pose_7, vis_Pose_8 = False, False, False, False
-
-    vis_camera_args = False
-    vis_camera_reset = False
-    vis_camera_vis = False
-    vis_vis_camera = False
-
-    # object motion control
-    vis_provided_traj = False
-    vis_provided_traj_des = False
-    vis_draw_yourself = False
-    vis_draw_run_status = False
-
-    vis_traj_1, vis_traj_2, vis_traj_3, vis_traj_4 = False, False, False, False
-    vis_traj_5, vis_traj_6, vis_traj_7, vis_traj_8 = False, False, False, False
-
-    traj_args = False
-    traj_droplast, traj_reset = False, False
-    traj_vis = False
-    traj_input, vis_traj = False, False
-
-
-    # generate video
-    vis_step3_prompt_generate = False
-    vis_prompt = False
-    vis_num_samples = False
-    vis_seed = False
-    vis_start = False
-    vis_gen_video = False
-
-    if infer_mode == MODE[0]:
-        vis_step2_camera_motion = True
-        vis_step2_camera_motion_des = True
-        vis_camera_mode = True
-        vis_camera_info = True
-
-        vis_step2_object_motion = False
-        vis_step2_object_motion_des = False
-        vis_traj_mode = False
-        vis_traj_info = False
-
-        step2_camera_object_motion = False
-        step2_camera_object_motion_des = False
-
-    elif infer_mode == MODE[1]:
-        vis_step2_camera_motion = False
-        vis_step2_camera_motion_des = False
-        vis_camera_mode = False
-        vis_camera_info = False
-
-        vis_step2_object_motion = True
-        vis_step2_object_motion_des = True
-        vis_traj_mode = True
-        vis_traj_info = True
-
-        step2_camera_object_motion = False
-        step2_camera_object_motion_des = False
-    else: #infer_mode == MODE[2]:
-        vis_step2_camera_motion = False
-        vis_step2_camera_motion_des = False
-        vis_camera_mode = False
-        vis_camera_info = False
-    
-        vis_step2_object_motion = False
-        vis_step2_object_motion_des = False
-        vis_traj_mode = False
-        vis_traj_info = False
-
-        step2_camera_object_motion = True
-        step2_camera_object_motion_des = True
-    
-        vis_basic_camera_motion = True
-        vis_basic_camera_motion_des = True
-        vis_U = True
-        vis_D = True
-        vis_L = True
-        vis_R = True
-        vis_I = True
-        vis_O = True
-        vis_ACW = True
-        vis_CW = True
-        vis_speed = True
-
-        vis_camera_args = True
-        vis_camera_reset = True
-        vis_camera_vis = True
-        vis_vis_camera = True
-        
-    
-    return gr.update(visible=vis_step2_camera_motion), \
-            gr.update(visible=vis_step2_camera_motion_des), \
-            gr.update(visible=vis_camera_mode), \
-            gr.update(visible=vis_camera_info), \
-            gr.update(visible=vis_basic_camera_motion), \
-            gr.update(visible=vis_basic_camera_motion_des), \
-            gr.update(visible=vis_custom_camera_motion), \
-            gr.update(visible=vis_custom_run_status), \
-            gr.update(visible=vis_complex_camera_motion), \
-            gr.update(visible=vis_complex_camera_motion_des), \
-            gr.update(visible=vis_U), gr.update(visible=vis_D), gr.update(visible=vis_L), gr.update(visible=vis_R), \
-            gr.update(visible=vis_I), gr.update(visible=vis_O), gr.update(visible=vis_ACW), gr.update(visible=vis_CW), \
-            gr.update(visible=vis_combine1), gr.update(visible=vis_combine2), \
-            gr.update(visible=vis_speed), \
-            gr.update(visible=vis_Pose_1), gr.update(visible=vis_Pose_2), gr.update(visible=vis_Pose_3), gr.update(visible=vis_Pose_4), \
-            gr.update(visible=vis_Pose_5), gr.update(visible=vis_Pose_6), gr.update(visible=vis_Pose_7), gr.update(visible=vis_Pose_8), \
-            gr.update(visible=vis_camera_args, value=None), \
-            gr.update(visible=vis_camera_reset), gr.update(visible=vis_camera_vis), \
-            gr.update(visible=vis_vis_camera, value=None), \
-            gr.update(visible=vis_step2_object_motion), \
-            gr.update(visible=vis_step2_object_motion_des), \
-            gr.update(visible=vis_traj_mode), \
-            gr.update(visible=vis_traj_info), \
-            gr.update(visible=vis_provided_traj), \
-            gr.update(visible=vis_provided_traj_des), \
-            gr.update(visible=vis_draw_yourself), \
-            gr.update(visible=vis_draw_run_status), \
-            gr.update(visible=vis_traj_1), gr.update(visible=vis_traj_2), gr.update(visible=vis_traj_3), gr.update(visible=vis_traj_4), \
-            gr.update(visible=vis_traj_5), gr.update(visible=vis_traj_6), gr.update(visible=vis_traj_7), gr.update(visible=vis_traj_8), \
-            gr.update(visible=traj_args), \
-            gr.update(visible=traj_droplast), gr.update(visible=traj_reset), \
-            gr.update(visible=traj_vis), \
-            gr.update(visible=traj_input), gr.update(visible=vis_traj, value=None), \
-            gr.update(visible=step2_camera_object_motion), \
-            gr.update(visible=step2_camera_object_motion_des), \
-            gr.update(visible=vis_step3_prompt_generate), \
-            gr.update(visible=vis_prompt), \
-            gr.update(visible=vis_num_samples), \
-            gr.update(visible=vis_seed), \
-            gr.update(visible=vis_start), \
-            gr.update(visible=vis_gen_video)
-
-def visualized_camera_poses(step2_camera_motion):
-    reset_camera()
-
-    # generate video
-    vis_step3_prompt_generate = False
-    vis_prompt = False
-    vis_num_samples = False
-    vis_seed = False
-    vis_start = False
-    vis_gen_video = False
-
-    if step2_camera_motion == CAMERA_MOTION_MODE[0]:
-        vis_basic_camera_motion = True
-        vis_basic_camera_motion_des = True
-        vis_custom_camera_motion = False
-        vis_custom_run_status = False
-        vis_complex_camera_motion = False
-        vis_complex_camera_motion_des = False
-        vis_U = True
-        vis_D = True
-        vis_L = True
-        vis_R = True
-        vis_I = True
-        vis_O = True
-        vis_ACW = True
-        vis_CW = True
-        vis_combine1 = False
-        vis_combine2 = False
-        vis_speed = True
-
-        vis_Pose_1, vis_Pose_2, vis_Pose_3, vis_Pose_4 = False, False, False, False
-        vis_Pose_5, vis_Pose_6, vis_Pose_7, vis_Pose_8 = False, False, False, False
-
-    elif step2_camera_motion == CAMERA_MOTION_MODE[1]:
-        vis_basic_camera_motion = False
-        vis_basic_camera_motion_des = False
-        vis_custom_camera_motion = False
-        vis_custom_run_status = False
-        vis_complex_camera_motion = True
-        vis_complex_camera_motion_des = True
-        vis_U = False
-        vis_D = False
-        vis_L = False
-        vis_R = False
-        vis_I = False
-        vis_O = False
-        vis_ACW = False
-        vis_CW = False
-        vis_combine1 = False
-        vis_combine2 = False
-        vis_speed = False
-
-        vis_Pose_1, vis_Pose_2, vis_Pose_3, vis_Pose_4 = True, True, True, True
-        vis_Pose_5, vis_Pose_6, vis_Pose_7, vis_Pose_8 = True, True, True, True
-
-    else: # step2_camera_motion = CAMERA_MOTION_MODE[2]:
-        vis_basic_camera_motion = False
-        vis_basic_camera_motion_des = False
-        vis_custom_camera_motion = True
-        vis_custom_run_status = True
-        vis_complex_camera_motion = False
-        vis_complex_camera_motion_des = False
-        vis_U = True
-        vis_D = True
-        vis_L = True
-        vis_R = True
-        vis_I = True
-        vis_O = True
-        vis_ACW = True
-        vis_CW = True
-        vis_combine1 = True
-        vis_combine2 = True
-        vis_speed = True
-
-        vis_Pose_1, vis_Pose_2, vis_Pose_3, vis_Pose_4 = False, False, False, False
-        vis_Pose_5, vis_Pose_6, vis_Pose_7, vis_Pose_8 = False, False, False, False
-
-    vis_camera_args = True
-    vis_camera_reset = True
-    vis_camera_vis = True
-    vis_vis_camera = True
-
-    return gr.update(visible=vis_basic_camera_motion), \
-            gr.update(visible=vis_basic_camera_motion_des), \
-            gr.update(visible=vis_custom_camera_motion), \
-            gr.update(visible=vis_custom_run_status), \
-            gr.update(visible=vis_complex_camera_motion), \
-            gr.update(visible=vis_complex_camera_motion_des), \
-            gr.update(visible=vis_U), gr.update(visible=vis_D), gr.update(visible=vis_L), gr.update(visible=vis_R), \
-            gr.update(visible=vis_I), gr.update(visible=vis_O), gr.update(visible=vis_ACW), gr.update(visible=vis_CW), \
-            gr.update(visible=vis_combine1), gr.update(visible=vis_combine2), \
-            gr.update(visible=vis_speed), \
-            gr.update(visible=vis_Pose_1), gr.update(visible=vis_Pose_2), gr.update(visible=vis_Pose_3), gr.update(visible=vis_Pose_4), \
-            gr.update(visible=vis_Pose_5), gr.update(visible=vis_Pose_6), gr.update(visible=vis_Pose_7), gr.update(visible=vis_Pose_8), \
-            gr.update(visible=vis_camera_args, value=None), \
-            gr.update(visible=vis_camera_reset), gr.update(visible=vis_camera_vis), \
-            gr.update(visible=vis_vis_camera, value=None), \
-            gr.update(visible=vis_step3_prompt_generate), \
-            gr.update(visible=vis_prompt), \
-            gr.update(visible=vis_num_samples), \
-            gr.update(visible=vis_seed), \
-            gr.update(visible=vis_start), \
-            gr.update(visible=vis_gen_video)
-
-def visualized_traj_poses(step2_object_motion):
-    
-    fn_traj_reset()
-
-    # generate video
-    vis_step3_prompt_generate = False
-    vis_prompt = False
-    vis_num_samples = False
-    vis_seed = False
-    vis_start = False
-    vis_gen_video = False
-
-    if step2_object_motion == "Provided Trajectory":
-        vis_provided_traj = True
-        vis_provided_traj_des = True
-        vis_draw_yourself = False
-        vis_draw_run_status = False
-
-        vis_traj_1, vis_traj_2, vis_traj_3, vis_traj_4 = True, True, True, True
-        vis_traj_5, vis_traj_6, vis_traj_7, vis_traj_8 = True, True, True, True
-
-        traj_args = True
-        traj_droplast, traj_reset = False, True
-        traj_vis = True
-        traj_input, vis_traj = False, True
-
-
-    elif step2_object_motion == "Custom Trajectory":
-        vis_provided_traj = False
-        vis_provided_traj_des = False
-        vis_draw_yourself = True
-        vis_draw_run_status = True
-
-        vis_traj_1, vis_traj_2, vis_traj_3, vis_traj_4 = False, False, False, False
-        vis_traj_5, vis_traj_6, vis_traj_7, vis_traj_8 = False, False, False, False
-
-        traj_args = True
-        traj_droplast, traj_reset = True, True
-        traj_vis = True
-        traj_input, vis_traj = True, True
-
-    return gr.update(visible=vis_provided_traj), \
-            gr.update(visible=vis_provided_traj_des), \
-            gr.update(visible=vis_draw_yourself), \
-            gr.update(visible=vis_draw_run_status), \
-            gr.update(visible=vis_traj_1), gr.update(visible=vis_traj_2), gr.update(visible=vis_traj_3), gr.update(visible=vis_traj_4), \
-            gr.update(visible=vis_traj_5), gr.update(visible=vis_traj_6), gr.update(visible=vis_traj_7), gr.update(visible=vis_traj_8), \
-            gr.update(visible=traj_args), \
-            gr.update(visible=traj_droplast), gr.update(visible=traj_reset), \
-            gr.update(visible=traj_vis), \
-            gr.update(visible=traj_input), gr.update(visible=vis_traj, value=None), \
-            gr.update(visible=vis_step3_prompt_generate), \
-            gr.update(visible=vis_prompt), \
-            gr.update(visible=vis_num_samples), \
-            gr.update(visible=vis_seed), \
-            gr.update(visible=vis_start), \
-            gr.update(visible=vis_gen_video)
 
 def main(args):
     demo = gr.Blocks()
     with demo:
 
         gr.Markdown(title)
+        gr.Markdown(important_link)
         gr.Markdown(description)
 
-        # state = gr.State({
-        #     "mode": "camera_only",
-        #     "camera_input": [],
-        #     "traj_input": [],
-        # })
 
         with gr.Column():
-            '''
             # step 0: select based model.
             gr.Markdown("## Step0: Selecting the model", show_label=False)
             gr.Markdown( f'- {BASE_MODEL[0]}: **MotionCtrl** deployed on {BASE_MODEL[0]}', show_label=False)
             gr.Markdown( f'- {BASE_MODEL[1]}: **MotionCtrl** deployed on {BASE_MODEL[1]}', show_label=False)
-            gr.Markdown( f'- {BASE_MODEL[2]}: **MotionCtrl** deployed on {BASE_MODEL[2]}', show_label=False)
-            gr.Markdown( f'- **Only the model that deployed on {BASE_MODEL[0]} is avalible now. MotionCtrl models deployed on {BASE_MODEL[1]} and {BASE_MODEL[2]} are coming soon.**', show_label=False)
-            gr.Radio(choices=BASE_MODEL, value=BASE_MODEL[0], label="Based Model", interactive=False)
-            '''
+            # gr.HighlightedText(value=[("",""), (f'Choosing {BASE_MODEL[1]} requires time for loading new model. Please be patient.', "Normal")],
+            #                     color_map={"Normal": "green", "Error": "red", "Clear clicks": "gray", "Add mask": "green", "Remove mask": "red"}, visible=True)
+            choose_model = gr.Radio(choices=BASE_MODEL, value=BASE_MODEL[0], label="Based Model", interactive=True)
+            choose_model_button = gr.Button(value="Proceed")
 
             # step 1: select motion control mode
-            gr.Markdown("## Step 1/3: Selecting the motion control mode", show_label=False)
-            gr.Markdown( f'- {MODE[0]}: Control the camera motion only', show_label=False)
-            gr.Markdown( f'- {MODE[1]}: Control the object motion only', show_label=False)
-            gr.Markdown( f'- {MODE[2]}: Control both the camera and object motion', show_label=False)
-            gr.Markdown( f'- Click `Proceed` to go into next step', show_label=False)
-            infer_mode = gr.Radio(choices=MODE, value=MODE[0], label="Motion Control Mode", interactive=True)
-            mode_info = gr.Button(value="Proceed")
+            step1 = gr.Markdown("## Step 1/3: Selecting the motion control mode", show_label=False, visible=False)
+            setp1_dec = gr.Markdown( f'\n - {MODE[0]}: Control the camera motion only \
+                                       \n- {MODE[1]}: Control the object motion only \
+                                       \n- {MODE[2]}: Control both the camera and object motion \
+                                       \n- Click `Proceed` to go into next step',
+                                       show_label=False, visible=False)
+            infer_mode = gr.Radio(choices=MODE, value=MODE[0], label="Motion Control Mode", interactive=True, visible=False)
+            mode_info = gr.Button(value="Proceed", visible=False)
 
             # step2 - camera + object motion control
             step2_camera_object_motion  = gr.Markdown("---\n## Step 2/3: Select the camera poses and trajectory", show_label=False, visible=False)
@@ -834,18 +382,40 @@ def main(args):
 
                     # step2.3 - camera motion control - custom
                     custom_camera_motion = gr.Markdown(f"---\n### {CAMERA_MOTION_MODE[2]}", show_label=False, visible=False)
-                    custom_run_status = gr.Markdown(f"\n 1. Click two of the basic camera poses, such as `Pan Up` and `Pan Left`; \
-                                                    \n 2. Click `Customized Mode 1: First A then B` or `Customized Mode 1: First A then B` \
-                                                    \n - `Customized Mode 1: First A then B`: The camera first `Pan Up` and then `Pan Left`; \
-                                                    \n - `Customized Mode 2: Both A and B`: The camera move towards the upper left corner; \
-                                                    \n 3. Slide the `Motion speed` to get a speed value. The large the value, the fast the camera motion; \
-                                                    \n 4. Click `Visualize Camera and Proceed` to visualize the camera poses and go proceed; \
-                                                    \n 5. Click `Reset Camera` to reset the camera poses (If needed). ",
+                    # custom_run_status = gr.Markdown(f"\n 1. Click two of the basic camera poses, such as `Pan Up` and `Pan Left`; \
+                    #                                 \n 2. Click `Customized Mode 1: First A then B` or `Customized Mode 1: First A then B` \
+                    #                                 \n - `Customized Mode 1: First A then B`: The camera first `Pan Up` and then `Pan Left`; \
+                    #                                 \n - `Customized Mode 2: Both A and B`: The camera move towards the upper left corner; \
+                    #                                 \n 3. Slide the `Motion speed` to get a speed value. The large the value, the fast the camera motion; \
+                    #                                 \n 4. Click `Visualize Camera and Proceed` to visualize the camera poses and go proceed; \
+                    #                                 \n 5. Click `Reset Camera` to reset the camera poses (If needed). ",
+                    #                                     show_label=False, visible=False)
+                    custom_run_status = gr.Markdown(f"\n 1. Click `{DIY_MODE[0]}`, `{DIY_MODE[1]}`, or `{DIY_MODE[2]}` \
+                                                    \n - `Customized Mode 1: First A then B`: For example, click `Pan Up` and `Pan Left`, the camera will first `Pan Up` and then `Pan Left`; \
+                                                    \n - `Customized Mode 2: Both A and B`: For example, click `Pan Up` and `Pan Left`, the camera will move towards the upper left corner; \
+                                                    \n - `{DIY_MODE[2]}`: Input the RAW RT matrix yourselves. \
+                                                    \n 2. Slide the `Motion speed` to get a speed value. The large the value, the fast the camera motion; \
+                                                    \n 3. Click `Visualize Camera and Proceed` to visualize the camera poses and go proceed; \
+                                                    \n 4. Click `Reset Camera` to reset the camera poses (If needed). ",
                                                         show_label=False, visible=False)
 
+                    # gr.HighlightedText(value=[("",""), ("1. Select two of the basic camera poses; 2. Select Customized Mode 1 OR Customized Mode 2. 3. Visualized Camera to show the customized camera poses", "Normal")],
+                    #                                     color_map={"Normal": "green", "Error": "red", "Clear clicks": "gray", "Add mask": "green", "Remove mask": "red"}, visible=False)
+                    
                     gr.HighlightedText(value=[("",""), ("1. Select two of the basic camera poses; 2. Select Customized Mode 1 OR Customized Mode 2. 3. Visualized Camera to show the customized camera poses", "Normal")],
                                                         color_map={"Normal": "green", "Error": "red", "Clear clicks": "gray", "Add mask": "green", "Remove mask": "red"}, visible=False)
                     
+                    with gr.Row():
+                        combine1 = gr.Button(value=DIY_MODE[0], visible=False)
+                        combine2 = gr.Button(value=DIY_MODE[1], visible=False)
+                        combine3 = gr.Button(value=DIY_MODE[2], visible=False)
+                    with gr.Row():
+                        combine3_des = gr.Markdown(f"---\n#### Input your camera pose in the following textbox. \
+                                                A total of 14 lines and each line contains 12 float number, indicated \
+                                                the RT matrix in the shape of 1x12. \
+                                                The example is RT matrix of ZOOM IN.", show_label=False, visible=False)
+
+
                     with gr.Row():
                         U = gr.Button(value="Pan Up", visible=False)
                         D = gr.Button(value="Pan Down", visible=False)
@@ -857,9 +427,9 @@ def main(args):
                         ACW = gr.Button(value="ACW", visible=False)
                         CW = gr.Button(value="CW", visible=False)
                     
-                    with gr.Row():
-                        combine1 = gr.Button(value="Customized Mode 1: First A then B", visible=False)
-                        combine2 = gr.Button(value="Customized Mode 2: Both A and B", visible=False)
+                    # with gr.Row():
+                    #     combine1 = gr.Button(value="Customized Mode 1: First A then B", visible=False)
+                    #     combine2 = gr.Button(value="Customized Mode 2: Both A and B", visible=False)
 
                     with gr.Row():    
                         speed = gr.Slider(minimum=0, maximum=2, step=0.2, label="Motion Speed", value=1.0, visible=False)
@@ -941,12 +511,62 @@ def main(args):
                 with gr.Column():
                     step3_prompt_generate = gr.Markdown("---\n## Step 3/3: Add prompt and Generate videos", show_label=False, visible=False)
                     prompt = gr.Textbox(value="a dog sitting on grass", label="Prompt", interactive=True, visible=False)
-                    n_samples = gr.Number(value=3, precision=0, interactive=True, label="n_samples", visible=False)
+                    n_samples = gr.Number(value=2, precision=0, interactive=True, label="n_samples", visible=False)
                     seed = gr.Number(value=1234, precision=0, interactive=True, label="Seed", visible=False)
                     start = gr.Button(value="Start generation !", visible=False)
                 with gr.Column():
                     gen_video = gr.Video(value=None, label="Generate Video", visible=False)
 
+        choose_model_button.click(
+            fn=visualized_step1,
+            inputs=[choose_model],
+            outputs=[
+                     step1, setp1_dec, infer_mode, mode_info,
+                     step2_camera_motion, 
+                     step2_camera_motion_des,
+                     camera_mode, 
+                     camera_info,
+
+                     basic_camera_motion,
+                     basic_camera_motion_des,
+                     custom_camera_motion,
+                     custom_run_status,
+                     complex_camera_motion,
+                     complex_camera_motion_des,
+                     U, D, L, R, 
+                     I, O, ACW, CW, 
+                     combine1, combine2, combine3, combine3_des,
+                     speed, 
+                     Pose_1, Pose_2, Pose_3, Pose_4, 
+                     Pose_5, Pose_6, Pose_7, Pose_8,
+                     camera_args, 
+                     camera_reset, camera_vis,
+                     vis_camera,
+
+                     step2_object_motion,
+                     step2_object_motion_des,
+                     object_mode,
+                     object_info,
+
+                    provided_traj,
+                    provided_traj_des,
+                    draw_traj,
+                    draw_run_status,
+                    traj_1, traj_2, traj_3, traj_4,
+                    traj_5, traj_6, traj_7, traj_8,
+                    traj_args,
+                    traj_droplast, traj_reset,
+                    traj_vis,
+                    traj_input, vis_traj,
+
+                    step2_camera_object_motion,
+                    step2_camera_object_motion_des,
+
+                     step3_prompt_generate, prompt, n_samples, seed, start, gen_video,
+                     
+                     ],
+        )
+        
         mode_info.click(
             fn=visualized_step2,
             inputs=[infer_mode],
@@ -963,7 +583,7 @@ def main(args):
                      complex_camera_motion_des,
                      U, D, L, R, 
                      I, O, ACW, CW, 
-                     combine1, combine2,
+                     combine1, combine2, combine3, combine3_des,
                      speed, 
                      Pose_1, Pose_2, Pose_3, Pose_4, 
                      Pose_5, Pose_6, Pose_7, Pose_8,
@@ -1006,7 +626,7 @@ def main(args):
                      complex_camera_motion_des,
                      U, D, L, R, 
                      I, O, ACW, CW, 
-                     combine1, combine2,
+                     combine1, combine2, combine3, combine3_des,
                      speed, 
                      Pose_1, Pose_2, Pose_3, Pose_4, 
                      Pose_5, Pose_6, Pose_7, Pose_8,
@@ -1044,10 +664,27 @@ def main(args):
         speed.change(fn=change_camera_speed, inputs=speed, outputs=camera_args)
         camera_reset.click(fn=reset_camera, inputs=None, outputs=[camera_args])
 
-        combine1.click(fn=change_camera_mode, inputs=[combine1, camera_mode], outputs=camera_args)
-        combine2.click(fn=change_camera_mode, inputs=[combine2, camera_mode], outputs=camera_args)
+        combine1.click(fn=change_camera_mode, 
+                       inputs=[combine1, camera_mode], 
+                       outputs=[camera_args,
+                                U, D, L, R, 
+                                I, O, ACW, CW, speed,
+                                combine3_des])
+        combine2.click(fn=change_camera_mode, 
+                       inputs=[combine2, camera_mode], 
+                       outputs=[camera_args,
+                                U, D, L, R, 
+                                I, O, ACW, CW, speed,
+                                combine3_des])
+        combine3.click(fn=input_raw_camera_pose, 
+                       inputs=[combine3, camera_mode], 
+                       outputs=[camera_args,
+                                U, D, L, R, 
+                                I, O, ACW, CW, 
+                                speed, 
+                                combine3_des])
 
-        camera_vis.click(fn=fn_vis_camera, inputs=[infer_mode], outputs=[vis_camera, object_mode, object_info, step3_prompt_generate, prompt, n_samples, seed, start, gen_video])
+        camera_vis.click(fn=fn_vis_camera, inputs=[infer_mode, camera_args], outputs=[vis_camera, object_mode, object_info, step3_prompt_generate, prompt, n_samples, seed, start, gen_video])
 
         Pose_1.click(fn=add_complex_camera_motion, inputs=Pose_1, outputs=camera_args)
         Pose_2.click(fn=add_complex_camera_motion, inputs=Pose_2, outputs=camera_args)
@@ -1073,13 +710,10 @@ def main(args):
         traj_reset.click(fn=fn_traj_reset, inputs=None, outputs=traj_args)
 
 
-        start.click(fn=model_run, inputs=[prompt, infer_mode, seed, n_samples], outputs=gen_video)
+        start.click(fn=model_run, inputs=[prompt, choose_model, infer_mode, seed, n_samples, camera_args], outputs=gen_video)
 
         gr.Markdown(article)
 
-    # demo.launch(server_name='0.0.0.0', share=False, server_port=args.port)
-    # demo.queue(concurrency_count=1, max_size=10)
-    # demo.launch()
     demo.queue(max_size=10).launch(**args)
 
 
@@ -1127,3 +761,4 @@ if __name__=="__main__":
         launch_kwargs['share'] = args.share
 
     main(launch_kwargs)
+

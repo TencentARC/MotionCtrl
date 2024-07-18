@@ -5,6 +5,8 @@
 
 ## MotionCtrl: A Unified and Flexible Motion Controller for Video Generation
 
+#### [SIGGRAPH 2024 CONFERENCE PROCEEDINGS]
+
 ### <div align="center">👉 MotionCtrl for <b><a href="https://github.com/TencentARC/MotionCtrl/tree/svd">[SVD]</a>, for <a href="https://github.com/TencentARC/MotionCtrl/tree/main">[VideoCrafter]</a></b></div>
 
 [![Paper](https://img.shields.io/badge/Paper-gray)](https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf) &ensp; [![arXiv](https://img.shields.io/badge/arXiv-red)](https://arxiv.org/pdf/2312.03641.pdf) &ensp; [![Project Page](https://img.shields.io/badge/Project%20Page-green
@@ -58,6 +60,8 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 - [x] 20231228: Provide local gradio demo for convenience.
 - [x] 20240115 More camera poses used for testing are provided in `dataset/camera_poses`
 - [x] 20240115 Release MotionCtrl deployed on ***SVD***. Codes are in the brach [svd](https://github.com/TencentARC/MotionCtrl/tree/svd) and Gradio Demo is available in 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BSVD&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
+- ### [x] Adapt MotionCtrl on ***VideoCrafter2***. Gradio demo available. 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BVideoCrafter&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl). You can also run the demo locally by `python -m app --share`.
+- ### [ ] ***Training Code*** will be released soon. 
 - [ ] Release MotionCtrl deployed on ***AnimateDiff***.
 
 ---
@@ -87,11 +91,12 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 ## :books: Citation
 If you make use of our work, please cite our paper.
 ```bibtex
-@inproceedings{wang2023motionctrl,
-  title={MotionCtrl: A Unified and Flexible Motion Controller for Video Generation},
-  author={Wang, Zhouxia and Yuan, Ziyang and Wang, Xintao and Chen, Tianshui and Xia, Menghan and Luo, Ping and Shan, Yin},
-  booktitle={arXiv preprint arXiv:2312.03641},
-  year={2023}
+@inproceedings{wang2024motionctrl,
+  title={Motionctrl: A unified and flexible motion controller for video generation},
+  author={Wang, Zhouxia and Yuan, Ziyang and Wang, Xintao and Li, Yaowei and Chen, Tianshui and Xia, Menghan and Luo, Ping and Shan, Ying},
+  booktitle={ACM SIGGRAPH 2024 Conference Papers},
+  pages={1--11},
+  year={2024}
 }
 ```
 

@@ -95,7 +95,20 @@ def combine_camera_motion(RT_0, RT_1):
 
     return np.concatenate([RT_0, RT_1], axis=0)
 
-def process_camera(camera_dict):
+def process_camera(camera_dict, camera_args=None, num_frames=16):
+    speed = camera_dict['speed']
+    motion_list = camera_dict['motion']
+    mode = camera_dict['mode']
+
+    if mode == 'Customized Mode 3: RAW Camera Poses':
+        print(camera_args)
+        RT = camera_args.strip().split()
+        assert(len(RT) == num_frames*12), "The number of camera poses should be equal to the number of frames"
+        RT = [float(x) for x in RT]
+        RT = np.array(RT).reshape(-1, 3, 4)
+        RT[:, :, -1] = RT[:, :, -1] * np.array([1.5, 1, 1.3]) * speed
+        return RT
+
     # "First A then B", "Both A and B", "Custom"
     if camera_dict['complex'] is not None:
         with open(COMPLEX_CAMERA[camera_dict['complex']]) as f:
@@ -105,9 +118,6 @@ def process_camera(camera_dict):
         return RT
 
 
-    motion_list = camera_dict['motion']
-    mode = camera_dict['mode']
-    speed = camera_dict['speed']
     print(len(motion_list))
     if len(motion_list) == 0:
         angle = np.array([0,0,0])
