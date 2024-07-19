@@ -28,6 +28,15 @@ Official implementation of [MotionCtrl: A Unified and Flexible Motion Controller
 
 MotionCtrl can Independently control **complex camera motion** and **object motion** of generated videos, with **only a unified** model.
 
+### Results of MotionCtrl+AnimateDiff
+
+<div align="center">
+    <img src="assets/animatediff/sample-d971457c81bca597-Photon.gif", width="600">
+    <img src="assets/animatediff/sample-d971457c81bca597-HelloObject.gif", width="600">
+    <img src="assets/animatediff/sample-SPIN-LR-HelloObject.gif", width="600">
+    <img src="assets/animatediff/sample-none_motion-swaying_0.gif", width="600">
+</div>
+
 ### Results of MotionCtrl+SVD
 
 More results are in [showcase_svd](https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md) and our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/).
