@@ -39,9 +39,6 @@ MotionCtrl can Independently control **complex camera motion** and **object moti
     <img src="__assets__/demo/sample-d971457c81bca597-HelloObject.gif", width="600">
     <img src="__assets__/demo/sample-SPIN-LR-HelloObject.gif", width="600">
     <img src="__assets__/demo/sample-none_motion-swaying_0.gif", width="600">
-    <!-- <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">
-    <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
-    <img src="assets/svd/13_3lyco-4ru8j.gif", width="300"> -->
 </div>
 
 ## ⚙️ Environment
