@@ -18,7 +18,7 @@
 
 ---
 
-## 🔥🔥 We have released both **Training** and **Inference** code of MotionCtrl deployed on [Animatediff](https://github.com/TencentARC/MotionCtrl/tree/animatediff)
+## 🔥🔥🔥 We have released both **Training** and **Inference** code of MotionCtrl deployed on [AnimateDiff](https://github.com/TencentARC/MotionCtrl/tree/animatediff)
 
 🔥🔥 We release the codes, [models](https://huggingface.co/TencentARC/MotionCtrl/tree/main) and [demos](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) for MotionCtrl on [Stable Video Diffusion (SVD)](https://github.com/Stability-AI/generative-models).
 
@@ -100,7 +100,7 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 - #### Run local gradio demo
       python -m app --share
 
-## 🔥🔥 Training 👉 [Details](https://github.com/TencentARC/MotionCtrl/tree/animatediff)
+## 🔥🔥 Training 👉 [Details](https://github.com/TencentARC/MotionCtrl/tree/animatediff?tab=readme-ov-file#-training)
 
 ###  Preparing Dataset
   - [RealEstate10K](https://google.github.io/realestate10k/)
