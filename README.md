@@ -35,10 +35,10 @@ MotionCtrl can Independently control **complex camera motion** and **object moti
 <!-- More results are in [showcase_svd](https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md) and our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/). -->
 
 <div align="center">
-    <img src="__assets__/demo/sample-d971457c81bca597-Photon.gif", width="450">
-    <img src="__assets__/demo/sample-d971457c81bca597-HelloObject.gif", width="450">
+    <img src="__assets__/demo/sample-d971457c81bca597-Photon.gif", width="600">
+    <img src="__assets__/demo/sample-d971457c81bca597-HelloObject.gif", width="600">
     <img src="__assets__/demo/sample-SPIN-LR-HelloObject.gif", width="450">
-    <img src="__assets__/demo/sample-none_motion-swaying_0.gif", width="450">
+    <img src="__assets__/demo/sample-none_motion-swaying_0.gif", width="600">
     <!-- <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">
     <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
     <img src="assets/svd/13_3lyco-4ru8j.gif", width="300"> -->
