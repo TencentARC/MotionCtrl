@@ -5,7 +5,9 @@
 
 ## MotionCtrl: A Unified and Flexible Motion Controller for Video Generation
 
-### <div align="center">👉 MotionCtrl for <b><a href="https://github.com/TencentARC/MotionCtrl/tree/svd">[SVD]</a>, for <a href="https://github.com/TencentARC/MotionCtrl/tree/main">[VideoCrafter]</a></b></div>
+#### [SIGGRAPH 2024 CONFERENCE PROCEEDINGS]
+
+### <div align="center">👉 MotionCtrl for <b><a href="https://github.com/TencentARC/MotionCtrl/tree/svd">[SVD]</a>, for <a href="https://github.com/TencentARC/MotionCtrl/tree/main">[VideoCrafter]</a>, for <a href="https://github.com/TencentARC/MotionCtrl/tree/animatediff">[AnimateDiff]</a></b></div>
 
 [![Paper](https://img.shields.io/badge/Paper-gray)](https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf) &ensp; [![arXiv](https://img.shields.io/badge/arXiv-red)](https://arxiv.org/pdf/2312.03641.pdf) &ensp; [![Project Page](https://img.shields.io/badge/Project%20Page-green
 )](https://wzhouxiff.github.io/projects/MotionCtrl/)
@@ -63,11 +65,12 @@ More results are in [showcase_svd](https://github.com/TencentARC/MotionCtrl/blob
 ## :books: Citation
 If you make use of our work, please cite our paper.
 ```bibtex
-@inproceedings{wang2023motionctrl,
-  title={MotionCtrl: A Unified and Flexible Motion Controller for Video Generation},
-  author={Wang, Zhouxia and Yuan, Ziyang and Wang, Xintao and Chen, Tianshui and Xia, Menghan and Luo, Ping and Shan, Yin},
-  booktitle={arXiv preprint arXiv:2312.03641},
-  year={2023}
+@inproceedings{wang2024motionctrl,
+  title={Motionctrl: A unified and flexible motion controller for video generation},
+  author={Wang, Zhouxia and Yuan, Ziyang and Wang, Xintao and Li, Yaowei and Chen, Tianshui and Xia, Menghan and Luo, Ping and Shan, Ying},
+  booktitle={ACM SIGGRAPH 2024 Conference Papers},
+  pages={1--11},
+  year={2024}
 }
 ```
 
