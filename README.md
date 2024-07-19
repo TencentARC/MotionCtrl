@@ -59,7 +59,7 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 - [x] 20231225: Gradio demo available. 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BVideoCrafter&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl)
 - [x] 20231228: Provide local gradio demo for convenience.
 - [x] 20240115 More camera poses used for testing are provided in `dataset/camera_poses`
-- [x] 20240115 Release MotionCtrl deployed on ***SVD***. Codes are in the brach [svd](https://github.com/TencentARC/MotionCtrl/tree/svd) and Gradio Demo is available in 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BSVD&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
+- [x] 20240115 Release MotionCtrl deployed on ***SVD***. Codes are in the branch [svd](https://github.com/TencentARC/MotionCtrl/tree/svd) and Gradio Demo is available in 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BSVD&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
 - [x] ❗❗❗ Gradio demo of MotionCtrl deployed on ***VideoCrafter2*** is available in 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BVideoCrafter&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl). You can also run it locally by `python -m app --share`.
 <!-- - [ ] ❗❗❗ ***Training Code*** will be released soon. -->
 - [x] ❗❗❗ Release MotionCtrl deployed on ***AnimateDiff*** are available in branch [animatediff](https://github.com/TencentARC/MotionCtrl/tree/animatediff), containing both **training** and **inference** code.
