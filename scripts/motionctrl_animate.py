@@ -46,14 +46,9 @@ def main(args):
     func_args = dict(func_args)
     
     time_str = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
-    savedir = f"samples/{Path(args.config).stem}_" #-{time_str}"
+    savedir = f"samples/{Path(args.config).stem}" #-{time_str}"
 
     config  = OmegaConf.load(args.config)
-
-    # import pdb; pdb.set_trace()
-    # name_part = config[0].motion_module.split('/')
-    # savedir = f"samples/{name_part[-3].split('_')[0]}_epoch{name_part[-1][:-5].split('-')[-1]}"
-    # os.makedirs(savedir, exist_ok=True)
 
     samples = []
 
@@ -156,7 +151,7 @@ def main(args):
         ) #.to("cuda")
 
         if model_config.get("dreambooth_path", "") != "":
-            savedir += "dreambooth_"
+            savedir += "_dreambooth"
 
         bound_moudule = unet3d_forward.__get__(unet, unet.__class__)
         setattr(unet, "forward", bound_moudule)
@@ -172,8 +167,8 @@ def main(args):
         # import pdb; pdb.set_trace()
 
         if cmcm_checkpoint_path != "" and os.path.exists(cmcm_checkpoint_path):
-            name_part = cmcm_checkpoint_path.split('/')
-            savedir = savedir + f"cmcm_{name_part[-3].split('_')[0]}"
+            # name_part = cmcm_checkpoint_path.split('/')
+            # savedir = savedir + f"cmcm_{name_part[-3].split('_')[0]}"
 
             for _name, _module in unet.named_modules():
                 if _module.__class__.__name__ == "TemporalTransformerBlock":
@@ -190,7 +185,6 @@ def main(args):
             # load cmcm checkpoint
             print(f"load cmcm from {cmcm_checkpoint_path}")
             load_model = torch.load(cmcm_checkpoint_path, map_location="cpu")
-            savedir = savedir + f"_global_step{load_model['global_step']}"
 
             cmcm_state_dict = load_model["state_dict"] if "state_dict" in load_model else load_model
             new_state_dict = {}
@@ -267,6 +261,7 @@ def main(args):
         random_seeds = [random_seeds] if isinstance(random_seeds, int) else list(random_seeds)
         random_seeds = random_seeds * len(prompts) if len(random_seeds) == 1 else random_seeds
         
+
         RTs = []
         RT_names = []
         for RT_path in model_config.get("RT_paths", []):
@@ -328,14 +323,6 @@ def main(args):
         for traj_idx, traj in enumerate(val_trajs):
             if traj is not None:
                 traj_features = get_traj_features(traj, omcm)
-                # for fea_idx in range(len(traj_features)):
-                #     fea = traj_features[fea_idx]
-                #     # upsampling X2
-                #     # import pdb; pdb.set_trace()
-                #     upfea = []
-                #     for fra in range(fea.shape[2]):
-                #         upfea.append(F.interpolate(fea[:,:,fra], scale_factor=2, mode='bilinear', align_corners=False))
-                #     traj_features[fea_idx] = torch.stack(upfea, dim=2)
             else:
                 traj_features = None
             for RT_idx, RT in enumerate(RTs):

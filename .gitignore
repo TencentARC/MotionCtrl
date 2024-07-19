@@ -26,3 +26,15 @@ models/StableDiffusion/*
 !models/MotionLoRA/*.txt
 
 .vscode/
+# unimatch/
+app.py
+notes/
+
+train_cmcm.py
+train_omcm_val_trainset.py
+training_scripts_org/
+training_org/
+motionctrl_org/
+prompts_org/
+inference_org/
+test_org.sh

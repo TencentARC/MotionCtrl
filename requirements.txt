@@ -3,3 +3,7 @@ transformers==4.25.1
 imageio==2.27.0
 accelerate
 wandb
+einops
+omegaconf
+decord
+open_clip_torch
