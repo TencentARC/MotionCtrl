@@ -224,7 +224,7 @@ def main(
     if enable_omcm:
         assert omcm_config is not None
         omcm = Adapter(**omcm_config.params)
-        if omcm_config.pretrained is not None:
+        if omcm_config.pretrained is not None and os.path.exists(omcm_config.pretrained):
             zero_rank_print(f"Loading pretrained omcm model from {omcm_config.pretrained}")
             omcm_state_dict = torch.load(omcm_config.pretrained, map_location="cpu")['omcm_state_dict']
             new_state_dict = {}

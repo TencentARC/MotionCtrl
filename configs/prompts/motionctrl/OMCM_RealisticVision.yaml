@@ -1,0 +1,36 @@
+- inference_config: "configs/inference/inference-v3.yaml"
+  motion_module:    "models/Motion_Module/v3_sd15_mm.ckpt"
+  omcm_checkpoint_path: /group/30098/zhouxiawang/outputs/motionctrl_animatediff/experiments/0021_cmcm_omcm_sparse_512_lr5e-05_bs1_gpus4_ccm8_debias5-2024-06-24T20-18-32/checkpoints/omcm-checkpoint-25000.ckpt
+  omcm_min_step: 700
+
+  dreambooth_path: "models/DreamBooth_LoRA/realisticVisionV51_v51VAE.safetensors"
+  lora_model_path: ""
+
+  seed:           [42, 42, 9329399085567825781]
+  steps:          50
+  guidance_scale: 7.5
+
+  omcm_config: 
+    params:
+      channels:
+        - 320
+        - 640
+        - 1280
+        - 1280
+      nums_rb: 2
+      cin: 128 # 2 * 8 * 8
+      sk: True
+      use_conv: False
+
+  prompt:
+    - "a sunflower swaying in the wind."
+    - "a red rose swaying in the wind."
+    - "a wind chime swaying in the wind."
+
+  n_prompt:
+    - "semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck"
+    - "semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck"
+    - "semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck"
+
+  traj_paths:
+    - ./examples/object_trajectories/swaying_0/swaying_0.npy

@@ -30,16 +30,19 @@ Official implementation of [MotionCtrl: A Unified and Flexible Motion Controller
 
 MotionCtrl can Independently control **complex camera motion** and **object motion** of generated videos, with **only a unified** model.
 
-### Results of MotionCtrl+SVD
+### Results of MotionCtrl+AnimateDiff
 
-<!-- More results are in [showcase_svd](https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md) and our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/).
+<!-- More results are in [showcase_svd](https://github.com/TencentARC/MotionCtrl/blob/svd/doc/showcase_svd.md) and our [Project Page](https://wzhouxiff.github.io/projects/MotionCtrl/). -->
 
 <div align="center">
-    <img src="assets/svd/00_ibzz5-dxv2h.gif", width="300">
-    <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">
+    <img src="__assets__/demo/sample-d971457c81bca597-Photon.gif", width="450">
+    <img src="__assets__/demo/sample-d971457c81bca597-HelloObject.gif", width="450">
+    <img src="__assets__/demo/sample-SPIN-LR-HelloObject.gif", width="450">
+    <img src="__assets__/demo/sample-none_motion-swaying_0.gif", width="450">
+    <!-- <img src="assets/svd/01_5guvn-0x6v2.gif", width="300">
     <img src="assets/svd/12_sn7bz-0hcaf.gif", width="300">
-    <img src="assets/svd/13_3lyco-4ru8j.gif", width="300">
-</div> -->
+    <img src="assets/svd/13_3lyco-4ru8j.gif", width="300"> -->
+</div>
 
 ## ⚙️ Environment
     conda create -n motionctrl python=3.10.6
@@ -50,13 +53,15 @@ MotionCtrl can Independently control **complex camera motion** and **object moti
 
 1. Preparing Models
 - [motionctrl_animatediff_cmcm.ckpt](https://huggingface.co/TencentARC/MotionCtrl/blob/main/motionctrl_animatediff_cmcm.ckpt) -> `./models/MotionCtrl`.
+- [motionctrl_animatediff_omcm.ckpt](https://huggingface.co/TencentARC/MotionCtrl/blob/main/motionctrl_animatediff_omcm.ckpt) -> `./models/MotionCtrl`.
 - [v3_sd15_mm.ckpt.ckpt](https://huggingface.co/guoyww/animatediff/blob/main/v3_sd15_mm.ckpt) -> `models/Motion_Module`
 - [stable-diffusion-v1-5](https://huggingface.co/runwayml/stable-diffusion-v1-5) -> `models/StableDiffusion/stable-diffusion-v1-5`
 - (Options) LoRAs described in `download_basescripts/`
 
 2. Running scripts:
 
-      `sh scripts/test_cmcm.sh`
+      - CMCM: `sh scripts/test_cmcm.sh`
+      - OMCM: `sh scripts/test_omcm.sh`
 
 ## 🔥🔥 Training
 
@@ -69,10 +74,18 @@ MotionCtrl can Independently control **complex camera motion** and **object moti
 
     1.  Following https://github.com/cashiwamochi/RealEstate10K_Downloader to download and process the videos.
     2. Corresponding Captions and List are provided in [GoogleDrive](https://drive.google.com/drive/folders/1RYdBW3JUBYMUPdMHL2Yig6getEYN3Z3g?usp=drive_link).
+  - [WebVid](https://www.v7labs.com/open-datasets/the-webvid-10m-dataset)
+    
+    1. Attaining object moving trajectories with [ParticleSfM](https://github.com/bytedance/particle-sfm)
+    2. Our collected object trajectories are too large to released. We will show more details about data collection later.
 
 3. Training
 
-      `sh scripts/train_cmcm.sh`
+    - Train Camera Motion Control: `sh scripts/train_cmcm.sh`
+    - Train Object Motion Control:
+
+      - Dense: `sh scripts/train_omcm_dense.sh`
+      - Sparse: `sh scripts/train_omcm_sparse.sh`
 
 ## :books: Citation
 If you make use of our work, please cite our paper.

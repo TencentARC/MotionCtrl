@@ -167,8 +167,8 @@ def main(args):
         # import pdb; pdb.set_trace()
 
         if cmcm_checkpoint_path != "" and os.path.exists(cmcm_checkpoint_path):
-            # name_part = cmcm_checkpoint_path.split('/')
-            # savedir = savedir + f"cmcm_{name_part[-3].split('_')[0]}"
+            name_part = cmcm_checkpoint_path.split('/')
+            savedir = savedir + f"_cmcm"
 
             for _name, _module in unet.named_modules():
                 if _module.__class__.__name__ == "TemporalTransformerBlock":
@@ -203,15 +203,12 @@ def main(args):
         if omcm_checkpoint_path != "" and os.path.exists(omcm_checkpoint_path):
 
             name_part = omcm_checkpoint_path.split('/')
-            savedir = savedir + f"_omcm_{name_part[-3].split('_')[0]}_"
-
-            if model_config.omcm_config.params.get("align_training_size", 0) > 0:
-                savedir = f'{savedir}_align{model_config.omcm_config.params["align_training_size"]}'
+            savedir = savedir + f"_omcm_{name_part[-3].split('_')[0]}"
 
             omcm = Adapter(**model_config.omcm_config.params)
 
             load_model = torch.load(omcm_checkpoint_path, map_location="cpu")
-            savedir = savedir + f"global_step{load_model['global_step']}_T{model_config.get('omcm_min_step', 700)}"
+            # savedir = savedir + f"global_step{load_model['global_step']}_T{model_config.get('omcm_min_step', 700)}"
 
             omcm_state_dict = load_model['omcm_state_dict']
             new_state_dict = {}
