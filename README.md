@@ -7,7 +7,7 @@
 
 #### [SIGGRAPH 2024 CONFERENCE PROCEEDINGS]
 
-### <div align="center">👉 MotionCtrl for <b><a href="https://github.com/TencentARC/MotionCtrl/tree/svd">[SVD]</a>, for <a href="https://github.com/TencentARC/MotionCtrl/tree/main">[VideoCrafter]</a></b></div>
+### <div align="center">👉 MotionCtrl for <b><a href="https://github.com/TencentARC/MotionCtrl/tree/svd">[SVD]</a>, for <a href="https://github.com/TencentARC/MotionCtrl/tree/main">[VideoCrafter]</a>, for <a href="https://github.com/TencentARC/MotionCtrl/tree/animatediff">[AnimateDiff]</a></b></div>
 
 [![Paper](https://img.shields.io/badge/Paper-gray)](https://wzhouxiff.github.io/projects/MotionCtrl/assets/paper/MotionCtrl.pdf) &ensp; [![arXiv](https://img.shields.io/badge/arXiv-red)](https://arxiv.org/pdf/2312.03641.pdf) &ensp; [![Project Page](https://img.shields.io/badge/Project%20Page-green
 )](https://wzhouxiff.github.io/projects/MotionCtrl/)
@@ -61,8 +61,8 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 - [x] 20240115 More camera poses used for testing are provided in `dataset/camera_poses`
 - [x] 20240115 Release MotionCtrl deployed on ***SVD***. Codes are in the brach [svd](https://github.com/TencentARC/MotionCtrl/tree/svd) and Gradio Demo is available in 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BSVD&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD).
 - [x] ❗❗❗ Gradio demo of MotionCtrl deployed on ***VideoCrafter2*** is available in 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BVideoCrafter&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl). You can also run it locally by `python -m app --share`.
-- [ ] ❗❗❗ ***Training Code*** will be released soon.
-- [ ] Release MotionCtrl deployed on ***AnimateDiff***.
+<!-- - [ ] ❗❗❗ ***Training Code*** will be released soon. -->
+- [x] ❗❗❗ Release MotionCtrl deployed on ***AnimateDiff*** are available in branch [animatediff](https://github.com/TencentARC/MotionCtrl/tree/animatediff), containing both **training** and **inference** code.
 
 ---
 
@@ -86,7 +86,16 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 - #### Run local gradio demo
       python -m app --share
 
+## 🔥🔥 Training
 
+<!-- ### 1. Preparing Pre-Trained Models
+- [**VideoCrafter2**](https://huggingface.co/VideoCrafter/VideoCrafter2/blob/main/model.ckpt), put to `checkpoints/pretrained_models/` -->
+
+### 1. Preparing Dataset
+  - [RealEstate10K](https://google.github.io/realestate10k/)
+
+    1.  Following https://github.com/cashiwamochi/RealEstate10K_Downloader to download and process the videos.
+    2. Corresponding Captions and List are provided in [GoogleDrive](https://drive.google.com/drive/folders/1RYdBW3JUBYMUPdMHL2Yig6getEYN3Z3g?usp=drive_link).
 
 ## :books: Citation
 If you make use of our work, please cite our paper.

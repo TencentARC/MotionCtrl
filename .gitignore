@@ -10,3 +10,4 @@ gradio_temp
 *.pth
 
 assets/demo
+configs/training
