@@ -29,6 +29,7 @@ models/StableDiffusion/*
 # unimatch/
 app.py
 notes/
+.DS_Store
 
 train_cmcm.py
 train_omcm_val_trainset.py
@@ -38,3 +39,5 @@ motionctrl_org/
 prompts_org/
 inference_org/
 test_org.sh
+
+motionctrl_animatediff_512/
