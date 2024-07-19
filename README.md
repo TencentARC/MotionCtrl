@@ -100,16 +100,14 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 - #### Run local gradio demo
       python -m app --share
 
-## 🔥🔥 Training
+## 🔥🔥 Training 👉 [Details](https://github.com/TencentARC/MotionCtrl/tree/animatediff)
 
-<!-- ### 1. Preparing Pre-Trained Models
-- [**VideoCrafter2**](https://huggingface.co/VideoCrafter/VideoCrafter2/blob/main/model.ckpt), put to `checkpoints/pretrained_models/` -->
-
-### 1. Preparing Dataset
+###  Preparing Dataset
   - [RealEstate10K](https://google.github.io/realestate10k/)
 
     1.  Following https://github.com/cashiwamochi/RealEstate10K_Downloader to download and process the videos.
     2. Corresponding Captions and List are provided in [GoogleDrive](https://drive.google.com/drive/folders/1RYdBW3JUBYMUPdMHL2Yig6getEYN3Z3g?usp=drive_link).
+
 
 ## :books: Citation
 If you make use of our work, please cite our paper.
