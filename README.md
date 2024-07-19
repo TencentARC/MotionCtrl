@@ -97,7 +97,7 @@ If you make use of our work, please cite our paper.
 ```
 
 ## 🤗 Acknowledgment
-The current version of **MotionCtrl** is built on [SVD](https://huggingface.co/stabilityai/stable-video-diffusion-img2vid). We appreciate the authors for sharing their awesome codebase.
+The current version of **MotionCtrl** is built on [AnimateDiff](https://github.com/guoyww/AnimateDiff). We appreciate the authors for sharing their awesome codebase.
 
 ## ❓ Contact
 For any question, feel free to email `wzhoux@connect.hku.hk` or `zhouzi1212@gmail.com`.
