@@ -18,7 +18,7 @@
 
 ---
 
-## 🔥🔥 We have released both Training and Inference code of MotionCtrl deployed on [Animatediff](https://github.com/TencentARC/MotionCtrl/tree/animatediff)
+## 🔥🔥 We have released both **Training** and **Inference** code of MotionCtrl deployed on [Animatediff](https://github.com/TencentARC/MotionCtrl/tree/animatediff)
 
 🔥🔥 We release the codes, [models](https://huggingface.co/TencentARC/MotionCtrl/tree/main) and [demos](https://huggingface.co/spaces/TencentARC/MotionCtrl_SVD) for MotionCtrl on [Stable Video Diffusion (SVD)](https://github.com/Stability-AI/generative-models).
 
