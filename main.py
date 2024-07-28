@@ -28,6 +28,8 @@ from sgm.util import exists, instantiate_from_config, isheatmap
 MULTINODE_HACKS = True
 ###add comment
 
+## add 2nd comment
+
 def default_trainer_args():
     argspec = dict(inspect.signature(Trainer.__init__).parameters)
     argspec.pop("self")
