@@ -77,6 +77,7 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 - [x] ❗❗❗ Gradio demo of MotionCtrl deployed on ***VideoCrafter2*** is available in 🤗 [![HF Demo](https://img.shields.io/static/v1?label=Demo&message=MotionCtrl%2BVideoCrafter&color=orange)](https://huggingface.co/spaces/TencentARC/MotionCtrl). You can also run it locally by `python -m app --share`.
 <!-- - [ ] ❗❗❗ ***Training Code*** will be released soon. -->
 - [x] ❗❗❗ Release MotionCtrl deployed on ***AnimateDiff*** are available in branch [animatediff](https://github.com/TencentARC/MotionCtrl/tree/animatediff), containing both **training** and **inference** code.
+- [x] 20240920 Provide scripts for collecting object trajectories with [ParticleSfM](https://github.com/bytedance/particle-sfm). 
 
 ---
 
@@ -107,6 +108,28 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 
     1.  Following https://github.com/cashiwamochi/RealEstate10K_Downloader to download and process the videos.
     2. Corresponding Captions and List are provided in [GoogleDrive](https://drive.google.com/drive/folders/1RYdBW3JUBYMUPdMHL2Yig6getEYN3Z3g?usp=drive_link).
+
+  - [WebVid](https://www.v7labs.com/open-datasets/the-webvid-10m-dataset) with Object Trajectories
+    1. Preparing [ParticleSfM](https://github.com/bytedance/particle-sfm). Our experiments is running on CentOS 8.5 and we provide a detailed install note in `dataset/object_trajectories/ParticleSfM_Install_Note.pdf`.
+    2. Moving `dataset/object_trajectories/prepare_webvideo_len32.py` and `dataset/object_trajectories/run_particlesfm_obj_traj.py` to **ParticleSfM** project.
+    3. Step 1: Prepare sub-videos with lenth of 32 and size of 256 x 256.
+        ```
+        ## start_idx and end_idx is used to process a subset of the dataset in different machines parallelly
+        
+        python prepare_webvideo_len32.py --start_idx 0 --end_idx 1000
+        ```
+    4. Step 2: Get object trajectories
+      
+        ```
+          root_dir="WebVid/train_256_32"
+          start_idx=0
+          end_idx=1000
+
+          CUDA_VISIBLE_DEVICES=0 python run_particlesfm_obj_traj.py \
+          --root_dir $root_dir \
+          --start_idx $start_idx \
+          --end_idx $end_idx \
+        ```
 
 
 ## :books: Citation
