@@ -72,7 +72,6 @@ MotionCtrl can Independently control **complex camera motion** and **object moti
     1.  Following https://github.com/cashiwamochi/RealEstate10K_Downloader to download and process the videos.
     2. Corresponding Captions and List are provided in [GoogleDrive](https://drive.google.com/drive/folders/1RYdBW3JUBYMUPdMHL2Yig6getEYN3Z3g?usp=drive_link).
     
-<<<<<<< HEAD
     <!-- - [WebVid](https://www.v7labs.com/open-datasets/the-webvid-10m-dataset) -->
     
     <!-- 1. Attaining object moving trajectories with [ParticleSfM](https://github.com/bytedance/particle-sfm) -->
@@ -102,10 +101,6 @@ MotionCtrl can Independently control **complex camera motion** and **object moti
         ```
 
   - You can customize object Trajectories with our provided [HandyTrajDrawer](https://github.com/wzhouxiff/HandyTrajDrawer).
-=======
-    1. Attaining object moving trajectories with [ParticleSfM](https://github.com/bytedance/particle-sfm)
-    2. Our collected object trajectories are too large to be released. We will show more details about data collection later.
->>>>>>> 2754859d51b9ea415dcba52b94a6e38907c466bb
 
 3. Training
 
