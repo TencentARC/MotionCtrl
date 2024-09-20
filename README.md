@@ -78,6 +78,7 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
 <!-- - [ ] ❗❗❗ ***Training Code*** will be released soon. -->
 - [x] ❗❗❗ Release MotionCtrl deployed on ***AnimateDiff*** are available in branch [animatediff](https://github.com/TencentARC/MotionCtrl/tree/animatediff), containing both **training** and **inference** code.
 - [x] 20240920 Provide scripts for collecting object trajectories with [ParticleSfM](https://github.com/bytedance/particle-sfm). 
+- [x] 20240920 We provide a [HandyTrajDrawer](https://github.com/wzhouxiff/HandyTrajDrawer) to customize object trajectoires more conveniently.
 
 ---
 
@@ -130,6 +131,8 @@ More results are in our [Project Page](https://wzhouxiff.github.io/projects/Moti
           --start_idx $start_idx \
           --end_idx $end_idx \
         ```
+
+  - You can customize object Trajectories with our provided [HandyTrajDrawer](https://github.com/wzhouxiff/HandyTrajDrawer).
 
 
 ## :books: Citation
