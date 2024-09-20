@@ -74,7 +74,7 @@ MotionCtrl can Independently control **complex camera motion** and **object moti
   - [WebVid](https://www.v7labs.com/open-datasets/the-webvid-10m-dataset)
     
     1. Attaining object moving trajectories with [ParticleSfM](https://github.com/bytedance/particle-sfm)
-    2. Our collected object trajectories are too large to released. We will show more details about data collection later.
+    2. Our collected object trajectories are too large to be released. We will show more details about data collection later.
 
 3. Training
 
