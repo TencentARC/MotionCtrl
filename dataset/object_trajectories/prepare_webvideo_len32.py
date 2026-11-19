@@ -17,6 +17,7 @@ import torch
 
 
 def parse_args():
+    parser = argparse.ArgumentParser(description="Prepare WebVid clips for motion tracking")
     parser.add_argument("--workspace_dir", type=str, default="none", help="input workspace")
     parser.add_argument("--image_folder", type=str, default="images", help="image folder") # also used in the folder option
 
